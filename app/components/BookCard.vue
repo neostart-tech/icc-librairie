@@ -70,3 +70,7 @@ const addToWishlist = () => {
   alert(`Ajouté à la wishlist : ${props.book.title}`)
 }
 </script>
+
+
+
+

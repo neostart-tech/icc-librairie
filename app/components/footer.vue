@@ -14,7 +14,7 @@
             />
             <div class="leading-tight">
               <p class="font-semibold text-white">Impact Centre</p>
-              <p class="text-sm text-white/80">
+              <p class="text-sm text-white/80"> 
                 chrétien | <span class="font-semibold">TOGO</span>
               </p>
             </div>
@@ -146,7 +146,7 @@
                 class="h-6 w-auto"
               />
               <span class="text-sm font-medium">
-                Disponible sur App Store
+                Disponible sur App Store 
               </span>
             </a>
           </div>

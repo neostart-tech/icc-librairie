@@ -1,0 +1,14 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@font-face {
+  font-family: 'Liber';
+  src: url('/fonts/liber.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* Styles personnalisés */
+body {
+  font-family: 'Open Sans', 'Lato', sans-serif;
+}
