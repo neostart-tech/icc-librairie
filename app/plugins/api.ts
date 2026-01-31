@@ -2,10 +2,10 @@ import { useAuthStore } from "~~/stores/auth";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const auth = useAuthStore();
+  const config = useRuntimeConfig();
 
   const api = $fetch.create({
-    baseURL: "http://localhost:8000/api",
-    credentials: "include",
+    baseURL: config.public.apiBase,
     headers: {
       Accept: "application/json",
     },

@@ -19,23 +19,28 @@ export interface Livre {
 }
 
 export const useLivreStore = defineStore("livre", {
+  /* =========================
+   * STATE
+   ========================= */
   state: () => ({
     livres: [] as Livre[],
     livre: null as Livre | null,
     loading: false,
   }),
 
+  /* =========================
+   * ACTIONS
+   ========================= */
   actions: {
     /** ======================
-     *  LISTE DES LIVRES
+     * LISTE DES LIVRES
      ======================= */
     async fetchLivres() {
       const { $api } = useNuxtApp();
       this.loading = true;
 
       try {
-        const res: Livre[] = await $api("/livres");
-        this.livres = res;
+        this.livres = await $api("/livres");
       } catch (error) {
         console.error("Erreur fetchLivres", error);
       } finally {
@@ -44,15 +49,14 @@ export const useLivreStore = defineStore("livre", {
     },
 
     /** ======================
-     *  DETAIL LIVRE
+     * DETAIL LIVRE
      ======================= */
     async fetchLivre(id: number) {
       const { $api } = useNuxtApp();
       this.loading = true;
 
       try {
-        const res: Livre = await $api(`/livres/${id}`);
-        this.livre = res;
+        this.livre = await $api(`/livres/${id}`);
       } catch (error) {
         console.error("Erreur fetchLivre", error);
       } finally {
@@ -61,8 +65,7 @@ export const useLivreStore = defineStore("livre", {
     },
 
     /** ======================
-     *  CREATION LIVRE (ADMIN)
-     *  images => FormData
+     * CREATION LIVRE (ADMIN)
      ======================= */
     async createLivre(payload: {
       titre: string;
@@ -84,17 +87,16 @@ export const useLivreStore = defineStore("livre", {
         formData.append("categorie_id", payload.categorie_id.toString());
 
         if (payload.auteur) formData.append("auteur", payload.auteur);
-        if (payload.description)
+        if (payload.description) {
           formData.append("description", payload.description);
+        }
         if (payload.prix_promo !== undefined) {
           formData.append("prix_promo", payload.prix_promo.toString());
         }
 
-        if (payload.images?.length) {
-          payload.images.forEach((file) => {
-            formData.append("images[]", file);
-          });
-        }
+        payload.images?.forEach((file) => {
+          formData.append("images[]", file);
+        });
 
         const res: Livre = await $api("/livres", {
           method: "POST",
@@ -111,7 +113,7 @@ export const useLivreStore = defineStore("livre", {
     },
 
     /** ======================
-     *  UPDATE LIVRE (ADMIN)
+     * UPDATE LIVRE (ADMIN)
      ======================= */
     async updateLivre(
       id: number,
@@ -135,24 +137,20 @@ export const useLivreStore = defineStore("livre", {
           if (value === undefined) return;
 
           if (key === "images" && Array.isArray(value)) {
-            value.forEach((file) => {
-              formData.append("images[]", file);
-            });
+            value.forEach((file) => formData.append("images[]", file));
           } else {
             formData.append(key, value.toString());
           }
         });
 
         const res: Livre = await $api(`/livres/${id}`, {
-          method: "POST", // Laravel accepte POST + _method
+          method: "POST",
           body: formData,
           query: { _method: "PUT" },
         });
 
         const index = this.livres.findIndex((l) => l.id === id);
-        if (index !== -1) {
-          this.livres[index] = res;
-        }
+        if (index !== -1) this.livres[index] = res;
 
         this.livre = res;
         return res;
@@ -164,21 +162,17 @@ export const useLivreStore = defineStore("livre", {
     },
 
     /** ======================
-     *  DELETE LIVRE (ADMIN)
+     * DELETE LIVRE (ADMIN)
      ======================= */
     async deleteLivre(id: number) {
       const { $api } = useNuxtApp();
       this.loading = true;
 
       try {
-        await $api(`/livres/${id}`, {
-          method: "DELETE",
-        });
+        await $api(`/livres/${id}`, { method: "DELETE" });
 
         this.livres = this.livres.filter((l) => l.id !== id);
-        if (this.livre?.id === id) {
-          this.livre = null;
-        }
+        if (this.livre?.id === id) this.livre = null;
       } catch (error) {
         console.error("Erreur suppression livre", error);
       } finally {
