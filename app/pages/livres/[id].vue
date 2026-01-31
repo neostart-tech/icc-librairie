@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb :items=" [{ label: 'Détail', to: '/livres/[id]' + book.id }]" />
   <div class="min-h-screen bg-gray-50">
     <!-- Bouton retour -->
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
@@ -246,6 +247,8 @@
 </template>
 
 <script setup>
+
+import Breadcrumb from '@/components/Breadcrumb.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from '#app'
 

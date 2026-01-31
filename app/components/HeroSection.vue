@@ -1,6 +1,5 @@
 <template>
-  <section class="relative w-full h-screen overflow-hidden bg-black">
-
+  <section class="relative w-full h-[500px] overflow-hidden bg-black">
     <!-- SLIDES -->
     <div class="relative w-full h-full">
       <transition-group name="fade" tag="div">
@@ -30,8 +29,9 @@
     >
       ›
     </button>
-
   </section>
+
+  <div class="h-12 md:h-16"></div>
 </template>
 
 <script setup>
@@ -53,9 +53,7 @@ const nextSlide = () => {
 
 const prevSlide = () => {
   currentSlide.value =
-    currentSlide.value === 0
-      ? images.length - 1
-      : currentSlide.value - 1
+    currentSlide.value === 0 ? images.length - 1 : currentSlide.value - 1
 }
 
 onMounted(() => {
@@ -74,7 +72,6 @@ onBeforeUnmount(() => {
 .fade-leave-active {
   transition: opacity 0.8s ease;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
