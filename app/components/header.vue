@@ -11,7 +11,6 @@
           />
         </NuxtLink>
 
-        <!-- MILIEU : RECHERCHE (MASQUÉE SUR MOBILE) -->
         <div class="hidden md:flex justify-center">
           <div
             class="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-xl"
@@ -25,9 +24,7 @@
           </div>
         </div>
 
-        <!-- DROITE : ICONES + MENU BURGER -->
         <div class="flex items-center space-x-3 sm:space-x-4 ml-auto">
-          <!-- BOUTON CONNEXION (toujours visible) -->
           <NuxtLink
             to="/connexion"
             class="bg-white text-[#6a0d5f] px-3 py-1 rounded-full font-medium text-sm hover:bg-gray-100 transition-colors"
@@ -35,12 +32,10 @@
             Connexion
           </NuxtLink>
 
-          <!-- Panier -->
           <NuxtLink to="/panier" class="relative">
             <img src="/icone/panier.png" class="w-5 h-5" />
             <span class="badge">3</span>
           </NuxtLink>
-
           <!-- Compte / Dashboard Dropdown -->
           <div
             class="relative"
@@ -86,16 +81,29 @@
                 stroke-width="2"
                 d="M4 6h16M4 12h16M4 18h16"
               />
+          <NuxtLink to="/dashboard">
+            <img src="/icone/user.png" class="w-6 h-6" />
+          </NuxtLink>
+
+          <button @click="isMenuOpen = !isMenuOpen" class="md:hidden focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+
             </svg>
           </button>
         </div>
       </div>
+
 
       <!-- MENU BURGER MOBILE : RECHERCHE + CONNEXION + DASHBOARD -->
       <div
         v-if="isMenuOpen"
         class="md:hidden mt-2 bg-[#6a0d5f] rounded-lg p-4 space-y-3"
       >
+
+      <div v-if="isMenuOpen" class="md:hidden mt-2 bg-[#6a0d5f] rounded-lg p-4 space-y-3">
+
         <div class="flex items-center bg-white rounded-full px-4 py-2 w-full">
           <input
             type="text"
@@ -122,7 +130,6 @@
     </nav>
   </header>
 
-  <!-- ESPACE POUR HEADER FIXE -->
   <div class="h-[90px]"></div>
 </template>
 
