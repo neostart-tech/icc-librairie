@@ -1,32 +1,46 @@
 <template>
-  <div class="max-w-7xl mx-auto px-12 py-8">
 
-    <!-- HERO -->
-    <section class="bg-[#E1DAF0] rounded-2xl py-12 pb-16 mb-10">
-      <div class="max-w-7xl mx-auto px-6 lg:px-12">
-        <div class="flex flex-col lg:flex-row items-center gap-8">
-          <!-- Texte -->
-          <div class="flex-1">
-            <h2 class="text-xl md:text-2xl font-semibold mb-3 text-gray-900">
-              {{ heroSlides[currentSlide].title }}
-            </h2>
-            <p class="text-sm md:text-base text-gray-600 leading-relaxed max-w-lg">
-              {{ heroSlides[currentSlide].description }}
-            </p>
-          </div>
+  <!-- HERO -->
+  <section class="w-full relative bg-[#E1DAF0] overflow-hidden mb-8 md:mb-12">
+    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-8 md:py-12">
+      <div class="flex flex-col md:flex-row items-center gap-10">
 
-          <!-- Image -->
-          <div class="flex-1 flex justify-center">
-            <img
-              :src="heroSlides[currentSlide].image"
-              class="w-64 md:w-80 rounded-xl drop-shadow-xl transition-all duration-500"
-            />
-          </div>
+        <!-- TEXTE -->
+        <div class="flex-1 text-center md:text-left">
+          <span class="inline-block mb-2 text-xs tracking-widest uppercase text-[#6a0d5f] font-semibold">
+            Livre du mois
+          </span>
+
+          <h2 class="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-gray-900 leading-tight mb-3"> {{ heroSlides[currentSlide].title }} </h2>
+
+          <p class="text-sm sm:text-base md:text-base text-gray-700 leading-relaxed max-w-xl mx-auto md:mx-0">
+            {{ heroSlides[currentSlide].description }}
+          </p>
+
+          <NuxtLink
+            to="/"
+            class="inline-block mt-4 px-5 py-2 bg-[#6a0d5f] text-white font-semibold hover:bg-purple-700 transition rounded-none"
+          >
+            Découvrir
+          </NuxtLink>
         </div>
-      </div>
-    </section>
 
-    <div class="flex gap-6">
+        <!-- IMAGE -->
+        <div class="flex-1 flex justify-center md:justify-end">
+          <img
+            :src="heroSlides[currentSlide].image"
+            alt=""
+            class="w-36 sm:w-44 md:w-56 lg:w-64 drop-shadow-2xl transition-all duration-500"
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6">
+
+    <div class="flex gap-4 md:gap-6">
 
       <!-- SIDEBAR -->
       <SidebarFiltre
@@ -39,22 +53,25 @@
       <section class="flex-1">
 
         <!-- LIVRES -->
-        <div v-if="paginatedBooks.length > 0"
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div
+        <div
+          v-if="paginatedBooks.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6"
+        >
+          <NuxtLink
             v-for="book in paginatedBooks"
             :key="book.id"
-            class="group relative bg-white rounded-lg shadow transition overflow-hidden w-full max-w-[220px] mx-auto hover:shadow-lg"
+            :to="`/livres/${book.id}`"
+            class="group relative bg-white rounded-lg shadow transition
+                   overflow-hidden w-full max-w-[220px]
+                   mx-auto lg:mx-0 hover:shadow-lg
+                   cursor-pointer block"
           >
-            <!-- Wishlist -->
-            <button class="absolute top-2 right-2 bg-white w-8 h-8 rounded-full flex items-center justify-center shadow cursor-pointer">
-              <img src="/icone/heart.png" class="w-4 h-4" />
-            </button>
 
             <!-- Solde -->
             <span
               v-if="book.isPromo"
-              class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full"
+              class="absolute top-2 left-2 bg-red-600 text-white
+                     text-xs font-bold px-2 py-1 rounded-full"
             >
               SOLDE
             </span>
@@ -62,12 +79,13 @@
             <!-- Image -->
             <img
               :src="book.image"
-              class="w-full h-44 object-cover group-hover:scale-105 transition"
+              class="w-full h-40 sm:h-44 object-cover
+                     group-hover:scale-105 transition"
             />
 
             <!-- Infos -->
             <div class="p-3">
-              <h3 class="font-semibold text-base mb-1 line-clamp-1">
+              <h3 class="font-semibold text-sm sm:text-base mb-1 line-clamp-1">
                 {{ book.title }}
               </h3>
               <p class="text-xs text-gray-500 mb-2">
@@ -81,33 +99,36 @@
                 >
                   {{ book.oldPrice }} FCFA
                 </span>
-                <span class="text-[#6a0d5f] font-bold text-base">
+                <span class="text-[#6a0d5f] font-bold text-sm sm:text-base">
                   {{ book.price }} FCFA
                 </span>
               </div>
 
-              <button class="w-full bg-[#6a0d5f] text-white py-1.5 rounded-md text-sm hover:bg-purple-700 cursor-pointer">
+              <button
+                class="w-full bg-[#6a0d5f] text-white py-1.5
+                       rounded-md text-xs sm:text-sm
+                       hover:bg-purple-700 cursor-pointer"
+              >
                 Ajouter au panier
               </button>
             </div>
-          </div>
+          </NuxtLink>
         </div>
 
-      <!-- AUCUN RÉSULTAT -->
-      <div v-else class="flex items-center justify-center py-20">
-        <p class="text-gray-600 text-base font-medium">
-          Aucun livre ne correspond à vos critères.
-          <br />
-          <span class="text-sm text-gray-500">
-            Modifiez le tri, les filtres ou la recherche pour voir des résultats.
-          </span>
-        </p>
-      </div>
+        <!-- AUCUN RÉSULTAT -->
+        <div v-else class="flex items-center justify-center py-20">
+          <p class="text-gray-600 text-base font-medium text-center">
+            Aucun livre ne correspond à vos critères.
+            <br />
+            <span class="text-sm text-gray-500">
+              Modifiez le tri ou les filtres.
+            </span>
+          </p>
+        </div>
 
         <!-- PAGINATION -->
-        <div class="flex justify-center mt-12">
-          <div class="flex items-center gap-2 text-sm">
-
+        <div class="flex justify-center mt-12 px-2">
+          <div class="flex flex-wrap items-center gap-2 text-sm">
             <button @click="changePage(1)" class="px-3 py-1 border rounded">«</button>
             <button @click="changePage(currentPage - 1)" class="px-3 py-1 border rounded">‹</button>
 
@@ -123,14 +144,8 @@
               {{ page }}
             </button>
 
-            <!-- <button @click="changePage(currentPage + 1)" class="px-3 py-1 border rounded">2</button>
-            <button @click="changePage(currentPage + 1)" class="px-3 py-1 border rounded">3</button>
-            <button @click="changePage(currentPage + 1)" class="px-3 py-1 border rounded">4</button>
-            <button @click="changePage(currentPage + 1)" class="px-3 py-1 border rounded">5</button> -->
-
             <button @click="changePage(currentPage + 1)" class="px-3 py-1 border rounded">›</button>
             <button @click="changePage(totalPages)" class="px-3 py-1 border rounded">»</button>
-
           </div>
         </div>
 
@@ -140,6 +155,7 @@
 </template>
 
 <script setup>
+
 import { ref, computed, onMounted, watch } from "vue"
 import SidebarFiltre from "@/components/SidebarFiltre.vue"
 
@@ -158,6 +174,7 @@ const heroSlides = [
 ]
 
 const currentSlide = ref(0)
+
 onMounted(() => {
   setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % heroSlides.length
@@ -197,16 +214,7 @@ const itemsPerPage = 12
 const filteredBooks = computed(() => {
   let result = books.value.filter(b => b.price <= filters.value.maxPrice)
 
-  if (filters.value.onlyPromo) {
-    result = result.filter(b => b.isPromo)
-  }
-
-  if (search.value) {
-    const term = search.value.toLowerCase()
-    result = result.filter(
-      b => b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term)
-    )
-  }
+  if (filters.value.onlyPromo) result = result.filter(b => b.isPromo)
 
   if (filters.value.categories.length) {
     result = result.filter(b => filters.value.categories.includes(b.category))
@@ -231,9 +239,7 @@ const paginatedBooks = computed(() => {
 })
 
 const changePage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-  }
+  if (page >= 1 && page <= totalPages.value) currentPage.value = page
 }
 
 watch(search, () => currentPage.value = 1)

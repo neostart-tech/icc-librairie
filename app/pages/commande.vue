@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb :items=" [{ label: 'Commande', to: '/commande' }]" />
   <div class="min-h-screen bg-[#F3F0F5] px-6 lg:px-12 py-10">
     <div class="max-w-6xl mx-auto">
 
@@ -142,6 +143,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import Breadcrumb from '@/components/Breadcrumb.vue'
 
 const cart = ref([
   { id: 1, title: 'Le Pouvoir de la Foi', price: 7500, quantity: 1 },
