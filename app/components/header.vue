@@ -36,6 +36,11 @@
             <img src="/icone/panier.png" class="w-5 h-5" />
             <span class="badge">3</span>
           </NuxtLink>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> dc82c8031d09fd6727530313faee7a8d8bcdc14f
           <!-- Compte / Dashboard Dropdown -->
           <div
             class="relative"
@@ -81,6 +86,10 @@
                 stroke-width="2"
                 d="M4 6h16M4 12h16M4 18h16"
               />
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> dc82c8031d09fd6727530313faee7a8d8bcdc14f
           <NuxtLink to="/dashboard">
             <img src="/icone/user.png" class="w-6 h-6" />
           </NuxtLink>
@@ -89,7 +98,10 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4 6h16M4 12h16M4 18h16" />
+<<<<<<< HEAD
 
+=======
+>>>>>>> dc82c8031d09fd6727530313faee7a8d8bcdc14f
             </svg>
           </button>
         </div>
