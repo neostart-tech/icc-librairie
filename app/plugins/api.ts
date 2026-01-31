@@ -5,6 +5,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const api = $fetch.create({
     baseURL: "http://localhost:8000/api",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+    },
 
     onRequest({ options }) {
       // Si le store n'est pas encore initialisé
