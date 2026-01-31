@@ -14,7 +14,7 @@
             />
             <div class="leading-tight">
               <p class="font-semibold text-white">Impact Centre</p>
-              <p class="text-sm text-white/80"> 
+              <p class="text-sm text-white/80">
                 chrétien | <span class="font-semibold">TOGO</span>
               </p>
             </div>
@@ -26,33 +26,47 @@
               href="#"
               class="w-9 h-9 rounded-full overflow-hidden border border-white/60 flex items-center justify-center hover:opacity-80 transition"
             >
-              <img src="/icone/facebook.png" alt="Facebook" class="w-full h-full object-cover" />
+              <img
+                src="/icone/facebook.png"
+                alt="Facebook"
+                class="w-full h-full object-cover"
+              />
             </a>
             <a
               href="#"
               class="w-9 h-9 rounded-full overflow-hidden border border-white/60 flex items-center justify-center hover:opacity-80 transition"
             >
-              <img src="/icone/tiktok.png" alt="TikTok" class="w-full h-full object-cover" />
+              <img
+                src="/icone/tiktok.png"
+                alt="TikTok"
+                class="w-full h-full object-cover"
+              />
             </a>
             <a
               href="#"
               class="w-9 h-9 rounded-full overflow-hidden border border-white/60 flex items-center justify-center hover:opacity-80 transition"
             >
-              <img src="/icone/instagram.png" alt="Instagram" class="w-full h-full object-cover" />
+              <img
+                src="/icone/instagram.png"
+                alt="Instagram"
+                class="w-full h-full object-cover"
+              />
             </a>
             <a
               href="#"
               class="w-9 h-9 rounded-full overflow-hidden border border-white/60 flex items-center justify-center hover:opacity-80 transition"
             >
-              <img src="/icone/youtube.png" alt="YouTube" class="w-full h-full object-cover" />
+              <img
+                src="/icone/youtube.png"
+                alt="YouTube"
+                class="w-full h-full object-cover"
+              />
             </a>
           </div>
 
           <!-- Newsletter -->
           <div class="space-y-4">
-            <h3 class="text-2xl font-bold">
-              Abonnez-vous à la newsletter
-            </h3>
+            <h3 class="text-2xl font-bold">Abonnez-vous à la newsletter</h3>
             <p class="text-sm text-white/80">
               Soyez le premier à recevoir tous les derniers articles
             </p>
@@ -111,8 +125,12 @@
           <ul class="space-y-3 text-sm opacity-90">
             <li><NuxtLink to="/">Accueil</NuxtLink></li>
             <li><NuxtLink to="/">Prise en main</NuxtLink></li>
-            <li><NuxtLink to="/">Conditions Générales d’Utilisation</NuxtLink></li>
-            <li><NuxtLink to="/">Politique de suppression de compte</NuxtLink></li>
+            <li>
+              <NuxtLink to="/">Conditions Générales d’Utilisation</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/">Politique de suppression de compte</NuxtLink>
+            </li>
             <li><NuxtLink to="/">Politique de confidentialité</NuxtLink></li>
             <li><NuxtLink to="/">Mentions Légales</NuxtLink></li>
           </ul>
@@ -146,7 +164,7 @@
                 class="h-6 w-auto"
               />
               <span class="text-sm font-medium">
-                Disponible sur App Store 
+                Disponible sur App Store
               </span>
             </a>
           </div>
@@ -156,8 +174,12 @@
 
     <!-- Bas de footer -->
     <div class="bg-[#5a0a50] py-4 text-center text-sm opacity-80">
-      © Copyrights, ICC – TOGO, 2025. Tous droits réservés.
-      Développé par <span class="font-medium">Neo Start Technology</span>
+      © Copyrights, ICC – TOGO, 2025. Tous droits réservés. Développé par
+      <span class="font-medium">
+        <a href="https://neostart.tech/" target="_blank">
+          Neo Start Technology
+        </a>
+      </span>
     </div>
   </footer>
 </template>
