@@ -8,7 +8,7 @@
           Connexion
         </h1>
         <p class="text-sm text-gray-500 mt-1">
-          Accède à ton espace personnel
+          Connectez-vous avec votre compte ICC-Covoiturage
         </p>
       </div>
 
@@ -95,26 +95,6 @@
           Se connecter
         </button>
       </form>
-
-      <p class="text-center text-sm text-gray-600 mt-6">
-        Pas encore de compte ?
-        <NuxtLink
-          to="/inscription"
-          class="font-medium text-[#6a0d5f] hover:underline"
-        >
-          Inscription
-        </NuxtLink>
-      </p>
-
-      <p class="text-center text-sm text-gray-600 mt-6">
-        Déjà un compte sur ICC-Covoiturage ?
-        <NuxtLink
-          to="/ConnexionIcc"
-          class="font-medium text-[#6a0d5f] hover:underline"
-        >
-          Connectez-vous
-        </NuxtLink>
-      </p>
 
     </div>
   </div>
