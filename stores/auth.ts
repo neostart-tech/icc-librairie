@@ -37,12 +37,49 @@ export const useAuthStore = defineStore("auth", {
 
         return res;
       } catch (error: any) {
-        const apiError: ApiError = {
+        throw {
           message: error?.data?.message || "Impossible de se connecter.",
           errors: error?.data?.errors,
-        };
+        } as ApiError;
+      } finally {
+        this.loading = false;
+      }
+    },
 
-        throw apiError;
+    async loginSSO(email: string, password: string) {
+      const { $api } = useNuxtApp();
+      this.loading = true;
+
+      try {
+        const res: any = await $api("/user/login-sso", {
+          method: "POST",
+          body: { email, password },
+        });
+
+        // Vérifier si la réponse contient un token, sinon lancer l'erreur
+        if (!res.token) {
+          throw {
+            message: res.message || "Email ou mot de passe incorrect",
+          } as ApiError;
+        }
+
+        this.token = res.token;
+        this.user = res.user;
+
+        if (process.client) {
+          localStorage.setItem("token", res.token);
+          localStorage.setItem("user", JSON.stringify(res.user));
+        }
+
+        return res;
+      } catch (error: any) {
+        throw {
+          message:
+            error?.data?.message ||
+            error?.message ||
+            "Impossible de se connecter via SSO.",
+          errors: error?.data?.errors,
+        } as ApiError;
       } finally {
         this.loading = false;
       }
@@ -74,13 +111,11 @@ export const useAuthStore = defineStore("auth", {
 
         return res;
       } catch (error: any) {
-        const apiError: ApiError = {
+        throw {
           message:
             error?.data?.message || "Erreur lors de l’inscription. Réessaie.",
           errors: error?.data?.errors,
-        };
-
-        throw apiError;
+        } as ApiError;
       } finally {
         this.loading = false;
       }
@@ -95,9 +130,7 @@ export const useAuthStore = defineStore("auth", {
         localStorage.removeItem("user");
       }
 
-      if (redirect) {
-        return navigateTo("/connexion");
-      }
+      if (redirect) return navigateTo("/connexion");
     },
 
     init() {

@@ -22,8 +22,20 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     onResponseError({ response }) {
       if (response.status === 401) {
-        auth.logout();
+        // juste nettoyer le token
+        auth.token = null;
+        auth.user = null;
+
+        if (process.client) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+        }
+
+        // IMPORTANT : relancer l'erreur
+        throw response._data;
       }
+
+      throw response._data;
     },
   });
 

@@ -4,12 +4,18 @@
       <div class="grid grid-cols-[auto_1fr_auto] items-center gap-4">
         <!-- GAUCHE : LOGO -->
         <NuxtLink to="/" class="flex items-center">
-          <img src="/logo/logo_librairie(1).png" alt="ICC_Librairie" class="h-12 sm:h-14 w-auto" />
+          <img
+            src="/logo/logo_librairie(1).png"
+            alt="ICC_Librairie"
+            class="h-12 sm:h-14 w-auto"
+          />
         </NuxtLink>
 
         <!-- MILIEU : RECHERCHE (MASQUÉE SUR MOBILE) -->
         <div class="hidden md:flex justify-center">
-          <div class="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-xl">
+          <div
+            class="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-xl"
+          >
             <input
               type="text"
               placeholder="Rechercher un livre..."
@@ -35,23 +41,61 @@
             <span class="badge">3</span>
           </NuxtLink>
 
-          <!-- Compte / Dashboard -->
-          <NuxtLink to="/dashboard">
-            <img src="/icone/user.png" class="w-6 h-6" />
-          </NuxtLink>
+          <!-- Compte / Dashboard Dropdown -->
+          <div
+            class="relative"
+            @mouseenter="showDropdown = true"
+            @mouseleave="showDropdown = false"
+          >
+            <button class="flex items-center focus:outline-none">
+              <img src="/icone/user.png" alt="Compte" class="w-6 h-6" />
+            </button>
+            <div
+              v-if="showDropdown"
+              class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50"
+            >
+              <NuxtLink
+                to="/dashboard"
+                class="block px-4 py-2 text-[#6a0d5f] hover:bg-gray-100"
+              >
+                Mon Dashboard
+              </NuxtLink>
+              <button
+                class="block w-full text-left px-4 py-2 text-[#6a0d5f] hover:bg-gray-100"
+                @click="handleLogout"
+              >
+                Déconnexion
+              </button>
+            </div>
+          </div>
 
           <!-- MENU BURGER SUR MOBILE -->
-          <button @click="isMenuOpen = !isMenuOpen" class="md:hidden focus:outline-none">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16" />
+          <button
+            @click="isMenuOpen = !isMenuOpen"
+            class="md:hidden focus:outline-none"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
         </div>
       </div>
 
       <!-- MENU BURGER MOBILE : RECHERCHE + CONNEXION + DASHBOARD -->
-      <div v-if="isMenuOpen" class="md:hidden mt-2 bg-[#6a0d5f] rounded-lg p-4 space-y-3">
+      <div
+        v-if="isMenuOpen"
+        class="md:hidden mt-2 bg-[#6a0d5f] rounded-lg p-4 space-y-3"
+      >
         <div class="flex items-center bg-white rounded-full px-4 py-2 w-full">
           <input
             type="text"
@@ -61,11 +105,17 @@
           <span class="ml-3 text-gray-500">⌕</span>
         </div>
 
-        <NuxtLink to="/connexion" class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors">
+        <NuxtLink
+          to="/connexion"
+          class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors"
+        >
           Connexion
         </NuxtLink>
 
-        <NuxtLink to="/dashboard" class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors">
+        <NuxtLink
+          to="/dashboard"
+          class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors"
+        >
           Dashboard
         </NuxtLink>
       </div>
@@ -77,8 +127,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const isMenuOpen = ref(false)
+import { ref } from "vue";
+const isMenuOpen = ref(false);
 </script>
 
 <style scoped>
