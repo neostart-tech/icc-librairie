@@ -1,26 +1,15 @@
 <template>
   <header class="fixed top-0 left-0 right-0 z-50 bg-[#6a0d5f]">
     <nav class="px-4 sm:px-6 lg:px-16 xl:px-24 py-4 text-white">
-
-      <!-- GRID HEADER -->
-      <div
-        class="grid grid-cols-[auto_1fr_auto] items-center gap-4"
-      >
-
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-4">
         <!-- GAUCHE : LOGO -->
         <NuxtLink to="/" class="flex items-center">
-          <img
-            src="/logo/logo_librairie(1).png"
-            alt="ICC_Librairie"
-            class="h-12 sm:h-14 w-auto"
-          />
+          <img src="/logo/logo_librairie(1).png" alt="ICC_Librairie" class="h-12 sm:h-14 w-auto" />
         </NuxtLink>
 
-        <!-- MILIEU : RECHERCHE (TOUJOURS CENTRÉE) -->
-        <div class="flex justify-center">
-          <div
-            class="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-xl"
-          >
+        <!-- MILIEU : RECHERCHE (MASQUÉE SUR MOBILE) -->
+        <div class="hidden md:flex justify-center">
+          <div class="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-xl">
             <input
               type="text"
               placeholder="Rechercher un livre..."
@@ -30,8 +19,15 @@
           </div>
         </div>
 
-        <!-- DROITE : ICONES -->
-        <div class="flex items-center space-x-5 sm:space-x-6">
+        <!-- DROITE : ICONES + MENU BURGER -->
+        <div class="flex items-center space-x-3 sm:space-x-4 ml-auto">
+          <!-- BOUTON CONNEXION (toujours visible) -->
+          <NuxtLink
+            to="/connexion"
+            class="bg-white text-[#6a0d5f] px-3 py-1 rounded-full font-medium text-sm hover:bg-gray-100 transition-colors"
+          >
+            Connexion
+          </NuxtLink>
 
           <!-- Panier -->
           <NuxtLink to="/panier" class="relative">
@@ -39,13 +35,39 @@
             <span class="badge">3</span>
           </NuxtLink>
 
-          <!-- Compte -->
-          <NuxtLink to="/connexion">
+          <!-- Compte / Dashboard -->
+          <NuxtLink to="/dashboard">
             <img src="/icone/user.png" class="w-6 h-6" />
           </NuxtLink>
 
+          <!-- MENU BURGER SUR MOBILE -->
+          <button @click="isMenuOpen = !isMenuOpen" class="md:hidden focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- MENU BURGER MOBILE : RECHERCHE + CONNEXION + DASHBOARD -->
+      <div v-if="isMenuOpen" class="md:hidden mt-2 bg-[#6a0d5f] rounded-lg p-4 space-y-3">
+        <div class="flex items-center bg-white rounded-full px-4 py-2 w-full">
+          <input
+            type="text"
+            placeholder="Rechercher un livre..."
+            class="w-full text-sm text-gray-700 outline-none bg-transparent"
+          />
+          <span class="ml-3 text-gray-500">⌕</span>
         </div>
 
+        <NuxtLink to="/connexion" class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors">
+          Connexion
+        </NuxtLink>
+
+        <NuxtLink to="/dashboard" class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors">
+          Dashboard
+        </NuxtLink>
       </div>
     </nav>
   </header>
@@ -53,6 +75,11 @@
   <!-- ESPACE POUR HEADER FIXE -->
   <div class="h-[90px]"></div>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+const isMenuOpen = ref(false)
+</script>
 
 <style scoped>
 .badge {
