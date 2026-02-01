@@ -293,10 +293,26 @@ const book = computed(() => {
   };
 });
 
-// Related books
-const relatedBooks = computed(() =>
-  livreStore.livres.filter((b) => b.id !== bookId),
-);
+// Related books : même catégorie, sauf le livre actuel
+const relatedBooks = computed(() => {
+  if (!book.value.category) return [];
+  return livreStore.livres
+    .filter(
+      (b) => b.id !== bookId && b.categorie?.libelle === book.value.category,
+    )
+    .map((b) => ({
+      id: b.id,
+      title: b.titre,
+      author: b.auteur,
+      price: b.prix_promo ?? b.prix,
+      oldPrice: b.prix_promo ? b.prix : null,
+      isPromo: !!b.prix_promo,
+      category: b.categorie?.libelle,
+      image: b.images?.length
+        ? `${livreStore.baseImageUrl}/${b.images[0].path}`
+        : "/images/livre.jpg",
+    }));
+});
 
 const itemsPerSlide = 6;
 const groupedRelatedBooks = computed(() => {
