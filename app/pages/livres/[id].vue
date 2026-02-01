@@ -267,6 +267,8 @@ const bookId = route.params.id;
 const carousel = ref(null);
 const currentSlide = ref(0);
 
+const config = useRuntimeConfig();
+
 // Charger les livres si le store est vide
 onMounted(async () => {
   if (!livreStore.livres.length) {
@@ -288,7 +290,7 @@ const book = computed(() => {
     category: b.categorie?.libelle,
     description: b.description,
     image: b.images?.length
-      ? `${livreStore.baseImageUrl}/${b.images[0].path}`
+      ? `${config.public.storageBase}/${b.images[0].path}`
       : "/images/livre.jpg",
   };
 });
@@ -309,7 +311,7 @@ const relatedBooks = computed(() => {
       isPromo: !!b.prix_promo,
       category: b.categorie?.libelle,
       image: b.images?.length
-        ? `${livreStore.baseImageUrl}/${b.images[0].path}`
+        ? `${config.public.storageBase}/${b.images[0].path}`
         : "/images/livre.jpg",
     }));
 });

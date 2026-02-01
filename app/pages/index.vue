@@ -137,6 +137,8 @@ import HeroSection from "~/components/HeroSection.vue";
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
 
+const config = useRuntimeConfig();
+
 /* FILTRES */
 const filters = ref({
   sort: "default",
@@ -169,7 +171,7 @@ const books = computed(() =>
     isPromo: !!livre.prix_promo,
     category: livre.categorie?.libelle,
     image: livre.images?.length
-      ? `${livreStore.baseImageUrl}/${livre.images[0].path}`
+      ? `${config.public.storageBase}/${livre.images[0].path}`
       : "/images/livre.jpg",
   })),
 );
