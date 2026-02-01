@@ -31,7 +31,12 @@
           <!-- Panier -->
           <NuxtLink to="/panier" class="relative mr-10">
             <img src="/icone/panier.png" class="w-5 h-5" />
-            <span class="badge">3</span>
+            <span
+              v-if="cartStore.count"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2"
+            >
+              {{ cartStore.count }}
+            </span>
           </NuxtLink>
 
           <!-- Connexion si non connecté -->
@@ -158,11 +163,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useAuthStore } from "~~/stores/auth";
+import { useCartStore } from "~~/stores/cart";
 
 const isMenuOpen = ref(false);
 const showDropdown = ref(false);
 
 const auth = useAuthStore();
+const cartStore = useCartStore();
 
 // Initialise le store depuis localStorage
 onMounted(() => {

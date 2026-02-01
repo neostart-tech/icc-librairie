@@ -62,9 +62,15 @@
                 </div>
 
                 <button
-                  class="w-full bg-[#6a0d5f] text-white py-1.5 rounded-md text-xs sm:text-sm hover:bg-purple-700 cursor-pointer"
+                  @click.stop.prevent="addToCart(book)"
+                  :disabled="cartStore.has(book.id)"
+                  class="w-full py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Ajouter au panier
+                  {{
+                    cartStore.has(book.id)
+                      ? "Déjà au panier"
+                      : "Ajouter au panier"
+                  }}
                 </button>
               </div>
             </NuxtLink>
@@ -133,6 +139,20 @@ import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
 import SidebarFiltre from "@/components/SidebarFiltre.vue";
 import HeroSection from "~/components/HeroSection.vue";
+
+import { useCartStore } from "~~/stores/cart";
+
+const cartStore = useCartStore();
+
+const addToCart = (book) => {
+  cartStore.add({
+    id: book.id,
+    title: book.title,
+    author: book.author,
+    price: book.price,
+    image: book.image,
+  });
+};
 
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
