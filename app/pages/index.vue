@@ -64,7 +64,7 @@
                 <button
                   @click.stop.prevent="addToCart(book)"
                   :disabled="cartStore.has(book.id)"
-                  class="w-full py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="w-full py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {{
                     cartStore.has(book.id)

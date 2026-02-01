@@ -119,9 +119,15 @@
             <!-- Ajouter au panier -->
             <div class="flex justify-center pt-3">
               <button
-                class="cursor-pointer bg-[#6a0d5f] hover:bg-[#8B5A8C] text-white py-2 px-4 rounded-lg font-medium text-sm flex items-center gap-2 transition-colors duration-200"
+                @click.stop.prevent="addToCart(book)"
+                :disabled="cartStore.has(book.id)"
+                class="w-50 py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
-                Ajouter au panier
+                {{
+                  cartStore.has(book.id)
+                    ? "Déjà au panier"
+                    : "Ajouter au panier"
+                }}
               </button>
             </div>
           </div>
@@ -260,6 +266,19 @@ import Breadcrumb from "@/components/Breadcrumb.vue";
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "#app";
 import { useLivreStore } from "~~/stores/livre";
+import { useCartStore } from "~~/stores/cart";
+
+const cartStore = useCartStore();
+
+const addToCart = (book) => {
+  cartStore.add({
+    id: book.id,
+    title: book.title,
+    author: book.author,
+    price: book.price,
+    image: book.image,
+  });
+};
 
 const route = useRoute();
 const livreStore = useLivreStore();

@@ -82,7 +82,7 @@
           <!-- Dashboard si connecté -->
           <div v-else class="relative">
             <button
-              class="flex items-center focus:outline-none"
+              class="flex items-center focus:outline-none cursor-pointer"
               @click="showDropdown = !showDropdown"
             >
               <svg
