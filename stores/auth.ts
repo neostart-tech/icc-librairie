@@ -130,7 +130,7 @@ export const useAuthStore = defineStore("auth", {
         localStorage.removeItem("user");
       }
 
-      if (redirect) return navigateTo("/connexion");
+      if (redirect) return navigateTo("/");
     },
 
     init() {
