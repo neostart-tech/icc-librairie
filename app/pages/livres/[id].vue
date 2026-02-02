@@ -120,13 +120,17 @@
             <div class="flex justify-center pt-3">
               <button
                 @click.stop.prevent="addToCart(book)"
-                :disabled="cartStore.has(book.id)"
-                class="w-50 py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                :disabled="
+                  cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
+                "
+                class="w-50 py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {{
-                  cartStore.has(book.id)
-                    ? "Déjà au panier"
-                    : "Ajouter au panier"
+                  !book.stockAvailable
+                    ? "Indisponible"
+                    : cartStore.getQuantity(book.id) > 0
+                      ? "Déjà au panier"
+                      : "Ajouter au panier"
                 }}
               </button>
             </div>
@@ -277,7 +281,14 @@ const addToCart = (book) => {
     author: book.author,
     price: book.price,
     image: book.image,
+    stockAvailable: book.stockAvailable,
   });
+};
+
+const canAddToCart = (book) => {
+  if (!book.stockAvailable) return false;
+
+  return cartStore.getQuantity(book.id) < book.stockAvailable;
 };
 
 const route = useRoute();
@@ -308,6 +319,10 @@ const book = computed(() => {
     isPromo: !!b.prix_promo,
     category: b.categorie?.libelle,
     description: b.description,
+
+    // stock interne (pas affiché)
+    stockAvailable: b.stock?.quantite ?? 0,
+
     image: b.images?.length
       ? `${config.public.storageBase}/${b.images[0].path}`
       : "/images/livre.jpg",
