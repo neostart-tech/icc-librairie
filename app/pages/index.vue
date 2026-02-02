@@ -201,10 +201,14 @@ const books = computed(() =>
     title: livre.titre,
     author: livre.auteur,
     price: livre.prix_promo ?? livre.prix,
+    oldPrice: livre.prix_promo ? livre.prix : null,
     isPromo: !!livre.prix_promo,
 
     // stock interne (pas affiché)
     stockAvailable: livre.stock?.quantite ?? 0,
+
+    // catégorie pour filtrage
+    category: livre.categorie?.libelle ?? "Autre",
 
     image: livre.images?.length
       ? `${config.public.storageBase}/${livre.images[0].path}`

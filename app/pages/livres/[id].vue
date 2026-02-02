@@ -69,7 +69,7 @@
               </h1>
               <div class="flex items-center space-x-2 text-gray-600 mb-3">
                 <svg
-                  class="w-4 h-4"
+                  class="w-5 h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

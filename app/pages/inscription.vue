@@ -47,7 +47,7 @@
         </div>
 
         <div>
-          <label class="text-sm text-gray-600">Téléphone</label>
+          <label class="text-sm text-gray-600">Téléphone (Facultatif)</label>
           <input
             v-model="telephone"
             type="tel"
