@@ -18,10 +18,12 @@
             class="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-xl"
           >
             <input
+              v-model="search"
               type="text"
               placeholder="Rechercher un livre..."
               class="w-full text-sm text-gray-700 outline-none bg-transparent"
             />
+
             <span class="ml-3 text-gray-500">⌕</span>
           </div>
         </div>
@@ -171,10 +173,12 @@
       >
         <div class="flex items-center bg-white rounded-full px-4 py-2 w-full">
           <input
+            v-model="search"
             type="text"
             placeholder="Rechercher un livre..."
             class="w-full text-sm text-gray-700 outline-none bg-transparent"
           />
+
           <span class="ml-3 text-gray-500">⌕</span>
         </div>
 
@@ -205,6 +209,10 @@
 import { ref, computed, onMounted } from "vue";
 import { useAuthStore } from "~~/stores/auth";
 import { useCartStore } from "~~/stores/cart";
+
+import { useSearch } from "~/composables/useSearch";
+
+const { search } = useSearch();
 
 const isMenuOpen = ref(false);
 const showDropdown = ref(false);

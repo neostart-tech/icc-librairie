@@ -139,6 +139,7 @@ import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
 import SidebarFiltre from "@/components/SidebarFiltre.vue";
 import HeroSection from "~/components/HeroSection.vue";
+import { useSearch } from "~/composables/useSearch";
 
 import { useCartStore } from "~~/stores/cart";
 
@@ -158,6 +159,8 @@ const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
 
 const config = useRuntimeConfig();
+
+const { search } = useSearch();
 
 /* FILTRES */
 const filters = ref({
@@ -201,24 +204,39 @@ const currentPage = ref(1);
 const itemsPerPage = 12;
 
 const filteredBooks = computed(() => {
-  let result = books.value.filter((b) => b.price <= filters.value.maxPrice);
+  let result = books.value;
 
-  if (filters.value.onlyPromo) result = result.filter((b) => b.isPromo);
+  /* RECHERCHE TEXTE */
+  if (search.value) {
+    const q = search.value.toLowerCase();
+    result = result.filter((b) => b.title.toLowerCase().includes(q));
+  }
 
-  if (filters.value.categories.length)
+  /* PRIX */
+  result = result.filter((b) => b.price <= filters.value.maxPrice);
+
+  /* PROMO */
+  if (filters.value.onlyPromo) {
+    result = result.filter((b) => b.isPromo);
+  }
+
+  /* CATÉGORIES */
+  if (filters.value.categories.length) {
     result = result.filter((b) =>
       filters.value.categories.includes(b.category),
     );
+  }
 
+  /* TRI */
   switch (filters.value.sort) {
     case "priceAsc":
-      result.sort((a, b) => a.price - b.price);
+      result = [...result].sort((a, b) => a.price - b.price);
       break;
     case "priceDesc":
-      result.sort((a, b) => b.price - a.price);
+      result = [...result].sort((a, b) => b.price - a.price);
       break;
     case "alpha":
-      result.sort((a, b) => a.title.localeCompare(b.title));
+      result = [...result].sort((a, b) => a.title.localeCompare(b.title));
       break;
   }
 
