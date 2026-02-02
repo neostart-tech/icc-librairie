@@ -63,13 +63,17 @@
 
                 <button
                   @click.stop.prevent="addToCart(book)"
-                  :disabled="cartStore.has(book.id)"
+                  :disabled="
+                    cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
+                  "
                   class="w-full py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {{
-                    cartStore.has(book.id)
-                      ? "Déjà au panier"
-                      : "Ajouter au panier"
+                    !book.stockAvailable
+                      ? "Indisponible"
+                      : cartStore.getQuantity(book.id) > 0
+                        ? "Déjà au panier"
+                        : "Ajouter au panier"
                   }}
                 </button>
               </div>
@@ -139,6 +143,7 @@ import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
 import SidebarFiltre from "@/components/SidebarFiltre.vue";
 import HeroSection from "~/components/HeroSection.vue";
+import { useSearch } from "~/composables/useSearch";
 
 import { useCartStore } from "~~/stores/cart";
 
@@ -151,13 +156,22 @@ const addToCart = (book) => {
     author: book.author,
     price: book.price,
     image: book.image,
+    stockAvailable: book.stockAvailable,
   });
+};
+
+const canAddToCart = (book) => {
+  if (!book.stockAvailable) return false;
+
+  return cartStore.getQuantity(book.id) < book.stockAvailable;
 };
 
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
 
 const config = useRuntimeConfig();
+
+const { search } = useSearch();
 
 /* FILTRES */
 const filters = ref({
@@ -189,7 +203,13 @@ const books = computed(() =>
     price: livre.prix_promo ?? livre.prix,
     oldPrice: livre.prix_promo ? livre.prix : null,
     isPromo: !!livre.prix_promo,
-    category: livre.categorie?.libelle,
+
+    // stock interne (pas affiché)
+    stockAvailable: livre.stock?.quantite ?? 0,
+
+    // catégorie pour filtrage
+    category: livre.categorie?.libelle ?? "Autre",
+
     image: livre.images?.length
       ? `${config.public.storageBase}/${livre.images[0].path}`
       : "/images/livre.jpg",
@@ -201,24 +221,39 @@ const currentPage = ref(1);
 const itemsPerPage = 12;
 
 const filteredBooks = computed(() => {
-  let result = books.value.filter((b) => b.price <= filters.value.maxPrice);
+  let result = books.value;
 
-  if (filters.value.onlyPromo) result = result.filter((b) => b.isPromo);
+  /* RECHERCHE TEXTE */
+  if (search.value) {
+    const q = search.value.toLowerCase();
+    result = result.filter((b) => b.title.toLowerCase().includes(q));
+  }
 
-  if (filters.value.categories.length)
+  /* PRIX */
+  result = result.filter((b) => b.price <= filters.value.maxPrice);
+
+  /* PROMO */
+  if (filters.value.onlyPromo) {
+    result = result.filter((b) => b.isPromo);
+  }
+
+  /* CATÉGORIES */
+  if (filters.value.categories.length) {
     result = result.filter((b) =>
       filters.value.categories.includes(b.category),
     );
+  }
 
+  /* TRI */
   switch (filters.value.sort) {
     case "priceAsc":
-      result.sort((a, b) => a.price - b.price);
+      result = [...result].sort((a, b) => a.price - b.price);
       break;
     case "priceDesc":
-      result.sort((a, b) => b.price - a.price);
+      result = [...result].sort((a, b) => b.price - a.price);
       break;
     case "alpha":
-      result.sort((a, b) => a.title.localeCompare(b.title));
+      result = [...result].sort((a, b) => a.title.localeCompare(b.title));
       break;
   }
 

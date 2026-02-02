@@ -69,7 +69,7 @@
               </h1>
               <div class="flex items-center space-x-2 text-gray-600 mb-3">
                 <svg
-                  class="w-4 h-4"
+                  class="w-5 h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -119,9 +119,19 @@
             <!-- Ajouter au panier -->
             <div class="flex justify-center pt-3">
               <button
-                class="cursor-pointer bg-[#6a0d5f] hover:bg-[#8B5A8C] text-white py-2 px-4 rounded-lg font-medium text-sm flex items-center gap-2 transition-colors duration-200"
+                @click.stop.prevent="addToCart(book)"
+                :disabled="
+                  cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
+                "
+                class="w-50 py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Ajouter au panier
+                {{
+                  !book.stockAvailable
+                    ? "Indisponible"
+                    : cartStore.getQuantity(book.id) > 0
+                      ? "Déjà au panier"
+                      : "Ajouter au panier"
+                }}
               </button>
             </div>
           </div>
@@ -260,6 +270,26 @@ import Breadcrumb from "@/components/Breadcrumb.vue";
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "#app";
 import { useLivreStore } from "~~/stores/livre";
+import { useCartStore } from "~~/stores/cart";
+
+const cartStore = useCartStore();
+
+const addToCart = (book) => {
+  cartStore.add({
+    id: book.id,
+    title: book.title,
+    author: book.author,
+    price: book.price,
+    image: book.image,
+    stockAvailable: book.stockAvailable,
+  });
+};
+
+const canAddToCart = (book) => {
+  if (!book.stockAvailable) return false;
+
+  return cartStore.getQuantity(book.id) < book.stockAvailable;
+};
 
 const route = useRoute();
 const livreStore = useLivreStore();
@@ -289,6 +319,10 @@ const book = computed(() => {
     isPromo: !!b.prix_promo,
     category: b.categorie?.libelle,
     description: b.description,
+
+    // stock interne (pas affiché)
+    stockAvailable: b.stock?.quantite ?? 0,
+
     image: b.images?.length
       ? `${config.public.storageBase}/${b.images[0].path}`
       : "/images/livre.jpg",

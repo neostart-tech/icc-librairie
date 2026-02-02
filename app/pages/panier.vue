@@ -57,17 +57,21 @@
                 <div class="flex items-center justify-between">
                   <div class="flex items-center border rounded-lg">
                     <button
-                      class="w-8 h-8 hover:bg-gray-100"
+                      class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
                       @click="decreaseQty(item)"
+                      :disabled="item.quantity <= 1"
                     >
-                      −
+                      -
                     </button>
-                    <span class="px-3 text-sm font-medium">
+
+                    <span class="px-4 text-sm font-medium">
                       {{ item.quantity }}
                     </span>
+
                     <button
-                      class="w-8 h-8 hover:bg-gray-100"
+                      class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
                       @click="increaseQty(item)"
+                      :disabled="item.quantity >= item.stockAvailable"
                     >
                       +
                     </button>
@@ -131,15 +135,19 @@
                         <button
                           class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
                           @click="decreaseQty(item)"
+                          :disabled="item.quantity <= 1"
                         >
-                          −
+                          -
                         </button>
+
                         <span class="px-4 text-sm font-medium">
                           {{ item.quantity }}
                         </span>
+
                         <button
                           class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
                           @click="increaseQty(item)"
+                          :disabled="item.quantity >= item.stockAvailable"
                         >
                           +
                         </button>
