@@ -2,20 +2,20 @@
   <!-- Header fixe -->
   <HeaderBar class="fixed top-0 left-0 right-0 z-50 bg-[#6a0d5f]">
     <nav class="px-4 sm:px-6 lg:px-16 xl:px-24 py-4 text-white">
-      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-4">
+      <div class="flex items-center justify-between gap-4">
         <!-- LOGO -->
         <NuxtLink to="/" class="flex items-center">
           <img
             src="/logo/logo_librairie(1).png"
             alt="ICC_Librairie"
-            class="h-12 sm:h-14 w-auto"
+            class="h-10 sm:h-12 lg:h-14 w-auto"
           />
         </NuxtLink>
 
         <!-- Barre de recherche (desktop) -->
         <div class="hidden md:flex justify-center">
           <div
-            class="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-xl"
+            class="flex items-center bg-white rounded-full px-4 py-2 w-100 max-w-xl"
           >
             <input
               v-model="search"
@@ -29,9 +29,9 @@
         </div>
 
         <!-- Actions utilisateur -->
-        <div class="flex items-center space-x-3 sm:space-x-4 ml-auto">
+        <div class="flex items-center gap-3 sm:gap-4">
           <!-- Panier -->
-          <NuxtLink to="/panier" class="relative mr-10">
+          <NuxtLink to="/panier" class="relative">
             <svg
               fill="#ffffff"
               version="1.1"
@@ -81,11 +81,11 @@
             Connexion
           </NuxtLink>
 
-          <!-- Dashboard si connecté -->
-          <div v-else class="relative" ref="dropdownRef">
+          <!-- Dashboard (desktop uniquement) -->
+          <div v-else class="relative hidden md:block" ref="dropdownRef">
             <button
-              class="flex items-center focus:outline-none cursor-pointer"
-              @click="showDropdown = !showDropdown"
+              class="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-white/10 transition focus:outline-none"
+              @click.stop="showDropdown = !showDropdown"
             >
               <svg
                 class="w-6 h-6 ml-2"
@@ -169,7 +169,7 @@
       <!-- Menu mobile -->
       <div
         v-if="isMenuOpen"
-        class="md:hidden mt-2 bg-[#6a0d5f] rounded-lg p-4 space-y-3"
+        class="md:hidden mt-4 bg-[#6a0d5f] rounded-2xl p-5 space-y-4 shadow-lg"
       >
         <div class="flex items-center bg-white rounded-full px-4 py-2 w-full">
           <input
@@ -190,13 +190,22 @@
           Connexion
         </NuxtLink>
 
-        <NuxtLink
-          v-else
-          to="/dashboard"
-          class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors"
-        >
-          Dashboard
-        </NuxtLink>
+        <!-- Utilisateur connecté -->
+        <div v-else class="space-y-3">
+          <NuxtLink
+            to="/dashboard"
+            class="block bg-white text-[#6a0d5f] px-3 py-2 rounded-full font-medium text-center hover:bg-gray-100 transition-colors"
+          >
+            Dashboard
+          </NuxtLink>
+
+          <button
+            @click="handleLogout"
+            class="w-full bg-red-500 text-white px-3 py-2 rounded-full font-medium text-center hover:bg-red-600 transition-colors"
+          >
+            Déconnexion
+          </button>
+        </div>
       </div>
     </nav>
   </HeaderBar>
@@ -212,6 +221,14 @@ import { useCartStore } from "~~/stores/cart";
 
 import { useSearch } from "~/composables/useSearch";
 
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+router.afterEach(() => {
+  isMenuOpen.value = false;
+});
+
 const { search } = useSearch();
 
 const isMenuOpen = ref(false);
@@ -219,10 +236,7 @@ const showDropdown = ref(false);
 const dropdownRef = ref<HTMLElement | null>(null);
 
 const handleClickOutside = (event: MouseEvent) => {
-  if (
-    dropdownRef.value &&
-    !dropdownRef.value.contains(event.target as Node)
-  ) {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
     showDropdown.value = false;
   }
 };
@@ -233,7 +247,7 @@ const cartStore = useCartStore();
 // Initialise le store depuis localStorage
 onMounted(() => {
   auth.init();
- document.addEventListener("click", handleClickOutside);
+  document.addEventListener("click", handleClickOutside);
 });
 
 onBeforeUnmount(() => {
@@ -242,7 +256,10 @@ onBeforeUnmount(() => {
 
 // Computed réactif pour savoir si l’utilisateur est connecté
 const isLoggedIn = computed(() => auth.isLogged);
-const handleLogout = () => auth.logout();
+const handleLogout = () => {
+  auth.logout();
+  isMenuOpen.value = false;
+};
 </script>
 
 <style scoped>
