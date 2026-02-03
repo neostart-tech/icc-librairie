@@ -112,6 +112,10 @@ import { computed, ref, onMounted } from "vue";
 import { useCartStore } from "~~/stores/cart";
 import { useGatewayStore } from "~~/stores/gateway";
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const cartStore = useCartStore();
 const gatewayStore = useGatewayStore();
 
