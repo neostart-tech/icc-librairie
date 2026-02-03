@@ -183,10 +183,10 @@
               <span>{{ subtotal }} FCFA</span>
             </div>
 
-            <div class="flex justify-between text-sm mb-3">
+            <!-- <div class="flex justify-between text-sm mb-3">
               <span>Livraison</span>
               <span class="text-green-600">Gratuite</span>
-            </div>
+            </div> -->
 
             <hr class="my-4" />
 
