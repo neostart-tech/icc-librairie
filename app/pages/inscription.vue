@@ -246,8 +246,12 @@ const handleRegister = async () => {
     });
 
     // Redirection après inscription
-    const redirect = (route.query.redirect as string) || "/";
-    router.push(redirect);
+    const redirect =
+      typeof route.query.redirect === "string"
+        ? route.query.redirect
+        : router.options.history.state.back || "/";
+
+    navigateTo(redirect);
   } catch (err: any) {
     error.value = err?.message || "Impossible de créer le compte.";
   }

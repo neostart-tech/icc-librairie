@@ -115,10 +115,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "~~/stores/auth";
 
 const route = useRoute();
+const router = useRouter();
 const auth = useAuthStore();
 
 const email = ref("");
@@ -131,8 +132,12 @@ const handleLogin = async () => {
   try {
     await auth.loginSSO(email.value, password.value);
 
-    const redirect = route.query.redirect as string;
-    navigateTo(redirect || "/");
+    const redirect =
+      typeof route.query.redirect === "string"
+        ? route.query.redirect
+        : router.options.history.state.back || "/";
+
+    navigateTo(redirect);
   } catch (e: any) {
     error.value = e.message;
   }

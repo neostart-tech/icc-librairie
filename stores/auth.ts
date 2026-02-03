@@ -5,6 +5,15 @@ interface ApiError {
   errors?: Record<string, string[]>;
 }
 
+function parseApiError(error: any): ApiError {
+  const data = error?.response?._data || error?.data || error;
+
+  return {
+    message: data?.message || "Une erreur est survenue.",
+    errors: data?.errors,
+  };
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null as any,
@@ -37,10 +46,7 @@ export const useAuthStore = defineStore("auth", {
 
         return res;
       } catch (error: any) {
-        throw {
-          message: error?.data?.message || "Impossible de se connecter.",
-          errors: error?.data?.errors,
-        } as ApiError;
+        throw parseApiError(error);
       } finally {
         this.loading = false;
       }
@@ -73,13 +79,7 @@ export const useAuthStore = defineStore("auth", {
 
         return res;
       } catch (error: any) {
-        throw {
-          message:
-            error?.data?.message ||
-            error?.message ||
-            "Impossible de se connecter via SSO.",
-          errors: error?.data?.errors,
-        } as ApiError;
+        throw parseApiError(error);
       } finally {
         this.loading = false;
       }
@@ -111,11 +111,7 @@ export const useAuthStore = defineStore("auth", {
 
         return res;
       } catch (error: any) {
-        throw {
-          message:
-            error?.data?.message || "Erreur lors de l’inscription. Réessaie.",
-          errors: error?.data?.errors,
-        } as ApiError;
+        throw parseApiError(error);
       } finally {
         this.loading = false;
       }
