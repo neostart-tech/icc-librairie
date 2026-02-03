@@ -31,7 +31,7 @@
             <span class="badge">3</span>
           </NuxtLink>
 
-          <NuxtLink to="/dashboard">
+          <NuxtLink to="/admin">
             <img src="/icone/user.png" class="w-6 h-6" />
           </NuxtLink>
 
