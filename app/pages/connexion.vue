@@ -132,8 +132,9 @@
 <script setup lang="ts">
 import { useAuthStore } from "~~/stores/auth";
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
+const router = useRouter();
 const auth = useAuthStore();
 const route = useRoute();
 const email = ref("");
@@ -146,8 +147,12 @@ const handleLogin = async () => {
   try {
     await auth.login(email.value, password.value);
 
-    const redirect = route.query.redirect as string;
-    navigateTo(redirect || "/");
+    const redirect =
+      typeof route.query.redirect === "string"
+        ? route.query.redirect
+        : router.options.history.state.back || "/";
+
+    navigateTo(redirect);
   } catch (e: any) {
     error.value = e.message;
   }

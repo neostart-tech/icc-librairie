@@ -82,7 +82,7 @@
           </NuxtLink>
 
           <!-- Dashboard si connecté -->
-          <div v-else class="relative">
+          <div v-else class="relative" ref="dropdownRef">
             <button
               class="flex items-center focus:outline-none cursor-pointer"
               @click="showDropdown = !showDropdown"
@@ -206,7 +206,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useAuthStore } from "~~/stores/auth";
 import { useCartStore } from "~~/stores/cart";
 
@@ -216,6 +216,16 @@ const { search } = useSearch();
 
 const isMenuOpen = ref(false);
 const showDropdown = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
+
+const handleClickOutside = (event: MouseEvent) => {
+  if (
+    dropdownRef.value &&
+    !dropdownRef.value.contains(event.target as Node)
+  ) {
+    showDropdown.value = false;
+  }
+};
 
 const auth = useAuthStore();
 const cartStore = useCartStore();
@@ -223,6 +233,11 @@ const cartStore = useCartStore();
 // Initialise le store depuis localStorage
 onMounted(() => {
   auth.init();
+ document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
 });
 
 // Computed réactif pour savoir si l’utilisateur est connecté
