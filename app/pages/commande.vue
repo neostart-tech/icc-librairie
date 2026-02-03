@@ -1,8 +1,7 @@
 <template>
-  <Breadcrumb :items=" [{ label: 'Commande', to: '/commande' }]" />
+  <Breadcrumb :items="[{ label: 'Commande', to: '/commande' }]" />
   <div class="min-h-screen bg-[#F3F0F5] px-6 lg:px-12 py-10">
     <div class="max-w-6xl mx-auto">
-
       <!-- HEADER -->
       <div class="flex items-center gap-3 mb-8">
         <NuxtLink
@@ -15,86 +14,49 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
         <!-- FORMULAIRE -->
         <div class="lg:col-span-2 bg-white rounded-xl shadow p-6">
-
-          <!-- INFOS CLIENT -->
-          <h2 class="text-lg font-semibold mb-4">Informations client</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <input class="input" placeholder="Nom" />
-            <input class="input" placeholder="Prénom" />
-            <input class="input md:col-span-2" placeholder="Email" />
-            <input class="input md:col-span-2" placeholder="Téléphone" />
-          </div>
-
-          <!-- ADRESSE -->
-          <h2 class="text-lg font-semibold mb-4">Adresse de livraison</h2>
-          <div class="grid grid-cols-1 gap-4 mb-6">
-            <input class="input" placeholder="Adresse complète" />
-            <div class="grid grid-cols-2 gap-4">
-              <input class="input" placeholder="Ville" />
-              <input class="input" placeholder="Pays" />
-            </div>
-          </div>
-
           <!-- PAIEMENT -->
           <h2 class="text-lg font-semibold mb-4">Mode de paiement</h2>
 
           <div class="space-y-3">
+            <label
+              v-for="gateway in gatewayStore.actifs"
+              :key="gateway.id"
+              class="payment-option"
+            >
+              <input type="radio" v-model="selectedGateway" :value="gateway" />
 
-            <!-- FLOOZ -->
-            <label class="payment-option">
-              <input type="radio" v-model="payment" value="flooz" />
-              <img src="/logo/flooz.png" class="w-8 h-6" alt="Flooz" />
-              <span>Flooz</span>
-            </label>
+              <img
+                :src="gateway.logo_url"
+                class="h-8 object-contain"
+                :alt="gateway.libelle"
+              />
 
-            <!-- MIXX -->
-            <label class="payment-option">
-              <input type="radio" v-model="payment" value="mixx" />
-              <img src="/logo/Mixx-by-yas.jpg" class="h-6" alt="Mixx by YAS" />
-              <span>Mixx by YAS</span>
-            </label>
-
-            <!-- MASTERCARD -->
-            <label class="payment-option">
-              <input type="radio" v-model="payment" value="mastercard" />
-              <img src="/logo/mastercard-logo.jpg" class="h-8" alt="MasterCard" />
-              <span>MasterCard</span>
+              <span>{{ gateway.libelle }}</span>
             </label>
           </div>
 
           <!-- INFOS DE PAIEMENT -->
-          <div v-if="payment" class="mt-6 bg-gray-50 border rounded-lg p-4">
+          <div
+            v-if="selectedGateway"
+            class="mt-6 bg-gray-50 border rounded-lg p-4"
+          >
             <h3 class="font-semibold mb-3 text-gray-700">
-              Informations de paiement
+              Paiement via {{ selectedGateway.libelle }}
             </h3>
 
-            <!-- FLOOZ -->
-            <div v-if="payment === 'flooz'" class="space-y-3">
-              <input class="input" placeholder="Numéro Flooz" />
-              <p class="text-sm text-gray-500">
-                Vous recevrez une demande de paiement sur votre téléphone.
-              </p>
-            </div>
+            <input
+              v-model="phone"
+              class="input"
+              placeholder="+22890000000"
+              @input="validatePhone"
+            />
 
-            <!-- MIXX -->
-            <div v-if="payment === 'mixx'" class="space-y-3">
-              <input class="input" placeholder="Numéro Mixx by YAS" />
-              <p class="text-sm text-gray-500">
-                Confirmez le paiement via votre compte Mixx.
-              </p>
-            </div>
-
-            <!-- MASTERCARD -->
-            <div v-if="payment === 'mastercard'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input class="input md:col-span-2" placeholder="Numéro de carte" />
-              <input class="input" placeholder="MM / AA" />
-              <input class="input" placeholder="CVV" />
-            </div>
+            <p v-if="phoneError" class="text-sm text-red-500 mt-2">
+              {{ phoneError }}
+            </p>
           </div>
-
         </div>
 
         <!-- RÉCAP COMMANDE -->
@@ -130,31 +92,62 @@
           </p>
 
           <button
-            class="mt-6 w-full bg-[#6a0d5f] text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+            class="mt-6 w-full bg-[#6a0d5f] text-white py-3 rounded-lg font-semibold transition"
+            :disabled="!canSubmit"
+            :class="{
+              'opacity-50 cursor-not-allowed': !canSubmit,
+              'hover:bg-purple-700': canSubmit,
+            }"
           >
             Confirmer la commande
           </button>
         </aside>
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import Breadcrumb from '@/components/Breadcrumb.vue'
+import { computed, ref, onMounted } from "vue";
+import { useCartStore } from "~~/stores/cart";
+import { useGatewayStore } from "~~/stores/gateway";
 
-const cart = ref([
-  { id: 1, title: 'Le Pouvoir de la Foi', price: 7500, quantity: 1 },
-  { id: 2, title: 'Marcher avec Dieu', price: 9800, quantity: 2 },
-])
+definePageMeta({
+  middleware: "auth",
+});
 
-const payment = ref(null)
+const cartStore = useCartStore();
+const gatewayStore = useGatewayStore();
 
-const total = computed(() =>
-  cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
-)
+const cart = computed(() => cartStore.items);
+const total = computed(() => cartStore.subtotal);
+
+const selectedGateway = ref(null);
+
+onMounted(() => {
+  if (!gatewayStore.hasGateways) {
+    gatewayStore.fetchGateways();
+  }
+});
+
+const phone = ref("");
+const phoneError = ref(null);
+
+const validatePhone = () => {
+  const regex = /^\+228\d{8}$/;
+
+  phoneError.value = regex.test(phone.value)
+    ? null
+    : "Le numéro doit être au format +228XXXXXXXX";
+};
+
+const canSubmit = computed(
+  () =>
+    cart.value.length > 0 &&
+    selectedGateway.value &&
+    phone.value &&
+    !phoneError.value,
+);
 </script>
 
 <style scoped>
