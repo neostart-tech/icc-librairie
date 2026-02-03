@@ -2,6 +2,7 @@
   <section class="relative w-full h-[320px] overflow-hidden">
     <!-- BACKGROUND FLOUTÉ -->
     <div
+      v-if="currentBook"
       class="absolute inset-0 bg-cover bg-center transition-all duration-700"
       :style="{
         backgroundImage: `url(${currentBook.image})`,
@@ -138,9 +139,13 @@ const heroBooks = computed(() =>
     }),
 );
 
-const currentBook = computed(() => heroBooks.value[currentIndex.value]);
+const currentBook = computed(() => {
+  return heroBooks.value.length ? heroBooks.value[currentIndex.value] : null;
+});
 
 const nextSlide = () => {
+  if (!heroBooks.value.length) return;
+
   currentIndex.value = (currentIndex.value + 1) % heroBooks.value.length;
 };
 
