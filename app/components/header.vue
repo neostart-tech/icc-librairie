@@ -4,7 +4,7 @@
     <nav class="px-4 sm:px-6 lg:px-16 xl:px-24 py-4 text-white">
       <div class="flex items-center justify-between gap-4">
         <!-- LOGO -->
-        <NuxtLink to="/" class="flex items-center">
+        <NuxtLink to="/admin" class="flex items-center">
           <img
             src="/logo/logo_librairie(1).png"
             alt="ICC_Librairie"
@@ -167,6 +167,10 @@
           </button>
         </div>
       </div>
+            </div>
+
+      
+
     </nav>
   </HeaderBar>
 
