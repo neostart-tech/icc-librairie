@@ -4,7 +4,7 @@
     <nav class="px-4 sm:px-6 lg:px-16 xl:px-24 py-4 text-white">
       <div class="flex items-center justify-between gap-4">
         <!-- LOGO -->
-        <NuxtLink to="/admin" class="flex items-center">
+        <NuxtLink to="/" class="flex items-center">
           <img
             src="/logo/logo_librairie(1).png"
             alt="ICC_Librairie"
@@ -100,9 +100,49 @@
               Mon compte
             </button>
 
-          <NuxtLink to="/admin">
-            <img src="/icone/user.png" class="w-6 h-6" />
-          </NuxtLink>
+            <div
+              v-if="showDropdown"
+              class="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg py-2 z-50"
+            >
+              <NuxtLink
+                to="/dashboard"
+                class="flex items-center gap-2 px-4 py-2 text-[#6a0d5f] hover:bg-gray-100"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="3" y="3" width="7" height="7" rx="2" />
+                  <rect x="14" y="3" width="7" height="7" rx="2" />
+                  <rect x="14" y="14" width="7" height="7" rx="2" />
+                  <rect x="3" y="14" width="7" height="7" rx="2" />
+                </svg>
+                Mon Dashboard
+              </NuxtLink>
+              <button
+                class="flex items-center gap-2 w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 border-t border-gray-100 mt-1"
+                @click="handleLogout"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"
+                  />
+                </svg>
+                Déconnexion
+              </button>
+            </div>
+          </div>
 
           <!-- Menu burger mobile -->
           <button
@@ -167,10 +207,6 @@
           </button>
         </div>
       </div>
-            </div>
-
-      
-
     </nav>
   </HeaderBar>
 
