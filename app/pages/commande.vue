@@ -20,7 +20,26 @@
           <h2 class="text-lg font-semibold mb-4">Mode de paiement</h2>
 
           <div class="space-y-3">
+            <!-- LOADING -->
+            <div v-if="gatewayStore.loading" class="space-y-3">
+              <div
+                v-for="i in 3"
+                :key="i"
+                class="h-12 bg-gray-200 rounded-lg animate-pulse"
+              ></div>
+            </div>
+
+            <!-- AUCUN MOYEN -->
+            <p
+              v-else-if="!gatewayStore.actifs.length"
+              class="text-sm text-gray-500"
+            >
+              Aucun moyen de paiement disponible pour le moment.
+            </p>
+
+            <!-- LISTE DES GATEWAYS -->
             <label
+              v-else
               v-for="gateway in gatewayStore.actifs"
               :key="gateway.id"
               class="payment-option"
@@ -93,13 +112,17 @@
 
           <button
             class="mt-6 w-full bg-[#6a0d5f] text-white py-3 rounded-lg font-semibold transition"
-            :disabled="!canSubmit"
+            :disabled="!canSubmit || commandeStore.loading"
             :class="{
-              'opacity-50 cursor-not-allowed': !canSubmit,
+              'opacity-50 cursor-not-allowed':
+                !canSubmit || commandeStore.loading,
               'hover:bg-purple-700': canSubmit,
             }"
+            @click="submitCommande"
           >
-            Confirmer la commande
+            {{
+              commandeStore.loading ? "Traitement..." : "Confirmer la commande"
+            }}
           </button>
         </aside>
       </div>
@@ -111,6 +134,7 @@
 import { computed, ref, onMounted } from "vue";
 import { useCartStore } from "~~/stores/cart";
 import { useGatewayStore } from "~~/stores/gateway";
+import { useCommandeStore } from "~~/stores/commande";
 
 definePageMeta({
   middleware: "auth",
@@ -118,11 +142,38 @@ definePageMeta({
 
 const cartStore = useCartStore();
 const gatewayStore = useGatewayStore();
+const commandeStore = useCommandeStore();
 
 const cart = computed(() => cartStore.items);
 const total = computed(() => cartStore.subtotal);
 
 const selectedGateway = ref(null);
+
+const submitCommande = async () => {
+  if (!canSubmit.value) return;
+
+  try {
+    const payload = {
+      phone: phone.value,
+      gateway_id: selectedGateway.value.semoa_id, // important
+      livres: cart.value.map((item) => ({
+        livre_id: item.id,
+        quantite: item.quantity,
+      })),
+    };
+
+    const res = await commandeStore.createCommande(payload);
+
+    // Redirection vers Semoa
+    if (res?.payment_url) {
+      window.location.href = res.payment_url;
+    }
+    cartStore.clear();
+  } catch (e) {
+    console.error("Erreur commande :", e);
+    alert("Impossible de créer la commande");
+  }
+};
 
 onMounted(() => {
   if (!gatewayStore.hasGateways) {

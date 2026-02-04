@@ -27,8 +27,8 @@ export const useCategorieStore = defineStore("categorie", {
       this.loading = true;
 
       try {
-        const res: any = await $api("/categories");
-        this.categories = res.data ?? res;
+        const res = await $api("/categories");
+        this.categories = Array.isArray(res?.data) ? res.data : [];
       } catch (error) {
         console.error("Erreur fetchCategories", error);
       } finally {
@@ -44,8 +44,8 @@ export const useCategorieStore = defineStore("categorie", {
       this.loading = true;
 
       try {
-        const res: any = await $api(`/categories/${id}`);
-        this.categorie = res.data ?? res;
+        const res = await $api(`/categories/${id}`);
+        this.categorie = res?.data ?? null;
       } catch (error) {
         console.error("Erreur fetchCategorie", error);
       } finally {

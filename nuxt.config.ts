@@ -10,8 +10,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: "http://127.0.0.1:8000/api",
-      storageBase: "http://127.0.0.1:8000/storage",
+      apiBase: "http://localhost:8000/api",
+      storageBase: "http://localhost:8000/storage",
     },
   },
 
