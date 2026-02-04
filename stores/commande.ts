@@ -88,7 +88,7 @@ export const useCommandeStore = defineStore("commande", {
           body: payload,
         });
 
-        return res.data; // { success, payment_url }
+        return res; // { success, payment_url }
       } catch (e) {
         console.error("Erreur création commande :", e);
         this.error = e;
