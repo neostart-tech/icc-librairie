@@ -164,10 +164,16 @@ const submitCommande = async () => {
 
     const res = await commandeStore.createCommande(payload);
 
-    // Redirection vers Semoa
-    if (res?.payment_url) {
-      window.location.href = res.payment_url;
+    if (!res?.success) {
+      throw new Error("Commande non confirmée");
     }
+
+    if (res.payment_url) {
+      cartStore.clear();
+      window.location.href = res.payment_url;
+      return;
+    }
+
     cartStore.clear();
   } catch (e) {
     console.error("Erreur commande :", e);
