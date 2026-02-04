@@ -17,6 +17,7 @@
     "@pinia/nuxt": "^0.11.3",
     "api": "^6.1.2",
     "nuxt": "^4.2.2",
+    "nuxt-toast": "1.4.0",
     "pinia": "^3.0.4",
     "plugin": "^0.0.15",
     "tailwindcss": "^4.1.18"
