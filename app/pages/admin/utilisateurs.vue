@@ -28,6 +28,7 @@
               <th class="p-4">Email</th>
               <th class="p-4">Téléphone</th>
               <th class="p-4">Date inscription</th>
+              <th class="p-4">Type d'utilisateur</th>
               <th class="p-4">Statut</th>
               <th class="p-4 text-center">Actions</th>
             </tr>
@@ -53,6 +54,10 @@
 
               <td class="p-4">
                 {{ user.date }}
+              </td>
+
+              <td class="p-4">
+                {{ user.type }}
               </td>
 
               <!-- BADGE STATUT -->
@@ -118,6 +123,7 @@
           <p><strong>Email :</strong> {{ utilisateurSelectionne.email }}</p>
           <p><strong>Téléphone :</strong> {{ utilisateurSelectionne.telephone }}</p>
           <p><strong>Date inscription :</strong> {{ utilisateurSelectionne.date }}</p>
+          <p><strong>Type d'utilisateur :</strong> {{ utilisateurSelectionne.type }}</p>
           <p><strong>Statut :</strong> {{ utilisateurSelectionne.statut }}</p>
         </div>
 
@@ -141,6 +147,7 @@ const utilisateurs = ref([
     email: "jean@mail.com",
     telephone: "90112233",
     date: "02/02/2026",
+    type: "compte synchronisé à l'app mobile",
     statut: "Actif"
   },
   {
@@ -149,6 +156,7 @@ const utilisateurs = ref([
     email: "marie@mail.com",
     telephone: "99887766",
     date: "01/02/2026",
+    type:"compte créé sur le site de la librairie",
     statut: "Bloqué"
   }
 ])
