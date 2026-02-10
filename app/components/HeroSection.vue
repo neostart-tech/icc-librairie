@@ -31,10 +31,6 @@
             {{ currentBook.title }}
           </h2>
 
-          <p class="text-sm text-gray-200 mb-1">
-            {{ currentBook.author }}
-          </p>
-
           <NuxtLink
             :to="`/livres/${currentBook.id}`"
             class="px-5 py-2 bg-[#6a0d5f] rounded-full text-sm font-semibold hover:opacity-90 transition"
@@ -136,7 +132,7 @@ const heroBooks = computed(() =>
           ? `${config.public.storageBase}/${livre.images[0].path}`
           : DEFAULT_IMAGE,
       };
-    }),
+    })
 );
 
 const currentBook = computed(() => {

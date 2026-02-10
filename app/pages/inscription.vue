@@ -213,10 +213,12 @@
 import { ref } from "vue";
 import { useAuthStore } from "~~/stores/auth";
 import { useRoute, useRouter } from "vue-router";
+import { useToast } from "#imports";
 
 const auth = useAuthStore();
 const router = useRouter();
 const route = useRoute();
+const toast = useToast();
 
 const name = ref("");
 const firstName = ref("");
@@ -252,6 +254,7 @@ const handleRegister = async () => {
         : router.options.history.state.back || "/";
 
     navigateTo(redirect);
+    toast.success({ message: "Bienvenue sur notre plateforme !" });
   } catch (err: any) {
     error.value = err?.message || "Impossible de créer le compte.";
   }

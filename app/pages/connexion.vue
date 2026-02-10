@@ -133,6 +133,7 @@
 import { useAuthStore } from "~~/stores/auth";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useToast } from "#imports";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -141,6 +142,7 @@ const email = ref("");
 const password = ref("");
 const showPassword = ref(false);
 const error = ref("");
+const toast = useToast();
 const handleLogin = async () => {
   error.value = "";
 
@@ -153,6 +155,7 @@ const handleLogin = async () => {
         : router.options.history.state.back || "/";
 
     navigateTo(redirect);
+    toast.success({ message: "Heureux de vous revoir !" });
   } catch (e: any) {
     error.value = e.message;
   }
