@@ -72,8 +72,8 @@
                     !book.stockAvailable
                       ? "Indisponible"
                       : cartStore.getQuantity(book.id) > 0
-                        ? "Déjà au panier"
-                        : "Ajouter au panier"
+                      ? "Déjà au panier"
+                      : "Ajouter au panier"
                   }}
                 </button>
               </div>
@@ -199,7 +199,7 @@ const books = computed(() =>
   livreStore.livres.map((livre) => ({
     id: livre.id,
     title: livre.titre,
-    author: livre.auteur,
+    author: livre.auteur ?? "--",
     price: livre.prix_promo ?? livre.prix,
     oldPrice: livre.prix_promo ? livre.prix : null,
     isPromo: !!livre.prix_promo,
@@ -213,7 +213,7 @@ const books = computed(() =>
     image: livre.images?.length
       ? `${config.public.storageBase}/${livre.images[0].path}`
       : "/images/livre.jpg",
-  })),
+  }))
 );
 
 /* PAGINATION */
@@ -240,7 +240,7 @@ const filteredBooks = computed(() => {
   /* CATÉGORIES */
   if (filters.value.categories.length) {
     result = result.filter((b) =>
-      filters.value.categories.includes(b.category),
+      filters.value.categories.includes(b.category)
     );
   }
 
@@ -261,7 +261,7 @@ const filteredBooks = computed(() => {
 });
 
 const totalPages = computed(() =>
-  Math.ceil(filteredBooks.value.length / itemsPerPage),
+  Math.ceil(filteredBooks.value.length / itemsPerPage)
 );
 
 const paginatedBooks = computed(() => {
