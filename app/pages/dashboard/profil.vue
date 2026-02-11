@@ -342,31 +342,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Actions dangereuses -->
-          <div class="bg-white shadow rounded-lg p-6 border border-red-200">
-            <h3 class="text-lg font-semibold text-red-800 mb-4">Zone de danger</h3>
-            <div class="space-y-4">
-              <button
-                @click="exportData"
-                class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                <svg class="h-5 w-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Exporter mes données
-              </button>
-              <button
-                @click="showDeleteModal = true"
-                class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-                Supprimer mon compte
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -440,7 +415,7 @@ const userData = reactive({
   firstName: 'Anna',
   lastName: 'Lorena',
   email: 'anna.lorena@example.com',
-  phone: '+33 1 23 45 67 89',
+  phone: '+228 90 12 34 56',
   avatar: null,
   role: 'Utilisateur Premium',
   createdAt: '2023-01-15T10:30:00Z',
@@ -557,25 +532,22 @@ const updatePassword = async () => {
     errorMessage.value = 'Le mot de passe actuel est incorrect'
   } finally {
     isLoading.value = false
+    isLoading.value = true
   }
 }
 
-// Toggle des préférences
 const toggleEmailNotifications = () => {
   userPreferences.emailNotifications = !userPreferences.emailNotifications
-  // Ici, vous pourriez sauvegarder la préférence via une API
 }
 
 const toggleDarkMode = () => {
   userPreferences.darkMode = !userPreferences.darkMode
-  // Ici, vous pourriez sauvegarder la préférence via une API
 }
 
-// Exporter les données
 const exportData = async () => {
   isLoading.value = true
   try {
-    // Simulation d'appel API
+outl
     await new Promise(resolve => setTimeout(resolve, 1000))
     
     // Dans un cas réel, vous généreriez et téléchargeriez un fichier
@@ -587,20 +559,13 @@ const exportData = async () => {
   }
 }
 
-// Supprimer le compte
 const deleteAccount = async () => {
   if (!deletePassword.value) return
 
   isLoading.value = true
   try {
-    // Simulation d'appel API
+
     await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Ici, vous feriez un appel API réel :
-    // await $fetch('/api/user/account', {
-    //   method: 'DELETE',
-    //   body: { password: deletePassword.value }
-    // })
     
     // Redirection vers la page d'accueil après suppression
     navigateTo('/')
