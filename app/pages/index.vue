@@ -4,135 +4,133 @@
     <HeroSection />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6">
-      <div class="flex gap-4 md:gap-6">
-        <!-- SIDEBAR -->
-        <SidebarFiltre
-          :categories="categorieStore.categories"
-          :min-price="0"
-          :max-price="20000"
-          @update:filters="updateFilters"
-        />
+      <!-- <div class="flex gap-4 md:gap-6"> -->
+      <!-- FILTRES DROPDOWN -->
+      <FiltersDropdown
+        :categories="categorieStore.categories"
+        :min-price="0"
+        :max-price="20000"
+        @update:filters="updateFilters"
+      />
 
-        <!-- CONTENU -->
-        <section class="flex-1">
-          <!-- LIVRES -->
-          <div
-            v-if="paginatedBooks.length > 0"
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      <!-- CONTENU -->
+      <section id="livres-list" class="flex-1 mt-5">
+        <!-- LIVRES -->
+        <div
+          v-if="paginatedBooks.length > 0"
+          class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+        >
+          <NuxtLink
+            v-for="book in paginatedBooks"
+            :key="book.id"
+            :to="`/livres/${book.id}`"
+            class="group relative bg-white rounded-lg shadow transition overflow-hidden w-full hover:shadow-lg cursor-pointer block"
           >
-            <NuxtLink
-              v-for="book in paginatedBooks"
-              :key="book.id"
-              :to="`/livres/${book.id}`"
-              class="group relative bg-white rounded-lg shadow transition overflow-hidden w-full hover:shadow-lg cursor-pointer block"
+            <!-- Solde -->
+            <span
+              v-if="book.isPromo"
+              class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full"
             >
-              <!-- Solde -->
-              <span
-                v-if="book.isPromo"
-                class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full"
-              >
-                SOLDE
-              </span>
+              SOLDE
+            </span>
 
-              <!-- Image -->
-              <img
-                :src="book.image"
-                class="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition"
-              />
+            <!-- Image -->
+            <img
+              :src="book.image"
+              class="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition"
+            />
 
-              <!-- Infos -->
-              <div class="p-3">
-                <h3
-                  class="font-semibold text-sm sm:text-base mb-1 line-clamp-1"
+            <!-- Infos -->
+            <div class="p-3">
+              <h3 class="font-semibold text-sm sm:text-base mb-1 line-clamp-1">
+                {{ book.title }}
+              </h3>
+              <p class="text-xs text-gray-500 mb-2">{{ book.author }}</p>
+
+              <div class="flex gap-2 items-center mb-3">
+                <span
+                  v-if="book.isPromo"
+                  class="line-through text-gray-400 text-xs"
                 >
-                  {{ book.title }}
-                </h3>
-                <p class="text-xs text-gray-500 mb-2">{{ book.author }}</p>
-
-                <div class="flex gap-2 items-center mb-3">
-                  <span
-                    v-if="book.isPromo"
-                    class="line-through text-gray-400 text-xs"
-                  >
-                    {{ book.oldPrice }} FCFA
-                  </span>
-                  <span class="text-[#6a0d5f] font-bold text-sm sm:text-base">
-                    {{ book.price }} FCFA
-                  </span>
-                </div>
-
-                <button
-                  @click.stop.prevent="addToCart(book)"
-                  :disabled="
-                    cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
-                  "
-                  class="w-full py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {{
-                    !book.stockAvailable
-                      ? "Indisponible"
-                      : cartStore.getQuantity(book.id) > 0
-                      ? "Déjà au panier"
-                      : "Ajouter au panier"
-                  }}
-                </button>
+                  {{ book.oldPrice }} FCFA
+                </span>
+                <span class="text-[#6a0d5f] font-bold text-sm sm:text-base">
+                  {{ book.price }} FCFA
+                </span>
               </div>
-            </NuxtLink>
-          </div>
-
-          <div v-else class="flex items-center justify-center py-20">
-            <p class="text-gray-600 text-base font-medium text-center">
-              Aucun livre ne correspond à vos critères.
-              <br />
-              <span class="text-sm text-gray-500">
-                Modifiez le tri ou les filtres.
-              </span>
-            </p>
-          </div>
-
-          <!-- PAGINATION -->
-          <div class="flex justify-center mt-12 px-2">
-            <div class="flex flex-wrap items-center gap-2 text-sm">
-              <button @click="changePage(1)" class="px-3 py-1 border rounded">
-                «
-              </button>
-              <button
-                @click="changePage(currentPage - 1)"
-                class="px-3 py-1 border rounded"
-              >
-                ‹
-              </button>
 
               <button
-                v-for="page in totalPages"
-                :key="page"
-                @click="changePage(page)"
-                class="px-3 py-1 border rounded transition"
-                :class="
-                  page === currentPage
-                    ? 'bg-[#6a0d5f] text-white border-[#6a0d5f]'
-                    : 'hover:bg-gray-100'
+                @click.stop.prevent="addToCart(book)"
+                :disabled="
+                  cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
                 "
+                class="w-full py-1.5 rounded-md text-xs sm:text-sm bg-[#6a0d5f] text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{ page }}
-              </button>
-
-              <button
-                @click="changePage(currentPage + 1)"
-                class="px-3 py-1 border rounded"
-              >
-                ›
-              </button>
-              <button
-                @click="changePage(totalPages)"
-                class="px-3 py-1 border rounded"
-              >
-                »
+                {{
+                  !book.stockAvailable
+                    ? "Indisponible"
+                    : cartStore.getQuantity(book.id) > 0
+                    ? "Déjà au panier"
+                    : "Ajouter au panier"
+                }}
               </button>
             </div>
+          </NuxtLink>
+        </div>
+
+        <div v-else class="flex items-center justify-center py-20">
+          <p class="text-gray-600 text-base font-medium text-center">
+            Aucun livre ne correspond à vos critères.
+            <br />
+            <span class="text-sm text-gray-500">
+              Modifiez le tri ou les filtres.
+            </span>
+          </p>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="flex justify-center mt-12 px-2">
+          <div class="flex flex-wrap items-center gap-2 text-sm">
+            <button @click="changePage(1)" class="px-3 py-1 border rounded">
+              «
+            </button>
+            <button
+              @click="changePage(currentPage - 1)"
+              class="px-3 py-1 border rounded"
+            >
+              ‹
+            </button>
+
+            <button
+              v-for="page in totalPages"
+              :key="page"
+              @click="changePage(page)"
+              class="px-3 py-1 border rounded transition"
+              :class="
+                page === currentPage
+                  ? 'bg-[#6a0d5f] text-white border-[#6a0d5f]'
+                  : 'hover:bg-gray-100'
+              "
+            >
+              {{ page }}
+            </button>
+
+            <button
+              @click="changePage(currentPage + 1)"
+              class="px-3 py-1 border rounded"
+            >
+              ›
+            </button>
+            <button
+              @click="changePage(totalPages)"
+              class="px-3 py-1 border rounded"
+            >
+              »
+            </button>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+      <!-- </div> -->
     </div>
   </div>
 </template>

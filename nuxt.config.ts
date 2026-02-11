@@ -40,8 +40,4 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  toast: {
-    position: "top-center",
-  },
 });
