@@ -396,7 +396,6 @@ const allOrders = ref([
   }
 ])
 
-// Fonction pour filtrer les commandes
 const filteredOrders = computed(() => {
   let filtered = [...allOrders.value]
   
@@ -405,7 +404,6 @@ const filteredOrders = computed(() => {
     filtered = filtered.filter(order => order.status === filters.value.status)
   }
   
-  // Filtrer par période
   const now = new Date()
   if (filters.value.period === 'month') {
     filtered = filtered.filter(order => {
@@ -430,7 +428,6 @@ const filteredOrders = computed(() => {
   return filtered
 })
 
-// Fonction pour parser la date
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/')
   return new Date(`${year}-${month}-${day}`)
@@ -453,7 +450,6 @@ const averageOrder = computed(() => {
 })
 
 
-// Pagination
 const totalPages = computed(() => Math.ceil(filteredOrders.value.length / itemsPerPage))
 const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage)
 const endIndex = computed(() => startIndex.value + itemsPerPage)
@@ -477,7 +473,6 @@ const nextPage = () => {
   }
 }
 
-// Actions
 const applyFilters = () => {
   currentPage.value = 1
 }
@@ -492,7 +487,6 @@ const duplicateOrder = (order) => {
   alert(`Commande #${order.id} ajoutée au panier`)
 }
 
-// Fonction pour obtenir les classes CSS selon le statut
 const getStatusClass = (status) => {
   switch(status) {
     case 'Expédiée':
