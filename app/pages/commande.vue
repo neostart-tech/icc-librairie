@@ -21,11 +21,12 @@
 
           <div class="space-y-3">
             <!-- LOADING -->
-            <div v-if="gatewayStore.loading" class="space-y-3">
+            <div
+              v-if="isPageLoading"
+              class="fixed inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-gray-900/70"
+            >
               <div
-                v-for="i in 3"
-                :key="i"
-                class="h-12 bg-gray-200 rounded-lg animate-pulse"
+                class="h-12 w-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
               ></div>
             </div>
 
@@ -140,6 +141,7 @@ definePageMeta({
   middleware: "auth",
 });
 
+const isPageLoading = ref(true);
 const cartStore = useCartStore();
 const gatewayStore = useGatewayStore();
 const commandeStore = useCommandeStore();
@@ -181,9 +183,14 @@ const submitCommande = async () => {
   }
 };
 
-onMounted(() => {
-  if (!gatewayStore.hasGateways) {
-    gatewayStore.fetchGateways();
+onMounted(async () => {
+  try {
+    isPageLoading.value = true;
+    if (!gatewayStore.hasGateways) {
+      await gatewayStore.fetchGateways();
+    }
+  } finally {
+    isPageLoading.value = false;
   }
 });
 
@@ -203,7 +210,7 @@ const canSubmit = computed(
     cart.value.length > 0 &&
     selectedGateway.value &&
     phone.value &&
-    !phoneError.value,
+    !phoneError.value
 );
 </script>
 
