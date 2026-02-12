@@ -1,4 +1,14 @@
 <template>
+  <!-- LOADING -->
+  <div
+    v-if="isPageLoading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-gray-900/70"
+  >
+    <div
+      class="h-12 w-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+    ></div>
+  </div>
+
   <div class="min-h-screen bg-gray-50">
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Section de bienvenue -->
@@ -10,15 +20,17 @@
       </div>
 
       <!-- Cartes de statistiques -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <!-- Commande en cours -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8"
+      >
+        <!-- Commandes en cours -->
         <div
-          class="bg-white rounded-xl shadow p-6 hover:shadow-md transition-shadow"
+          class="bg-white rounded-xl shadow p-4 sm:p-6 hover:shadow-md transition-shadow"
         >
           <div class="flex items-center">
-            <div class="p-3 bg-blue-100 rounded-lg">
+            <div class="p-2 sm:p-3 bg-blue-100 rounded-lg flex-shrink-0">
               <svg
-                class="w-6 h-6 text-blue-600"
+                class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -31,23 +43,23 @@
                 />
               </svg>
             </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">
+            <div class="ml-3 sm:ml-4 min-w-0 flex-1">
+              <p class="text-xs sm:text-sm font-medium text-gray-600 truncate">
                 Commandes en cours
               </p>
-              <p class="text-2xl font-bold text-gray-900">
-                {{ stats.ordersInProgress }}
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ ordersInProgress }}
               </p>
             </div>
           </div>
-          <div class="mt-4">
+          <div class="mt-3 sm:mt-4">
             <NuxtLink
-              to="/dashboard/commandes/liste"
-              class="text-blue-600 text-sm hover:text-blue-800 flex items-center"
+              to="/dashboard/commandes"
+              class="text-blue-600 text-xs sm:text-sm hover:text-blue-800 flex items-center"
             >
-              Voir les commandes
+              <span class="truncate">Voir les commandes</span>
               <svg
-                class="w-4 h-4 ml-1"
+                class="w-3 h-3 sm:w-4 sm:h-4 ml-1 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -65,12 +77,12 @@
 
         <!-- Livres achetés -->
         <div
-          class="bg-white rounded-xl shadow p-6 hover:shadow-md transition-shadow"
+          class="bg-white rounded-xl shadow p-4 sm:p-6 hover:shadow-md transition-shadow"
         >
           <div class="flex items-center">
-            <div class="p-3 bg-green-100 rounded-lg">
+            <div class="p-2 sm:p-3 bg-green-100 rounded-lg flex-shrink-0">
               <svg
-                class="w-6 h-6 text-green-600"
+                class="w-5 h-5 sm:w-6 sm:h-6 text-green-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -83,26 +95,25 @@
                 />
               </svg>
             </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Livres achetés</p>
-              <p class="text-2xl font-bold text-gray-900">
-                {{ stats.booksPurchased }}
+            <div class="ml-3 sm:ml-4 min-w-0 flex-1">
+              <p class="text-xs sm:text-sm font-medium text-gray-600 truncate">
+                Livres achetés
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900">
+                {{ booksPurchased }}
               </p>
             </div>
           </div>
-          <div class="mt-4">
-            <p class="text-xs text-gray-500">{{ stats.lastPurchaseDate }}</p>
-          </div>
         </div>
 
-        <!-- Prix total dépensé -->
+        <!-- Total dépensé -->
         <div
-          class="bg-white rounded-xl shadow p-6 hover:shadow-md transition-shadow"
+          class="bg-white rounded-xl shadow p-4 sm:p-6 hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1"
         >
           <div class="flex items-center">
-            <div class="p-3 bg-purple-100 rounded-lg">
+            <div class="p-2 sm:p-3 bg-purple-100 rounded-lg flex-shrink-0">
               <svg
-                class="w-6 h-6 text-purple-600"
+                class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -115,152 +126,120 @@
                 />
               </svg>
             </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Total dépensé</p>
-              <p class="text-2xl font-bold text-gray-900">
-                {{ stats.totalSpent }} FCFA
+            <div class="ml-3 sm:ml-4 min-w-0 flex-1">
+              <p class="text-xs sm:text-sm font-medium text-gray-600 truncate">
+                Total dépensé
+              </p>
+              <p class="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                {{ totalSpent }} FCFA
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Section commandes récentes -->
+      <!-- Commandes récentes -->
       <div class="bg-white rounded-xl shadow overflow-hidden">
         <div
-          class="px-6 py-4 border-b border-gray-200 flex justify-between items-center"
+          class="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex flex-wrap justify-between items-center gap-2"
         >
-          <h3 class="text-lg font-semibold text-gray-800">
+          <h3 class="text-base sm:text-lg font-semibold text-gray-800">
             Commandes récentes
           </h3>
           <NuxtLink
-            to="/dashboard/commandes/liste"
-            class="text-blue-600 text-sm hover:text-blue-800 font-medium"
+            to="/dashboard/commandes"
+            class="text-blue-600 text-xs sm:text-sm hover:text-blue-800 font-medium"
           >
             Voir toutes
           </NuxtLink>
         </div>
 
-        <!-- Sur mobile : vue en cartes -->
-        <div class="md:hidden">
+        <!-- Version mobile (cartes) -->
+        <div class="block md:hidden divide-y divide-gray-200">
           <div
             v-for="order in recentOrders"
             :key="order.id"
-            class="border-b border-gray-200 p-6"
+            class="p-4 space-y-2"
           >
             <div class="flex justify-between items-start">
-              <div>
-                <p class="font-medium text-gray-900">
-                  Commande #{{ order.id }}
-                </p>
-                <p class="text-sm text-gray-500 mt-1">{{ order.date }}</p>
-                <p class="text-sm text-gray-500 mt-1">{{ order.heure }}</p>
-              </div>
-              <div class="text-right">
-                <span
-                  :class="`px-2 py-1 text-xs font-semibold rounded-full ${getStatusClass(
-                    order.status
-                  )}`"
-                >
-                  {{ order.status }}
-                </span>
-                <p class="text-lg font-bold text-gray-900 mt-2">
-                  {{ order.total }} FCFA
-                </p>
-              </div>
-            </div>
-            <div class="mt-4 flex justify-end">
-              <NuxtLink
-                :to="`/commande/details/${order.id}`"
-                class="text-blue-600 text-sm hover:text-blue-800 font-medium"
+              <span class="font-medium text-gray-900"
+                >#{{ order.reference }}</span
               >
-                Voir détails
-              </NuxtLink>
+              <span
+                class="px-2 py-1 text-xs font-semibold rounded-full"
+                :class="
+                  order.statut === 'Traitée'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-yellow-100 text-yellow-800'
+                "
+              >
+                {{ order.statut }}
+              </span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-500">{{ order.date }}</span>
+              <span class="font-medium text-gray-900"
+                >{{ order.total }} FCFA</span
+              >
             </div>
           </div>
         </div>
 
-        <!-- Sur desktop : vue en tableau -->
+        <!-- Version desktop (tableau) -->
         <div class="hidden md:block overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
                 <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Commande
                 </th>
                 <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Date
                 </th>
                 <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Heure
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Statut
                 </th>
                 <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Total
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Actions
                 </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr
-                v-for="order in recentOrders"
-                :key="order.id"
-                class="hover:bg-gray-50"
-              >
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900">
-                    #{{ order.id }}
-                  </div>
+              <tr v-for="order in recentOrders" :key="order.id">
+                <td
+                  class="px-4 sm:px-6 py-3 sm:py-4 font-medium text-sm sm:text-base whitespace-nowrap"
+                >
+                  #{{ order.reference }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td
+                  class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-500 whitespace-nowrap"
+                >
                   {{ order.date }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ order.heure }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                   <span
-                    :class="`px-3 py-1 text-xs font-semibold rounded-full ${getStatusClass(
-                      order.status
-                    )}`"
+                    class="px-2 sm:px-3 py-1 text-xs font-semibold rounded-full"
+                    :class="
+                      order.statut === 'Traitée'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    "
                   >
-                    {{ order.status }}
+                    {{ order.statut }}
                   </span>
                 </td>
                 <td
-                  class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium"
+                  class="px-4 sm:px-6 py-3 sm:py-4 font-medium text-sm sm:text-base whitespace-nowrap"
                 >
                   {{ order.total }} FCFA
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <NuxtLink
-                    :to="`/dashboard/commandes/details/${order.id}`"
-                    class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors duration-200"
-                  >
-                    Détails
-                  </NuxtLink>
                 </td>
               </tr>
             </tbody>
@@ -269,15 +248,17 @@
       </div>
 
       <!-- Section de navigation rapide -->
-      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div
+        class="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+      >
         <NuxtLink
           to="/dashboard/commandes"
-          class="bg-white p-6 rounded-xl shadow hover:shadow-md transition-shadow border border-transparent hover:border-blue-200"
+          class="bg-white p-4 sm:p-6 rounded-xl shadow hover:shadow-md transition-shadow border border-transparent hover:border-blue-200"
         >
           <div class="flex items-center">
-            <div class="p-2 bg-blue-50 rounded-lg">
+            <div class="p-1.5 sm:p-2 bg-blue-50 rounded-lg flex-shrink-0">
               <svg
-                class="w-6 h-6 text-blue-600"
+                class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -290,21 +271,27 @@
                 />
               </svg>
             </div>
-            <div class="ml-4">
-              <h4 class="font-medium text-gray-900">Mes commandes</h4>
-              <p class="text-sm text-gray-600">Consultez vos achats</p>
+            <div class="ml-3 sm:ml-4 min-w-0">
+              <h4
+                class="font-medium text-gray-900 text-sm sm:text-base truncate"
+              >
+                Mes commandes
+              </h4>
+              <p class="text-xs sm:text-sm text-gray-600 truncate">
+                Consultez vos achats
+              </p>
             </div>
           </div>
         </NuxtLink>
 
         <NuxtLink
           to="/dashboard/profil"
-          class="bg-white p-6 rounded-xl shadow hover:shadow-md transition-shadow border border-transparent hover:border-green-200"
+          class="bg-white p-4 sm:p-6 rounded-xl shadow hover:shadow-md transition-shadow border border-transparent hover:border-green-200"
         >
           <div class="flex items-center">
-            <div class="p-2 bg-green-50 rounded-lg">
+            <div class="p-1.5 sm:p-2 bg-green-50 rounded-lg flex-shrink-0">
               <svg
-                class="w-6 h-6 text-green-600"
+                class="w-5 h-5 sm:w-6 sm:h-6 text-green-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -317,21 +304,27 @@
                 />
               </svg>
             </div>
-            <div class="ml-4">
-              <h4 class="font-medium text-gray-900">Mon profil</h4>
-              <p class="text-sm text-gray-600">Gérez vos informations</p>
+            <div class="ml-3 sm:ml-4 min-w-0">
+              <h4
+                class="font-medium text-gray-900 text-sm sm:text-base truncate"
+              >
+                Mon profil
+              </h4>
+              <p class="text-xs sm:text-sm text-gray-600 truncate">
+                Gérez vos informations
+              </p>
             </div>
           </div>
         </NuxtLink>
 
         <a
           href="/"
-          class="bg-white p-6 rounded-xl shadow hover:shadow-md transition-shadow border border-transparent hover:border-purple-200"
+          class="bg-white p-4 sm:p-6 rounded-xl shadow hover:shadow-md transition-shadow border border-transparent hover:border-purple-200 sm:col-span-2 lg:col-span-1"
         >
           <div class="flex items-center">
-            <div class="p-2 bg-purple-50 rounded-lg">
+            <div class="p-1.5 sm:p-2 bg-purple-50 rounded-lg flex-shrink-0">
               <svg
-                class="w-6 h-6 text-purple-600"
+                class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -344,9 +337,15 @@
                 />
               </svg>
             </div>
-            <div class="ml-4">
-              <h4 class="font-medium text-gray-900">Boutique</h4>
-              <p class="text-sm text-gray-600">Continuer mes achats</p>
+            <div class="ml-3 sm:ml-4 min-w-0">
+              <h4
+                class="font-medium text-gray-900 text-sm sm:text-base truncate"
+              >
+                Boutique
+              </h4>
+              <p class="text-xs sm:text-sm text-gray-600 truncate">
+                Continuer mes achats
+              </p>
             </div>
           </div>
         </a>
@@ -356,8 +355,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useUserStore } from "~~/stores/user";
+import { useCommandeStore } from "~~/stores/commande";
 
 definePageMeta({
   layout: "dashboard",
@@ -365,69 +365,61 @@ definePageMeta({
 });
 
 const userStore = useUserStore();
-const userFullName = ref("");
+const commandeStore = useCommandeStore();
+const isPageLoading = ref(true);
 
-// Statistiques
-const stats = {
-  ordersInProgress: 2,
-  booksPurchased: 42,
-  totalSpent: "150000",
-  averageOrder: "31,20",
-  lastPurchaseDate: "Dernier achat: 15/11/2025",
-};
+const userFullName = computed(() =>
+  userStore.user ? `${userStore.user.nom} ${userStore.user.prenom}` : null
+);
 
-// Commandes récentes
-const recentOrders = [
-  {
-    id: "ORD-7892",
-    date: "15/11/2023",
-    heure: "14:30",
-    status: "Expédiée",
-    total: "12000",
-  },
-  {
-    id: "ORD-7885",
-    date: "12/11/2023",
-    heure: "09:15",
-    status: "Livrée",
-    total: "1699",
-  },
-  {
-    id: "ORD-7871",
-    date: "05/11/2023",
-    heure: "16:45",
-    status: "En préparation",
-    total: "2850",
-  },
-  {
-    id: "ORD-7854",
-    date: "28/10/2023",
-    heure: "11:20",
-    status: "Livrée",
-    total: "6420",
-  },
-];
+/* =========================
+   STATS
+========================= */
+const ordersInProgress = computed(
+  () => commandeStore.commandes.filter((c) => c.statut === "termine").length
+);
 
-// Fonction pour obtenir les classes CSS selon le statut
-const getStatusClass = (status) => {
-  switch (status) {
-    case "Expédiée":
-      return "bg-green-100 text-green-800";
-    case "En préparation":
-      return "bg-yellow-100 text-yellow-800";
-    case "Livrée":
-      return "bg-blue-100 text-blue-800";
-    case "Annulée":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
+const booksPurchased = computed(() =>
+  commandeStore.commandes
+    .filter((c) => ["termine", "traite"].includes(c.statut))
+    .reduce((sum, c) => {
+      c.detailcommandes?.forEach((d) => {
+        sum += d.quantite;
+      });
+      return sum;
+    }, 0)
+);
+
+const totalSpent = computed(() =>
+  commandeStore.commandes
+    .filter((c) => ["termine", "traite"].includes(c.statut))
+    .reduce((sum, c) => sum + c.prix_total, 0)
+);
+
+/* =========================
+   COMMANDES RECENTES
+========================= */
+const recentOrders = computed(() =>
+  commandeStore.commandes
+    .filter((c) => ["termine", "traite"].includes(c.statut))
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .slice(0, 5)
+    .map((c) => ({
+      id: c.id,
+      reference: c.reference,
+      date: new Date(c.created_at).toLocaleDateString("fr-FR"),
+      total: c.prix_total,
+      statut: c.statut === "termine" ? "En attente de traitement" : "Traitée",
+    }))
+);
 
 onMounted(async () => {
-  await userStore.fetchProfile();
-  if (userStore.user) {
-    userFullName.value = `${userStore.user.nom} ${userStore.user.prenom}`;
+  try {
+    isPageLoading.value = true;
+    await userStore.fetchProfile();
+    await commandeStore.fetchMyOrders();
+  } finally {
+    isPageLoading.value = false;
   }
 });
 </script>

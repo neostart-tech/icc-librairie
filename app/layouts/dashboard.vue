@@ -1,6 +1,5 @@
 <template>
   <div class="flex min-h-screen">
-   
     <Sidebar v-model:isCollapsed="isCollapsed" />
 
     <div
@@ -12,14 +11,13 @@
         <slot />
       </main>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import Sidebar from '~/components/dashboard/Sidebar.vue'
-import Topbar from '~/components/dashboard/Topbar.vue'
+import { ref } from "vue";
+import Sidebar from "~/components/dashboard/Sidebar.vue";
+import Topbar from "~/components/dashboard/Topbar.vue";
 
-const isCollapsed = ref(false)
+const isCollapsed = ref(false);
 </script>
