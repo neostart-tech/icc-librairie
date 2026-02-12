@@ -1,12 +1,12 @@
 <template>
   <aside
     :class="[
-      'fixed top-0 left-0 h-screen bg-gradient-to-b from-white to-gray-50 border-r border-gray-200 flex flex-col transition-all duration-300 z-50 overflow-y-auto',
+      'fixed top-0 left-0 h-screen bg-gradient-to-b from-white to-gray-50 border-r border-gray-200 flex flex-col transition-all duration-300',
       isCollapsed ? 'w-20' : 'w-64',
     ]"
   >
     <!-- Logo et utilisateur -->
-    <div class="p-4 flex items-center justify-between">
+    <div class="p-4 flex items-center justify-between flex-shrink-0">
       <div class="flex items-center gap-3">
         <img
           src="/logo/logo_librairie(1).png"
@@ -39,7 +39,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 px-3 space-y-1 mt-4">
+    <nav class="flex-1 px-3 space-y-1 mt-4 overflow-hidden">
       <!-- Tableau de bord -->
       <NuxtLink
         to="/dashboard"
@@ -92,10 +92,7 @@
             </div>
             <span v-if="!isCollapsed" class="ml-3">Commandes</span>
           </div>
-          
         </nuxt-link>
-
-        
       </div>
 
       <!-- Profil -->
@@ -158,7 +155,10 @@
     </nav>
 
     <!-- Footer -->
-    <div v-if="!isCollapsed" class="p-4 text-xs text-gray-500 border-t">
+    <div
+      v-if="!isCollapsed"
+      class="p-4 text-xs text-gray-500 border-t flex-shrink-0"
+    >
       © ICC Librairie 2026
     </div>
   </aside>

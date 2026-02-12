@@ -1,106 +1,179 @@
 import { defineStore } from "pinia";
 
+interface User {
+	id: string;
+	nom: string;
+	prenom: string;
+	email: string;
+}
+
+interface Livre {
+	id: string;
+	titre: string;
+	prix: number;
+	prix_promo?: number | null;
+	image?: string;
+}
+
+interface DetailCommande {
+	id: string;
+	quantite: number;
+	prix_unitaire: number;
+	livre_id: string;
+	livre?: Livre;
+}
+
+interface Paiement {
+	id: string;
+	moyen_paiement: number;
+	reference_transaction: string;
+	montant: number;
+	statut: "pending" | "success" | "failed";
+	created_at: string;
+}
+
+export interface Commande {
+	id: string;
+	reference: string;
+	prix_total: number;
+	statut: "en_cours" | "termine" | "traite";
+	created_at: string;
+
+	user?: User;
+	detailcommandes?: DetailCommande[];
+	paiements?: Paiement[];
+}
+
+interface ApiError {
+	message?: string;
+	errors?: Record<string, string[]>;
+}
+
 export const useCommandeStore = defineStore("commande", {
-  state: () => ({
-    commandes: [] as any[],
-    currentCommande: null as any | null,
-    loading: false,
-    error: null as any,
-  }),
+	state: () => ({
+		commandes: [] as Commande[],
+		commande: null as Commande | null,
+		loading: false,
+	}),
 
-  getters: {
-    hasCommandes: (state) => state.commandes.length > 0,
-  },
+	actions: {
+		/** ======================
+		 *  MES COMMANDES (USER)
+		 ======================= */
+		async fetchMyOrders() {
+			const { $api } = useNuxtApp();
+			this.loading = true;
 
-  actions: {
-    /**
-     * Commandes de l'utilisateur connecté
-     */
-    async fetchMyCommandes() {
-      this.loading = true;
-      this.error = null;
+			try {
+				const res: any = await $api("/commandes");
+				this.commandes = Array.isArray(res?.data) ? res.data : [];
+			} catch (error) {
+				console.error("Erreur fetchMyOrders", error);
+			} finally {
+				this.loading = false;
+			}
+		},
 
-      try {
-        const { $api } = useNuxtApp();
-        const res = await $api("/commandes");
-        this.commandes = res.data.data ?? [];
-      } catch (e) {
-        console.error("Erreur fetch commandes :", e);
-        this.error = e;
-      } finally {
-        this.loading = false;
-      }
-    },
+		/** ======================
+		 *  TOUTES LES COMMANDES (ADMIN)
+		 ======================= */
+		async fetchAllOrders() {
+			const { $api } = useNuxtApp();
+			this.loading = true;
 
-    /**
-     * Toutes les commandes (admin)
-     */
-    async fetchAllCommandes() {
-      this.loading = true;
-      this.error = null;
+			try {
+				const res: any = await $api("/commandes/all");
+				this.commandes = Array.isArray(res?.data) ? res.data : [];
+			} catch (error) {
+				console.error("Erreur fetchAllOrders", error);
+			} finally {
+				this.loading = false;
+			}
+		},
 
-      try {
-        const { $api } = useNuxtApp();
-        const res = await $api("/commandes/all");
-        this.commandes = res.data.data ?? [];
-      } catch (e) {
-        console.error("Erreur fetch all commandes :", e);
-        this.error = e;
-      } finally {
-        this.loading = false;
-      }
-    },
+		/** ======================
+		 *  DETAIL COMMANDE
+		 ======================= */
+		async fetchCommande(id: string) {
+			const { $api } = useNuxtApp();
+			this.loading = true;
 
-    /**
-     * Détail d'une commande
-     */
-    async fetchCommande(id: string) {
-      this.loading = true;
-      this.error = null;
+			try {
+				const res: any = await $api(`/commandes/${id}`);
+				this.commande = res?.data ?? null;
+				return res;
+			} catch (error) {
+				console.error("Erreur fetchCommande", error);
+			} finally {
+				this.loading = false;
+			}
+		},
 
-      try {
-        const { $api } = useNuxtApp();
-        const res = await $api(`/commandes/${id}`);
-        this.currentCommande = res.data.data;
-      } catch (e) {
-        console.error("Erreur fetch commande :", e);
-        this.error = e;
-      } finally {
-        this.loading = false;
-      }
-    },
+		/** ======================
+		 *  TRAITER UNE COMMANDE
+		 ======================= */
+		async traiterCommande(id: string) {
+			const { $api } = useNuxtApp();
+			this.loading = true;
 
-    /**
-     * Créer une commande + initier paiement
-     */
-    async createCommande(payload: {
-      phone: string;
-      gateway_id: number;
-      livres: { livre_id: string; quantite: number }[];
-    }) {
-      this.loading = true;
-      this.error = null;
+			try {
+				const res: any = await $api(`/commandes/${id}/traiter`, {
+					method: "PUT",
+				});
 
-      try {
-        const { $api } = useNuxtApp();
-        const res = await $api("/commandes", {
-          method: "POST",
-          body: payload,
-        });
+				// Met à jour la commande dans la liste
+				const index = this.commandes.findIndex((c) => c.id === id);
+				if (index !== -1) {
+					this.commandes[index].statut = "traite";
+				}
 
-        return res; // { success, payment_url }
-      } catch (e) {
-        console.error("Erreur création commande :", e);
-        this.error = e;
-        throw e;
-      } finally {
-        this.loading = false;
-      }
-    },
+				// Met à jour la commande courante si ouverte
+				if (this.commande?.id === id) {
+					this.commande.statut = "traite";
+				}
 
-    clear() {
-      this.commandes = [];
-      this.currentCommande = null;
-    },
-  },
+				return res;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		/** ======================
+		 *  CREER UNE COMMANDE
+		 ======================= */
+		async createCommande(payload: {
+			phone: string;
+			gateway_id: number;
+			livres: {
+				livre_id: string;
+				quantite: number;
+			}[];
+		}) {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+
+			try {
+				const res: any = await $api("/commandes", {
+					method: "POST",
+					body: payload,
+				});
+
+				/**
+				 * res = {
+				 *  success: true,
+				 *  payment_url: string
+				 * }
+				 */
+				return res;
+			} catch (error: any) {
+				throw {
+					message:
+						error?.data?.message || "Erreur lors de la création de la commande",
+					errors: error?.data?.errors,
+				} as ApiError;
+			} finally {
+				this.loading = false;
+			}
+		},
+	},
 });
