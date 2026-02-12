@@ -15,7 +15,7 @@
     <!-- Actions droite -->
     <div class="flex items-center space-x-3 sm:space-x-4">
       <!-- Bouton recherche (desktop) -->
-      <button
+      <!-- <button
         class="hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors duration-200"
       >
         <svg
@@ -32,15 +32,15 @@
           />
         </svg>
         <span class="text-sm">Rechercher</span>
-      </button>
+      </button> -->
 
       <!-- Bouton notifications avec dropdown -->
-      <div class="relative" ref="notificationsDropdown">
+      <!-- <div class="relative" ref="notificationsDropdown">
         <button
           @click.stop="toggleNotifications"
           class="h-10 w-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors duration-200 relative"
         >
-          <!-- Icône alerte -->
+          
           <svg
             class="w-5 h-5 text-gray-600"
             fill="none"
@@ -59,7 +59,7 @@
             class="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full"
           ></span>
         </button>
-      </div>
+      </div> -->
 
       <!-- Séparateur -->
       <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
@@ -72,7 +72,7 @@
         >
           <!-- Avatar -->
           <div
-            class="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center"
+            class="h-8 w-8 rounded-full bg-[#6a0d5f] flex items-center justify-center"
           >
             <svg
               class="w-4 h-4 text-white"
@@ -87,7 +87,7 @@
 
           <!-- Info utilisateur -->
           <div class="hidden lg:block text-left">
-            <p class="text-sm font-medium text-gray-900">Anna Lorena</p>
+            <p class="text-sm font-medium text-gray-900">{{ userFullName }}</p>
             <p class="text-xs text-gray-500">Utilisateur</p>
           </div>
 
@@ -123,9 +123,9 @@
           >
             <!-- En-tête dropdown -->
             <div class="px-4 py-3 border-b border-gray-100">
-              <p class="text-sm font-medium text-gray-900">Anna Lorena</p>
+              <p class="text-sm font-medium text-gray-900">{{ userFullName }}</p>
               <p class="text-xs text-gray-500 mt-0.5">
-                anna.lorena@example.com
+                {{ userEmail }}
               </p>
             </div>
 
@@ -152,37 +152,10 @@
                 <span>Mon profil</span>
               </NuxtLink>
 
-              <NuxtLink
-                to="/dashboard/parametres"
-                @click="closeDropdowns"
-                class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
-              >
-                <svg
-                  class="w-4 h-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                <span>Paramètres</span>
-              </NuxtLink>
-
               <div class="border-t border-gray-100 my-1"></div>
 
-              <button
-                @click="logout"
+              <nuxt-link
+                to="/"
                 class="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150"
               >
                 <svg
@@ -198,8 +171,8 @@
                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                   />
                 </svg>
-                <span>Déconnexion</span>
-              </button>
+                <span>Retourner à l'accueil</span>
+              </nuxt-link>
             </div>
           </div>
         </transition>
@@ -211,9 +184,11 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "#imports";
+import { useUserStore } from "~~/stores/user";
 
 const emit = defineEmits(["toggle-sidebar"]);
 const route = useRoute();
+const userStore = useUserStore();
 
 // Références pour les dropdowns
 const profileDropdown = ref(null);
@@ -223,38 +198,12 @@ const notificationsDropdown = ref(null);
 const profileDropdownOpen = ref(false);
 const notificationsOpen = ref(false);
 
-// Notifications
-const notifications = ref([
-  {
-    id: 1,
-    title: "Commande expédiée",
-    message: "Votre commande #ORD-7892 a été expédiée",
-    time: "Il y a 2 heures",
-    type: "order",
-    read: false,
-  },
-  {
-    id: 2,
-    title: "Promotion spéciale",
-    message: "20% de réduction sur les livres de science-fiction",
-    time: "Il y a 1 jour",
-    type: "alert",
-    read: false,
-  },
-  {
-    id: 3,
-    title: "Commande livrée",
-    message: "Votre commande #ORD-7885 a été livrée",
-    time: "Il y a 3 jours",
-    type: "order",
-    read: true,
-  },
-]);
+const userInitial = computed(() =>
+		userStore.user?.nom?.charAt(0)?.toUpperCase(),
+	);
 
-// Computed properties
-const hasNotifications = computed(() => {
-  return notifications.value.some((n) => !n.read);
-});
+	const userFullName = ref("");
+	const userEmail = ref("");
 
 // Fonctions pour les dropdowns
 const toggleProfileDropdown = () => {
@@ -294,10 +243,7 @@ const handleNotificationClick = (notification) => {
   notificationsOpen.value = false;
 };
 
-const logout = () => {
-  alert("Déconnexion effectuée");
-  closeDropdowns();
-};
+
 
 // Fermer les dropdowns en cliquant à l'extérieur
 const handleClickOutside = (event) => {
@@ -319,7 +265,7 @@ const handleDropdownClick = (event) => {
 };
 
 // Lifecycle hooks
-onMounted(() => {
+onMounted(async() => {
   document.addEventListener("click", handleClickOutside);
   // Ajouter les listeners pour les dropdowns
   if (profileDropdown.value) {
@@ -328,6 +274,13 @@ onMounted(() => {
   if (notificationsDropdown.value) {
     notificationsDropdown.value.addEventListener("click", handleDropdownClick);
   }
+
+  await userStore.fetchProfile();
+		if (userStore.user) {
+			userFullName.value = `${userStore.user.nom} ${userStore.user.prenom}`;
+			
+			userEmail.value = userStore.user.email;
+		}
 });
 
 onBeforeUnmount(() => {

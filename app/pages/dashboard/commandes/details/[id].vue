@@ -5,11 +5,11 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-6">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Détails de la commande</h1>
+            <h1 class="text-2xl font-semibold text-gray-900">Détails de la commande</h1>
             <p class="text-gray-600 mt-1">Commande #{{ order.id }}</p>
           </div>
           <div class="flex space-x-4">
-            <NuxtLink to="/commande/liste" class="text-blue-600 hover:text-blue-800 flex items-center">
+            <NuxtLink to="/dashboard/commandes" class="text-blue-600 hover:text-blue-800 flex items-center">
               <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
@@ -379,4 +379,9 @@ const getStatusClass = (status) => {
       return 'bg-gray-100 text-gray-800';
   }
 };
+
+definePageMeta({
+  layout: 'dashboard',
+  middleware: "auth",
+})
 </script>

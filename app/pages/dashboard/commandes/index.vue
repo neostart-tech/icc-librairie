@@ -4,7 +4,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
       <div class=" mb-10">
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Mes commandes</h1>
+        <h1 class="text-2xl sm:text-2xl font-semibold text-gray-900">Mes commandes</h1>
         <p class="text-gray-600 mt-1 text-sm sm:text-base">Historique de tous vos achats</p>
       </div>
 
@@ -268,7 +268,8 @@
 
 <script setup>
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  middleware: "auth",
 })
 
 import { ref, computed } from 'vue'

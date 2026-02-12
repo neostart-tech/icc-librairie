@@ -14,7 +14,7 @@
           class="h-10 w-10 object-contain"
         />
         <div v-if="!isCollapsed">
-          <h1 class="text-lg font-bold text-gray-900">ICC Librairie</h1>
+          <h1 class="text-lg font-bold text-[#6a0d5f]">ICC Librairie</h1>
           <p class="text-xs text-gray-500">Tableau de bord</p>
         </div>
       </div>
@@ -68,8 +68,8 @@
 
       <!-- Commandes -->
       <div>
-        <button
-          @click="openCommandes = !openCommandes"
+        <nuxt-link
+          to="/dashboard/commandes"
           class="w-full flex items-center justify-between px-3 py-3 rounded-xl text-gray-700 hover:bg-white hover:shadow-sm transition group"
         >
           <div class="flex items-center">
@@ -92,52 +92,10 @@
             </div>
             <span v-if="!isCollapsed" class="ml-3">Commandes</span>
           </div>
-          <svg
-            v-if="!isCollapsed"
-            class="w-4 h-4 text-gray-400 transition-transform"
-            :class="openCommandes ? 'rotate-180' : ''"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
+          
+        </nuxt-link>
 
-        <!-- Sous-menu Commandes -->
-        <transition
-          enter-active-class="transition-all duration-200 ease-out"
-          leave-active-class="transition-all duration-150 ease-in"
-          enter-from-class="opacity-0 max-h-0"
-          enter-to-class="opacity-100 max-h-40"
-          leave-from-class="opacity-100 max-h-40"
-          leave-to-class="opacity-0 max-h-0"
-        >
-          <div
-            v-show="openCommandes"
-            :class="[
-              isCollapsed
-                ? 'flex flex-col items-center mt-1 space-y-2'
-                : 'ml-12 mt-1 space-y-1 overflow-hidden',
-            ]"
-          >
-            <NuxtLink
-              to="/dashboard/commandes/liste"
-              class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-[#6a0d5f]"
-              >Liste</NuxtLink
-            >
-            <NuxtLink
-              to="/dashboard/commandes/details"
-              class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-[#6a0d5f]"
-              >Détails</NuxtLink
-            >
-          </div>
-        </transition>
+        
       </div>
 
       <!-- Profil -->
@@ -167,7 +125,7 @@
       </NuxtLink>
 
       <!-- Paramètres -->
-      <NuxtLink
+      <!-- <NuxtLink
         to="/dashboard/parametres"
         class="flex items-center px-3 py-3 rounded-xl text-gray-700 hover:bg-white hover:shadow-sm transition group"
         active-class="bg-white shadow font-semibold text-[#6a0d5f]"
@@ -196,7 +154,7 @@
           </svg>
         </div>
         <span v-if="!isCollapsed" class="ml-3">Paramètres</span>
-      </NuxtLink>
+      </NuxtLink> -->
     </nav>
 
     <!-- Footer -->
