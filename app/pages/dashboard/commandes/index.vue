@@ -1,4 +1,14 @@
 <template>
+  <!-- LOADING -->
+  <div
+    v-if="isPageLoading"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-gray-900/70"
+  >
+    <div
+      class="h-12 w-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+    ></div>
+  </div>
+
   <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div class="mb-10">
@@ -17,7 +27,7 @@
             <div>
               <p class="text-sm font-medium text-gray-600">Commandes totales</p>
               <p class="text-2xl sm:text-3xl font-bold text-gray-900 mt-1">
-                {{ allOrders.length }}
+                {{ totalProcessedOrders }}
               </p>
             </div>
             <div class="p-2 bg-blue-50 rounded-lg">
@@ -104,254 +114,101 @@
               Toutes vos commandes
             </h2>
             <div class="text-sm text-gray-600">
-              {{ filteredOrders.length }} commande(s)
+              {{ processedOrders.length }} commande(s)
             </div>
           </div>
         </div>
 
-        <!-- Vue mobile -->
-        <div class="block sm:hidden divide-y divide-gray-200">
-          <div
-            v-for="order in paginatedOrders"
-            :key="order.id"
-            class="p-4 hover:bg-gray-50 transition-colors duration-150"
-          >
-            <div class="flex justify-between items-start mb-3">
-              <div>
-                <p class="font-semibold text-gray-900">#{{ order.id }}</p>
-                <div class="flex items-center gap-2 mt-1">
-                  <svg
-                    class="w-3 h-3 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span class="text-xs text-gray-500"
-                    >{{ order.date }} • {{ order.time }}</span
-                  >
-                </div>
-              </div>
-              <span
-                :class="`px-2.5 py-1 text-xs font-medium rounded-full ${getStatusClass(
-                  order.status
-                )}`"
-              >
-                {{ order.status }}
-              </span>
-            </div>
+        <!-- Tableau avec Vue3Datatable -->
+        <div class="p-4 hidden sm:block">
+  <Vue3Datatable
+    :rows="processedOrders"
+    :columns="columns"
+    :sortable="true"
+    :pagination="true"
+    :page-size="8"
+    class="!bg-transparent"
+    :header-class="'bg-gray-50 text-gray-700 text-xs uppercase cursor-pointer'"
+    :row-class="'hover:bg-gray-50 text-gray-700'"
+    :cell-class="'px-4 py-2'"
+  >
+    <template #statut="data">
+      <span
+        class="px-3 py-1 rounded-full text-xs font-semibold"
+        :class="
+          data.value.statut === 'traite'
+            ? 'bg-green-100 text-green-700'
+            : 'bg-yellow-100 text-yellow-700'
+        "
+      >
+        {{ data.value.statut === "traite" ? "Traitée" : "En cours de traitement" }}
+      </span>
+    </template>
 
-            <div class="space-y-2">
-              <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600">Articles</span>
-                <span class="font-medium">{{ order.items }} article(s)</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600">Total</span>
-                <span class="font-bold text-gray-900"
-                  >{{ order.total }} FCFA</span
-                >
-              </div>
-            </div>
+    <template #actions="data">
+      <NuxtLink
+        :to="`/dashboard/commandes/details/${data.value._raw.id}`"
+        class="px-3 py-1.5 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+      >
+        Détails
+      </NuxtLink>
+    </template>
+  </Vue3Datatable>
+</div>
+<!-- Version mobile : cartes -->
+<div class="block sm:hidden p-4 space-y-4">
+  <div
+    v-for="order in processedOrders"
+    :key="order._raw.id"
+    class="border border-gray-200 rounded-xl p-4 bg-white shadow-sm"
+  >
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-sm font-semibold text-gray-900">
+        {{ order.reference }}
+      </span>
+      <span
+        class="px-3 py-1 rounded-full text-xs font-semibold"
+        :class="
+          order.statut === 'traite'
+            ? 'bg-green-100 text-green-700'
+            : 'bg-yellow-100 text-yellow-700'
+        "
+      >
+        {{ order.statut === "traite" ? "Traitée" : "En cours" }}
+      </span>
+    </div>
 
-            <div class="flex justify-end gap-3 mt-4">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <NuxtLink
-                  :to="`/dashboard/commandes/details/${order.id}`"
-                  class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors duration-200"
-                >
-                  Détails
-                </NuxtLink>
-              </td>
-            </div>
-          </div>
-        </div>
+    <div class="text-sm text-gray-600 space-y-1">
+      <div class="flex justify-between">
+        <span>Date</span>
+        <span class="font-medium">{{ order.date }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Heure</span>
+        <span class="font-medium">{{ order.heure }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Total</span>
+        <span class="font-semibold text-gray-900">
+          {{ order.montant }}
+        </span>
+      </div>
+    </div>
 
-        <!-- Vue desktop -->
-        <div class="hidden sm:block overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  N° Commande
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Date
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Heure
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Statut
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Total
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr
-                v-for="order in paginatedOrders"
-                :key="order.id"
-                class="hover:bg-gray-50 transition-colors duration-150"
-              >
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-gray-900">
-                    #{{ order.id }}
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ order.date }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ order.time }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    :class="`px-3 py-1.5 text-xs font-medium rounded-full ${getStatusClass(
-                      order.status
-                    )}`"
-                  >
-                    {{ order.status }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-gray-900">
-                    {{ order.total }} FCFA
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center gap-3">
-                    <td class="px-0 py-2 whitespace-nowrap text-sm font-medium">
-                      <NuxtLink
-                        :to="`/dashboard/commandes/details/${order.id}`"
-                        class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors duration-200"
-                      >
-                        Détails
-                      </NuxtLink>
-                    </td>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <NuxtLink
+      :to="`/dashboard/commandes/details/${order._raw.id}`"
+      class="mt-4 block w-full text-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+    >
+      Voir les détails
+    </NuxtLink>
+  </div>
+</div>
 
-        <!-- Pagination -->
-        <div
-          v-if="filteredOrders.length > itemsPerPage"
-          class="px-4 sm:px-6 py-4 border-t border-gray-200"
-        >
-          <div
-            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-          >
-            <div class="text-sm text-gray-700">
-              Affichage de
-              <span class="font-medium">{{ startIndex + 1 }}</span> à
-              <span class="font-medium">{{
-                Math.min(endIndex, filteredOrders.length)
-              }}</span>
-              sur
-              <span class="font-medium">{{ filteredOrders.length }}</span>
-              commandes
-            </div>
-
-            <div class="flex items-center gap-1">
-              <button
-                @click="previousPage"
-                :disabled="currentPage === 1"
-                :class="`p-2 rounded-lg ${
-                  currentPage === 1
-                    ? 'text-gray-400 cursor-not-allowed'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-
-              <button
-                v-for="page in totalPages"
-                :key="page"
-                @click="goToPage(page)"
-                :class="`h-10 w-10 flex items-center justify-center rounded-lg text-sm font-medium ${
-                  currentPage === page
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`"
-              >
-                {{ page }}
-              </button>
-
-              <button
-                @click="nextPage"
-                :disabled="currentPage === totalPages"
-                :class="`p-2 rounded-lg ${
-                  currentPage === totalPages
-                    ? 'text-gray-400 cursor-not-allowed'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Aucune commande -->
       <div
-        v-if="filteredOrders.length === 0"
+        v-if="processedOrders.length === 0"
         class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12 text-center"
       >
         <svg
@@ -373,24 +230,19 @@
         <p class="text-gray-600 mb-6">
           Aucune commande ne correspond à vos critères de recherche.
         </p>
-        <button
-          @click="resetFilters"
-          class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
-        >
-          Voir toutes les commandes
-        </button>
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
-definePageMeta({
-  layout: "dashboard",
-  middleware: "auth",
-});
-
 import { ref, computed } from "vue";
+import Vue3Datatable from "@bhplugin/vue3-datatable";
+import '@bhplugin/vue3-datatable/dist/style.css'
+import { useCommandeStore } from "~~/stores/commande";
+
+const commandeStore = useCommandeStore();
+const isPageLoading = ref(true);
 
 // Filtres
 const filters = ref({
@@ -398,243 +250,67 @@ const filters = ref({
   period: "all",
 });
 
-// Pagination
-const currentPage = ref(1);
-const itemsPerPage = 8;
+// Colonnes pour Vue3Datatable
+const columns = [
+  { field: "reference", title: "N° Commande", sortable: true },
+  { field: "date", title: "Date", sortable: true },
+  { field: "heure", title: "Heure", sortable: true },
+  { field: "statut", title: "Statut" },
+  { field: "montant", title: "Total", sortable: true },
+  { field: "actions", title: "Actions" },
+];
 
-// Données des commandes
-const allOrders = ref([
-  {
-    id: "ORD-7892",
-    date: "15/11/2023",
-    time: "14:30",
-    status: "Expédiée",
-    items: 3,
-    total: "14000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [
-      { name: "L'Étranger", quantity: 1, price: 8.99 },
-      { name: "1984", quantity: 1, price: 12.99 },
-      { name: "Le Petit Prince", quantity: 1, price: 6.99 },
-    ],
-  },
-  {
-    id: "ORD-7885",
-    date: "12/11/2023",
-    time: "09:15",
-    status: "Livrée",
-    items: 1,
-    total: "12000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [
-      {
-        name: "Harry Potter à l'école des sorciers",
-        quantity: 1,
-        price: 16.99,
-      },
-    ],
-  },
-  {
-    id: "ORD-7871",
-    date: "05/11/2023",
-    time: "16:45",
-    status: "En préparation",
-    items: 2,
-    total: "22000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [
-      { name: "Le Seigneur des Anneaux", quantity: 1, price: 19.99 },
-      { name: "Le Hobbit", quantity: 1, price: 8.51 },
-    ],
-  },
-  {
-    id: "ORD-7854",
-    date: "28/10/2023",
-    time: "11:20",
-    status: "Livrée",
-    items: 4,
-    total: "18000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [
-      { name: "Dune", quantity: 1, price: 14.99 },
-      { name: "Fondation", quantity: 1, price: 12.99 },
-      { name: "Le Meilleur des mondes", quantity: 1, price: 9.99 },
-      { name: "Fahrenheit 451", quantity: 1, price: 8.99 },
-    ],
-  },
-  {
-    id: "ORD-7832",
-    date: "15/10/2023",
-    time: "13:10",
-    status: "Livrée",
-    items: 2,
-    total: "5000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [
-      { name: "Chroniques martiennes", quantity: 1, price: 18.9 },
-      { name: "Les Robots", quantity: 1, price: 16.9 },
-    ],
-  },
-  {
-    id: "ORD-7815",
-    date: "02/10/2023",
-    time: "10:05",
-    status: "Livrée",
-    items: 5,
-    total: "10000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [
-      { name: "Cent ans de solitude", quantity: 1, price: 22.5 },
-      { name: "L'Amour aux temps du choléra", quantity: 1, price: 19.99 },
-      { name: "Le Vieil Homme et la Mer", quantity: 1, price: 9.99 },
-      { name: "Pour qui sonne le glas", quantity: 1, price: 14.99 },
-      { name: "Les Raisins de la colère", quantity: 1, price: 22.03 },
-    ],
-  },
-  {
-    id: "ORD-7798",
-    date: "20/09/2023",
-    time: "15:30",
-    status: "Livrée",
-    items: 1,
-    total: "7000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [{ name: "Le Nom de la rose", quantity: 1, price: 19.99 }],
-  },
-  {
-    id: "ORD-7776",
-    date: "10/09/2023",
-    time: "17:25",
-    status: "Livrée",
-    items: 3,
-    total: "12000",
-    shippingAddress: "12 Rue des Lilas, 75020 Paris",
-    books: [
-      { name: "Guerre et Paix", quantity: 1, price: 25.99 },
-      { name: "Anna Karénine", quantity: 1, price: 18.99 },
-      { name: "Crime et Châtiment", quantity: 1, price: 7.42 },
-    ],
-  },
-]);
-
-const filteredOrders = computed(() => {
-  let filtered = [...allOrders.value];
-
-  // Filtrer par statut
-  if (filters.value.status) {
-    filtered = filtered.filter(
-      (order) => order.status === filters.value.status
-    );
-  }
-
-  const now = new Date();
-  if (filters.value.period === "month") {
-    filtered = filtered.filter((order) => {
-      const orderDate = parseDate(order.date);
-      const monthAgo = new Date(
-        now.getFullYear(),
-        now.getMonth() - 1,
-        now.getDate()
-      );
-      return orderDate >= monthAgo;
-    });
-  } else if (filters.value.period === "3months") {
-    filtered = filtered.filter((order) => {
-      const orderDate = parseDate(order.date);
-      const threeMonthsAgo = new Date(
-        now.getFullYear(),
-        now.getMonth() - 3,
-        now.getDate()
-      );
-      return orderDate >= threeMonthsAgo;
-    });
-  } else if (filters.value.period === "year") {
-    filtered = filtered.filter((order) => {
-      const orderDate = parseDate(order.date);
-      const yearAgo = new Date(
-        now.getFullYear() - 1,
-        now.getMonth(),
-        now.getDate()
-      );
-      return orderDate >= yearAgo;
-    });
-  }
-
-  return filtered;
-});
-
-const parseDate = (dateString) => {
-  const [day, month, year] = dateString.split("/");
-  return new Date(`${year}-${month}-${day}`);
-};
+// Commandes traitées et terminées
+const processedOrders = computed(() =>
+  commandeStore.commandes
+    .filter((c) => ["termine", "traite"].includes(c.statut))
+    .map((c) => {
+      const d = new Date(c.created_at);
+      return {
+        reference: c.reference,
+        date: d.toLocaleDateString("fr-FR"),
+        heure: d.toLocaleTimeString("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        statut: c.statut,
+        montant: c.prix_total.toLocaleString() + " FCFA",
+        _raw: c,
+      };
+    })
+);
 
 // Statistiques
-const totalSpent = computed(() => {
-  const total = filteredOrders.value.reduce((sum, order) => {
-    return sum + parseFloat(order.total.replace(",", "."));
-  }, 0);
-  return Math.round(total);
-});
+const totalProcessedOrders = computed(() =>
+  commandeStore.commandes.filter((c) => ["termine", "traite"].includes(c.statut)).length
+);
+
+const totalSpent = computed(() =>
+  commandeStore.commandes
+    .filter((c) => ["termine", "traite"].includes(c.statut))
+    .reduce((sum, c) => sum + c.prix_total, 0)
+    .toLocaleString()
+);
 
 const averageOrder = computed(() => {
-  if (filteredOrders.value.length === 0) return 0;
-  const total = filteredOrders.value.reduce((sum, order) => {
-    return sum + parseFloat(order.total.replace(",", "."));
-  }, 0);
-  return Math.round(total / filteredOrders.value.length);
+  const orders = commandeStore.commandes.filter((c) => ["termine", "traite"].includes(c.statut));
+  if (orders.length === 0) return 0;
+  const total = orders.reduce((sum, c) => sum + c.prix_total, 0);
+  return Math.round(total / orders.length).toLocaleString();
 });
 
-const totalPages = computed(() =>
-  Math.ceil(filteredOrders.value.length / itemsPerPage)
-);
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage);
-const endIndex = computed(() => startIndex.value + itemsPerPage);
-const paginatedOrders = computed(() => {
-  return filteredOrders.value.slice(startIndex.value, endIndex.value);
+// Chargement des commandes
+onMounted(async () => {
+  try {
+    isPageLoading.value = true;
+  await commandeStore.fetchMyOrders();
+  } finally {
+    isPageLoading.value = false;
+  }
 });
 
-const goToPage = (page) => {
-  currentPage.value = page;
-};
-
-const previousPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
-
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-};
-
-const applyFilters = () => {
-  currentPage.value = 1;
-};
-
-const resetFilters = () => {
-  filters.value.status = "";
-  filters.value.period = "all";
-  currentPage.value = 1;
-};
-
-const duplicateOrder = (order) => {
-  alert(`Commande #${order.id} ajoutée au panier`);
-};
-
-const getStatusClass = (status) => {
-  switch (status) {
-    case "Expédiée":
-      return "bg-green-100 text-green-800";
-    case "En préparation":
-      return "bg-yellow-100 text-yellow-800";
-    case "Livrée":
-      return "bg-blue-100 text-blue-800";
-    case "Annulée":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
+definePageMeta({
+  layout: "dashboard",
+  middleware: "auth",
+});
 </script>
