@@ -15,6 +15,16 @@ export const useGatewayStore = defineStore("gateway", {
 	}),
 
 	getters: {
+		// gateways actifs seulement
+		actifs: (state) =>
+			Array.isArray(state.gateways)
+				? state.gateways.filter((g) => g.actif)
+				: [],
+
+		// pour savoir si on a déjà chargé
+		hasGateways: (state) =>
+			Array.isArray(state.gateways) && state.gateways.length > 0,
+
 		gatewayMap: (state) => {
 			if (!Array.isArray(state.gateways)) return {}; // sécurité
 			const map: Record<string, { libelle: string; logo_url?: string }> = {};
