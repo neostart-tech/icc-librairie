@@ -1,44 +1,45 @@
 import { defineStore } from "pinia";
 
+export interface Gateway {
+	id: number;
+	semoa_id: string;
+	libelle: string;
+	logo_url?: string;
+	actif: boolean;
+}
+
 export const useGatewayStore = defineStore("gateway", {
-  state: () => ({
-    gateways: [],
-    loading: false,
-    error: null,
-  }),
+	state: () => ({
+		gateways: [] as Gateway[],
+		loading: false,
+	}),
 
-  getters: {
-    actifs: (state) => state.gateways.filter((g) => g.actif),
-    hasGateways: (state) => state.gateways.length > 0,
+	getters: {
+		gatewayMap: (state) => {
+			if (!Array.isArray(state.gateways)) return {}; // sécurité
+			const map: Record<string, { libelle: string; logo_url?: string }> = {};
+			state.gateways.forEach((g) => {
+				map[g.semoa_id] = { libelle: g.libelle, logo_url: g.logo_url };
+			});
+			return map;
+		},
+	},
 
-    // optionnel mais utile
-    getById: (state) => (id) => state.gateways.find((g) => g.id === id),
-  },
+	actions: {
+		async fetchGateways() {
+			this.loading = true;
+			try {
+				const { $api } = useNuxtApp();
+				const res = await $api("/gateways");
 
-  actions: {
-    async fetchGateways(force = false) {
-      if (this.gateways.length && !force) return;
-
-      this.loading = true;
-      this.error = null;
-
-      try {
-        const { $api } = useNuxtApp();
-
-        const res = await $api("/gateways");
-
-        // Laravel JsonResource => { data: [...] }
-        this.gateways = res.data ?? [];
-      } catch (e) {
-        console.error("Erreur fetch gateways :", e);
-        this.error = "Impossible de charger les moyens de paiement";
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    clear() {
-      this.gateways = [];
-    },
-  },
+				// s'assurer que gateways est un tableau
+				this.gateways = Array.isArray(res) ? res : (res.data ?? []);
+			} catch (e) {
+				console.error("Erreur fetchGateways", e);
+				this.gateways = [];
+			} finally {
+				this.loading = false;
+			}
+		},
+	},
 });
