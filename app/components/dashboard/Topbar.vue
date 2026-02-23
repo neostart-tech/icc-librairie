@@ -260,11 +260,11 @@ const handleNotificationClick = async (notif) => {
   notificationsOpen.value = false;
 
   // Redirection selon type
-  if (notif.data?.commande_id) {
-    navigateTo(`/commandes/${notif.data.commande_id}`);
-  } else if (notif.data?.livre_id) {
-    navigateTo(`/livres/${notif.data.livre_id}`);
-  }
+  // if (notif.data?.commande_id) {
+  //   navigateTo(`/commandes/${notif.data.commande_id}`);
+  // } else if (notif.data?.livre_id) {
+  //   navigateTo(`/livres/${notif.data.livre_id}`);
+  // }
 };
 
 // Click outside

@@ -134,29 +134,15 @@ const handleLogin = async () => {
   try {
     await auth.loginSSO(email.value, password.value);
 
-    // Récupère la route de redirection depuis le query param
-    const redirectQuery = typeof route.query.redirect === "string" ? route.query.redirect : null;
-    // Récupère la route précédente depuis l'historique
-    const backRoute = router.options.history.state.back;
+    const redirect =
+      typeof route.query.redirect === "string"
+        ? route.query.redirect
+        : router.options.history.state.back || "/";
 
-    // Liste des routes à exclure
-    const excludedRoutes = ["/connexion", "/inscription"];
-
-    // Détermine la route de redirection finale
-    let redirect = "/"; // Route par défaut
-
-    if (redirectQuery && !excludedRoutes.includes(redirectQuery)) {
-      redirect = redirectQuery;
-    } else if (backRoute && !excludedRoutes.includes(backRoute)) {
-      redirect = backRoute;
-    }
-
-    // Effectue la redirection
     navigateTo(redirect);
     toast.success({ message: "Heureux de vous revoir !" });
   } catch (e: any) {
     error.value = e.message;
   }
 };
-
 </script>
