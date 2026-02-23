@@ -143,7 +143,7 @@
               >
                 {{
                   data.value.statut === "traite"
-                    ? "Traitée"
+                    ? "Livrée"
                     : "En cours de traitement"
                 }}
               </span>

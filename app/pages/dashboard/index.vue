@@ -228,7 +228,7 @@
                   <span
                     class="px-2 sm:px-3 py-1 text-xs font-semibold rounded-full"
                     :class="
-                      order.statut === 'Traitée'
+                      order.statut === 'Livrée'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-yellow-100 text-yellow-800'
                     "
@@ -369,14 +369,14 @@ const commandeStore = useCommandeStore();
 const isPageLoading = ref(true);
 
 const userFullName = computed(() =>
-  userStore.user ? `${userStore.user.nom} ${userStore.user.prenom}` : null
+  userStore.user ? `${userStore.user.nom} ${userStore.user.prenom}` : null,
 );
 
 /* =========================
    STATS
 ========================= */
 const ordersInProgress = computed(
-  () => commandeStore.commandes.filter((c) => c.statut === "termine").length
+  () => commandeStore.commandes.filter((c) => c.statut === "termine").length,
 );
 
 const booksPurchased = computed(() =>
@@ -387,13 +387,13 @@ const booksPurchased = computed(() =>
         sum += d.quantite;
       });
       return sum;
-    }, 0)
+    }, 0),
 );
 
 const totalSpent = computed(() =>
   commandeStore.commandes
     .filter((c) => ["termine", "traite"].includes(c.statut))
-    .reduce((sum, c) => sum + c.prix_total, 0)
+    .reduce((sum, c) => sum + c.prix_total, 0),
 );
 
 /* =========================
@@ -409,8 +409,8 @@ const recentOrders = computed(() =>
       reference: c.reference,
       date: new Date(c.created_at).toLocaleDateString("fr-FR"),
       total: c.prix_total,
-      statut: c.statut === "termine" ? "En attente de traitement" : "Traitée",
-    }))
+      statut: c.statut === "termine" ? "En attente de traitement" : "Livrée",
+    })),
 );
 
 onMounted(async () => {

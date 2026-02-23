@@ -497,10 +497,6 @@
                   {{ formatDate(userData.updatedAt) }}
                 </p>
               </div>
-              <div>
-                <p class="text-sm font-medium text-gray-900">ID utilisateur</p>
-                <p class="text-sm text-gray-600 font-mono">{{ userData.id }}</p>
-              </div>
             </div>
           </div>
         </div>
