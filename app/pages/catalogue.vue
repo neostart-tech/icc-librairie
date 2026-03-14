@@ -1,19 +1,23 @@
 <template>
   <div class="min-h-screen bg-gray-50/50">
+    <Breadcrumb :items="breadcrumbItems" />
+
     <!-- Header de page dynamique -->
-    <div class="bg-[#6a0d5f] pt-10 pb-20 px-4">
+    <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[-2rem]">
       <div class="max-w-7xl mx-auto text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
-          {{ headerTitle }}
+        <h1 class="text-3xl md:text-5xl font-black text-white mb-4 italic uppercase tracking-tighter">
+          <template v-if="headerTitle === 'Tous les livres'">
+            Tous les <span class="text-orange-400">livres</span>
+          </template>
+          <template v-else>
+            {{ headerTitle }}
+          </template>
         </h1>
-        <p class="text-white/80 text-sm md:text-base max-w-2xl mx-auto">
+        <p class="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-medium">
           Découvrez notre collection complète d'ouvrages inspirants et édifiants pour nourrir votre foi.
         </p>
       </div>
     </div>
-
-    <!-- Breadcrumb -->
-    <Breadcrumb :items="breadcrumbItems" />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-12">
       <div class="flex flex-col lg:flex-row gap-10">
@@ -155,7 +159,7 @@
             <div v-if="paginatedBooks.length > 0"
               class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
               <div v-for="book in paginatedBooks" :key="book.id"
-                class="group relative bg-white rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 w-full cursor-pointer flex flex-col transform hover:-translate-y-3 border border-gray-50/50">
+                class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 w-full cursor-pointer flex flex-col transform hover:-translate-y-3 border border-gray-50/50">
 
                 <NuxtLink :to="`/livres/${book.id}`" class="absolute inset-0 z-10" />
 

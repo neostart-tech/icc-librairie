@@ -88,6 +88,120 @@
         </div>
       </div>
     </section>
+    <!-- Recent Books Section -->
+    <section class="py-24 px-4 bg-white overflow-hidden">
+      <div class="max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div class="space-y-2">
+            <h2 class="text-4xl md:text-5xl font-black text-gray-900 italic tracking-tighter uppercase">
+              Nos livres <span class="text-[#6a0d5f]">récents</span>
+            </h2>
+            <div class="flex items-center gap-4">
+              <div class="h-1.5 w-24 bg-[#6a0d5f] rounded-full relative overflow-hidden animate-pulse-slow">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer-fast"></div>
+              </div>
+              <p class="text-gray-500 font-medium uppercase tracking-[0.2em] text-xs">
+                Découvrez les dernières pépites de notre collection
+              </p>
+            </div>
+          </div>
+          <NuxtLink to="/catalogue"
+            class="group flex items-center gap-3 px-8 py-4 bg-gray-50 hover:bg-[#6a0d5f] text-[#6a0d5f] hover:text-white rounded-full font-black text-sm transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-[#6a0d5f]/20 uppercase tracking-widest border border-gray-100 italic">
+            Explorer tout le catalogue
+            <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </NuxtLink>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <!-- Books Grid -->
+          <div class="lg:col-span-9 grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div v-for="(book, index) in recentBooks" :key="book.id" class="group flex flex-col animate-fadeInUp"
+              :style="{ animationDelay: `${index * 100}ms` }">
+
+              <!-- Book Image Container -->
+              <NuxtLink :to="`/livres/${book.id}`"
+                class="relative aspect-[3/4] rounded-3xl bg-gray-50 p-6 mb-6 overflow-hidden transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-[#6a0d5f]/10 block group-hover:-translate-y-2">
+                <!-- Badges -->
+                <div
+                  class="absolute top-4 left-4 flex flex-col gap-2 z-10 transition-transform duration-500 group-hover:translate-x-1">
+                  <span v-if="book.isPromo"
+                    class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
+                    Hot
+                  </span>
+                  <span v-if="book.isPromo"
+                    class="bg-[#6a0d5f] text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
+                    -30%
+                  </span>
+                </div>
+
+                <img :src="book.image" :alt="book.titre"
+                  class="w-full h-full object-contain drop-shadow-2xl transition-all duration-700 group-hover:scale-110 group-hover:rotate-3" />
+
+                <!-- Overlay Button -->
+                <div
+                  class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                  <button @click.stop.prevent="addToCart(book)"
+                    class="w-full py-4 bg-white/90 backdrop-blur text-[#6a0d5f] rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-[#6a0d5f] hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
+                    </svg>
+                    Ajouter
+                  </button>
+                </div>
+              </NuxtLink>
+
+              <!-- Book Info -->
+              <div class="space-y-2 px-2">
+                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                  {{ book.categorie?.libelle || 'Inspirant' }}
+                </span>
+                <h3
+                  class="font-black text-gray-900 text-sm md:text-base line-clamp-2 leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                  {{ book.titre }}
+                </h3>
+
+                <div class="flex items-center gap-3 pt-1">
+                  <span class="text-lg font-black text-[#6a0d5f]">
+                    {{ formatPrice(book.prix_promo || book.prix) }}
+                  </span>
+                  <span v-if="book.prix_promo" class="text-sm font-bold text-gray-300 line-through">
+                    {{ formatPrice(book.prix) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vertical Banner -->
+          <div class="lg:col-span-3">
+            <div class="relative h-full rounded-3xl overflow-hidden group shadow-2xl shadow-[#6a0d5f]/10">
+              <img src="/images/ban-cote.webp" alt="Promotion"
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/90 via-[#6a0d5f]/20 to-transparent p-10 flex flex-col justify-end items-start gap-6">
+                <div class="space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-700">
+                  <h3 class="text-3xl font-black text-white italic leading-tight uppercase">
+                    Trouvez votre <br />
+                    <span class="text-orange-400">meilleur</span> livre
+                  </h3>
+                  <p class="text-white/80 text-sm font-medium">
+                    Profitez de -25% sur une sélection limitée !
+                  </p>
+                </div>
+                <NuxtLink to="/catalogue"
+                  class="px-8 py-4 bg-white text-[#6a0d5f] rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all duration-300">
+                  Acheter plus
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -96,9 +210,11 @@ import HeroSection from "~/components/HeroSection.vue";
 import { computed, onMounted, ref } from "vue";
 import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
+import { useCartStore } from "~~/stores/cart";
 
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
+const cartStore = useCartStore();
 const config = useRuntimeConfig();
 
 const scrollContainer = ref(null);
@@ -114,7 +230,7 @@ const scroll = (direction) => {
   if (!scrollContainer.value) return;
   const container = scrollContainer.value;
   const scrollAmount = window.innerWidth < 1024 ? container.clientWidth * 0.8 : 500;
-  
+
   if (direction === 'right') {
     const isAtEnd = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth - 10;
     if (isAtEnd) {
@@ -131,6 +247,38 @@ const scroll = (direction) => {
     }
   }
 };
+
+const formatPrice = (price) => {
+  if (price === undefined || price === null) return '0 FCFA';
+  return new Intl.NumberFormat('fr-FR').format(Number(price)) + ' FCFA';
+};
+
+const addToCart = (book) => {
+  cartStore.add({
+    id: book.id,
+    title: book.titre,
+    price: book.prix_promo || book.prix,
+    image: book.image,
+    stockAvailable: book.stock?.quantite || 1
+  });
+};
+
+const recentBooks = computed(() => {
+  return [...livreStore.livres]
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 4)
+    .map(book => {
+      const imagePath = book.images?.length
+        ? `${config.public.storageBase}/${book.images[0].path}`
+        : "/images/livre.jpg";
+      return {
+        ...book,
+        image: imagePath,
+        categorie: book.categorie || categorieStore.categories.find(c => c.id === book.categorie_id),
+        isPromo: !!book.prix_promo
+      };
+    });
+});
 
 const topCategories = computed(() => {
   const cats = [...categorieStore.categories]
@@ -184,6 +332,25 @@ const topCategories = computed(() => {
 
 .dashed-border {
   animation: spinDashedPermanent 15s linear infinite;
+}
+
+@keyframes shimmer-fast {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  50% { transform: scaleX(1.1); opacity: 0.8; }
+}
+
+.animate-shimmer-fast {
+  animation: shimmer-fast 2s infinite linear;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+  transform-origin: left;
 }
 
 .scrollbar-hide::-webkit-scrollbar {

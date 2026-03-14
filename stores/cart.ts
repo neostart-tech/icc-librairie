@@ -12,6 +12,8 @@ export const useCartStore = defineStore("cart", {
     }>,
   }),
 
+  persist: true,
+
   getters: {
     subtotal: (state) =>
       state.items.reduce((sum, item) => sum + item.price * item.quantity, 0),

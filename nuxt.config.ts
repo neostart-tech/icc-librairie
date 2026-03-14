@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxt/eslint", "@nuxt/ui", "@pinia/nuxt", "nuxt-toast"],
+  modules: ["@nuxt/eslint", "@nuxt/ui", "@pinia/nuxt", "nuxt-toast", "pinia-plugin-persistedstate/nuxt"],
 
   devtools: {
     enabled: true,

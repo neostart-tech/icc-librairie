@@ -1,167 +1,178 @@
 <template>
-  <div>
-    <Breadcrumb :items="[{ label: 'Panier', to: '#' }]" />
+  <div class="min-h-screen bg-gray-50/50">
+    <Breadcrumb :items="[{ label: 'Mon Panier', to: '#' }]" />
 
-    <div class="bg-[#F3F0F5]">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 lg:py-10 mb-20">
-        <!-- Titre -->
-        <div class="flex items-center gap-3 mb-6 lg:mb-8">
-          <NuxtLink to="/" class="text-gray-500 hover:text-[#6a0d5f] transition text-xl">
-            ←
-          </NuxtLink>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Panier</h1>
-        </div>
+    <!-- Page Header -->
+    <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[-2rem]">
+      <div class="max-w-7xl mx-auto text-center">
+        <h1 class="text-3xl md:text-5xl font-black text-white mb-4 italic uppercase tracking-tighter">
+          Votre <span class="text-orange-400">Sélection</span>
+        </h1>
+        <p class="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-medium">
+          Gérez vos coups de cœur et finalisez votre commande pour nourrir votre esprit.
+        </p>
+      </div>
+    </div>
 
-        <!-- PANIER VIDE -->
-        <div v-if="cart.length === 0" class="bg-white rounded-xl shadow p-8 sm:p-12 text-center">
-          <p class="text-lg font-semibold text-gray-700 mb-2">
-            Votre panier est vide
-          </p>
-          <p class="text-sm text-gray-500 mb-6">
-            Ajoutez des livres pour les retrouver ici.
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+      <!-- EMPTY CART STATE -->
+      <div v-if="cart.length === 0"
+        class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/5 p-12 md:p-20 text-center animate-fadeInUp relative overflow-hidden border border-gray-100 mt-16">
+        <div class="absolute -top-12 -right-12 w-64 h-64 bg-[#6a0d5f]/5 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-12 -left-12 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10">
+          <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+            <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-black text-gray-900 mb-4 uppercase italic">Votre panier est vide</h2>
+          <p class="text-gray-500 max-w-md mx-auto mb-10 font-medium">
+            Il semblerait que vous n'ayez pas encore trouvé votre prochain compagnon de lecture.
           </p>
           <NuxtLink to="/catalogue"
-            class="inline-block bg-[#6a0d5f] text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
-            Retour au catalogue
+            class="inline-flex items-center gap-3 bg-[#6a0d5f] text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-[#851178] transition-all duration-300 shadow-xl shadow-[#6a0d5f]/20 hover:scale-105 active:scale-95">
+            Explorer le catalogue
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
           </NuxtLink>
         </div>
+      </div>
 
-        <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          <section class="lg:col-span-2 space-y-4">
-            <div v-for="item in cart" :key="item.id" class="bg-white rounded-xl shadow p-4 flex gap-4 lg:hidden">
-              <img :src="item.image" class="w-16 h-24 object-cover rounded border" />
+      <!-- CART CONTENT -->
+      <div v-else class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mt-16">
+        <section class="lg:col-span-8 space-y-6">
+          <!-- Clear Cart Header -->
+          <div class="flex items-center justify-between px-4 mb-2 animate-fadeInUp">
+            <span class="text-sm font-black text-gray-400 uppercase tracking-widest">
+              {{ cart.length }} {{ cart.length > 1 ? 'Articles' : 'Article' }}
+            </span>
+            <button @click="clearCart"
+              class="text-xs font-black text-red-500 hover:text-red-700 uppercase tracking-widest flex items-center gap-2 transition-colors group">
+              <svg class="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Vider le panier
+            </button>
+          </div>
 
-              <div class="flex-1">
-                <p class="font-semibold text-gray-800">
-                  {{ item.title }}
-                </p>
-                <p class="text-sm text-gray-500 mb-2">
-                  {{ item.author }}
-                </p>
+          <!-- Items List -->
+          <div v-for="(item, index) in cart" :key="item.id"
+            class="group bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row gap-8 transition-all duration-500 hover:shadow-2xl hover:shadow-[#6a0d5f]/5 animate-fadeInUp"
+            :style="{ animationDelay: `${index * 100}ms` }">
 
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center border rounded-lg">
-                    <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="decreaseQty(item)"
-                      :disabled="item.quantity <= 1">
-                      -
-                    </button>
+            <!-- Book Image -->
+            <div
+              class="relative w-full md:w-32 aspect-[3/4] rounded-2xl bg-gray-50 flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform duration-500 shadow-md">
+              <img :src="item.image" :alt="item.title" class="w-full h-full object-contain p-2" />
+            </div>
 
-                    <span class="px-4 text-sm font-medium">
-                      {{ item.quantity }}
-                    </span>
+            <div class="flex-1 flex flex-col justify-between py-2">
+              <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                <div>
+                  <h3
+                    class="font-black text-gray-900 text-lg md:text-xl uppercase italic leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                    {{ item.title }}
+                  </h3>
+                  <p v-if="item.author" class="text-gray-400 font-bold text-xs uppercase tracking-widest mt-1">
+                    {{ item.author }}
+                  </p>
+                </div>
 
-                    <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="increaseQty(item)"
-                      :disabled="item.quantity >= item.stockAvailable">
-                      +
-                    </button>
-                  </div>
+                <button @click="removeItem(item.id)"
+                  class="w-10 h-10 rounded-full bg-gray-50 text-gray-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all duration-300 md:self-start">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
 
-                  <span class="font-semibold text-[#6a0d5f]">
-                    {{ item.price * item.quantity }} FCFA
+              <div class="flex flex-wrap items-center justify-between gap-6 mt-6 md:mt-0">
+                <!-- Quantity Controls -->
+                <div class="flex items-center gap-1 p-1 bg-gray-50 rounded-2xl border border-gray-100">
+                  <button @click="decreaseQty(item)" :disabled="item.quantity <= 1"
+                    class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] hover:shadow-sm disabled:opacity-30 transition-all">
+                    ー
+                  </button>
+                  <span class="w-12 text-center font-black text-gray-900">{{ item.quantity }}</span>
+                  <button @click="increaseQty(item)" :disabled="item.quantity >= item.stockAvailable"
+                    class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] hover:shadow-sm disabled:opacity-30 transition-all">
+                    ＋
+                  </button>
+                </div>
+
+                <!-- Prices -->
+                <div class="flex flex-col items-end">
+                  <span class="text-xs font-black text-gray-300 uppercase tracking-widest mb-1">Total Article</span>
+                  <span class="text-2xl font-black text-[#6a0d5f] italic">
+                    {{ formatPrice(item.price * item.quantity) }}
+                  </span>
+                  <span v-if="item.quantity > 1" class="text-[10px] font-bold text-gray-400">
+                    {{ formatPrice(item.price) }} / unité
                   </span>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
 
-              <button class="text-gray-400 hover:text-red-500 text-lg" @click="removeItem(item.id)">
-                ✕
-              </button>
+        <!-- ORDER SUMMARY -->
+        <aside class="lg:col-span-4 lg:sticky lg:top-24 animate-fadeInUp" style="animation-delay: 400ms">
+          <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-8">
+            <h2
+              class="text-2xl font-black text-gray-900 italic uppercase tracking-tighter mb-8 flex items-center gap-3">
+              <svg class="w-7 h-7 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Récapitulatif
+            </h2>
+
+            <div class="space-y-4">
+              <div class="flex justify-between items-center py-2 border-b border-gray-50">
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Sous-total</span>
+                <span class="font-black text-gray-800">{{ formatPrice(subtotal) }}</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-50">
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Articles</span>
+                <span class="font-black text-gray-800">{{ cartStore.count }}</span>
+              </div>
             </div>
 
-            <!-- DESKTOP : table -->
-            <div class="hidden lg:block bg-white rounded-xl shadow overflow-x-auto">
-              <table class="w-full min-w-[700px]">
-                <thead class="border-b text-sm text-gray-500">
-                  <tr>
-                    <th class="p-4 text-left">Produit</th>
-                    <th class="p-4 text-left">Prix</th>
-                    <th class="p-4 text-left">Quantité</th>
-                    <th class="p-4 text-left">Total</th>
-                    <th class="p-4"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in cart" :key="item.id" class="border-b last:border-b-0">
-                    <td class="p-4">
-                      <div class="flex gap-4 items-center">
-                        <img :src="item.image" class="w-10 h-16 object-cover rounded border" />
-                        <div>
-                          <p class="font-semibold text-gray-800">
-                            {{ item.title }}
-                          </p>
-                          <p class="text-sm text-gray-500">
-                            {{ item.author }}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td class="p-4 font-semibold">{{ item.price }} FCFA</td>
-
-                    <td class="p-4">
-                      <div class="flex items-center border rounded-lg w-fit">
-                        <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="decreaseQty(item)"
-                          :disabled="item.quantity <= 1">
-                          -
-                        </button>
-
-                        <span class="px-4 text-sm font-medium">
-                          {{ item.quantity }}
-                        </span>
-
-                        <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="increaseQty(item)"
-                          :disabled="item.quantity >= item.stockAvailable">
-                          +
-                        </button>
-                      </div>
-                    </td>
-
-                    <td class="p-4 font-semibold">
-                      {{ item.price * item.quantity }} FCFA
-                    </td>
-
-                    <td class="p-4 text-center">
-                      <button class="text-gray-400 hover:text-red-500 text-lg cursor-pointer"
-                        @click="removeItem(item.id)">
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!-- RÉCAP -->
-          <aside class="bg-white rounded-xl shadow p-6 h-fit lg:sticky lg:top-28">
-            <h2 class="text-lg font-bold mb-6 text-gray-800">Récapitulatif</h2>
-
-            <div class="flex justify-between text-sm mb-3">
-              <span>Sous-total</span>
-              <span>{{ subtotal }} FCFA</span>
-            </div>
-
-            <!-- <div class="flex justify-between text-sm mb-3">
-              <span>Livraison</span>
-              <span class="text-green-600">Gratuite</span>
-            </div> -->
-
-            <hr class="my-4" />
-
-            <div class="flex justify-between font-bold text-lg mb-6">
-              <span>Total</span>
-              <span class="text-[#6a0d5f]"> {{ subtotal }} FCFA </span>
+            <div
+              class="mt-8 mb-10 p-6 bg-[#6a0d5f]/5 rounded-[2rem] border border-[#6a0d5f]/10 text-center flex flex-col items-center">
+              <span class="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Total à payer</span>
+              <span class="text-4xl font-black text-[#6a0d5f] italic tracking-tighter">
+                {{ formatPrice(subtotal) }}
+              </span>
             </div>
 
             <NuxtLink to="/commande"
-              class="block w-full text-center bg-[#6a0d5f] text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
-              Passer au paiement
+              class="w-full flex items-center justify-center gap-4 bg-[#6a0d5f] text-white py-6 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+              Passer la commande
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
             </NuxtLink>
 
-            <NuxtLink to="/" class="block text-center text-sm text-gray-500 mt-4 hover:underline">
+            <NuxtLink to="/catalogue"
+              class="w-full flex items-center justify-center mt-6 text-gray-400 hover:text-[#6a0d5f] font-black text-[10px] uppercase tracking-widest transition-colors duration-300">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
               Continuer mes achats
             </NuxtLink>
-          </aside>
-        </div>
+          </div>
+
+
+        </aside>
       </div>
     </div>
   </div>
@@ -179,5 +190,38 @@ const subtotal = computed(() => cartStore.subtotal);
 
 const increaseQty = (item) => cartStore.increase(item.id);
 const decreaseQty = (item) => cartStore.decrease(item.id);
-const removeItem = (id) => cartStore.remove(id);
+const removeItem = (id) => {
+  if (confirm('Voulez-vous retirer cet article ?')) {
+    cartStore.remove(id);
+  }
+};
+
+const clearCart = () => {
+  if (confirm('Voulez-vous vraiment vider tout votre panier ?')) {
+    cartStore.clear();
+  }
+};
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('fr-FR').format(price) + ' FCFA';
+};
 </script>
+
+<style scoped>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+</style>
