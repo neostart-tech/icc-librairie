@@ -1,50 +1,35 @@
 <template>
   <div>
-    <Breadcrumb :items="[{ label: 'Panier', to: '/panier' }]" />
+    <Breadcrumb :items="[{ label: 'Panier', to: '#' }]" />
 
     <div class="bg-[#F3F0F5]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 lg:py-10 mb-20">
         <!-- Titre -->
         <div class="flex items-center gap-3 mb-6 lg:mb-8">
-          <NuxtLink
-            to="/"
-            class="text-gray-500 hover:text-[#6a0d5f] transition text-xl"
-          >
+          <NuxtLink to="/" class="text-gray-500 hover:text-[#6a0d5f] transition text-xl">
             ←
           </NuxtLink>
           <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Panier</h1>
         </div>
 
         <!-- PANIER VIDE -->
-        <div
-          v-if="cart.length === 0"
-          class="bg-white rounded-xl shadow p-8 sm:p-12 text-center"
-        >
+        <div v-if="cart.length === 0" class="bg-white rounded-xl shadow p-8 sm:p-12 text-center">
           <p class="text-lg font-semibold text-gray-700 mb-2">
             Votre panier est vide
           </p>
           <p class="text-sm text-gray-500 mb-6">
             Ajoutez des livres pour les retrouver ici.
           </p>
-          <NuxtLink
-            to="/"
-            class="inline-block bg-[#6a0d5f] text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
-          >
+          <NuxtLink to="/catalogue"
+            class="inline-block bg-[#6a0d5f] text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
             Retour au catalogue
           </NuxtLink>
         </div>
 
         <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <section class="lg:col-span-2 space-y-4">
-            <div
-              v-for="item in cart"
-              :key="item.id"
-              class="bg-white rounded-xl shadow p-4 flex gap-4 lg:hidden"
-            >
-              <img
-                :src="item.image"
-                class="w-16 h-24 object-cover rounded border"
-              />
+            <div v-for="item in cart" :key="item.id" class="bg-white rounded-xl shadow p-4 flex gap-4 lg:hidden">
+              <img :src="item.image" class="w-16 h-24 object-cover rounded border" />
 
               <div class="flex-1">
                 <p class="font-semibold text-gray-800">
@@ -56,11 +41,8 @@
 
                 <div class="flex items-center justify-between">
                   <div class="flex items-center border rounded-lg">
-                    <button
-                      class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
-                      @click="decreaseQty(item)"
-                      :disabled="item.quantity <= 1"
-                    >
+                    <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="decreaseQty(item)"
+                      :disabled="item.quantity <= 1">
                       -
                     </button>
 
@@ -68,11 +50,8 @@
                       {{ item.quantity }}
                     </span>
 
-                    <button
-                      class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
-                      @click="increaseQty(item)"
-                      :disabled="item.quantity >= item.stockAvailable"
-                    >
+                    <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="increaseQty(item)"
+                      :disabled="item.quantity >= item.stockAvailable">
                       +
                     </button>
                   </div>
@@ -83,18 +62,13 @@
                 </div>
               </div>
 
-              <button
-                class="text-gray-400 hover:text-red-500 text-lg"
-                @click="removeItem(item.id)"
-              >
+              <button class="text-gray-400 hover:text-red-500 text-lg" @click="removeItem(item.id)">
                 ✕
               </button>
             </div>
 
             <!-- DESKTOP : table -->
-            <div
-              class="hidden lg:block bg-white rounded-xl shadow overflow-x-auto"
-            >
+            <div class="hidden lg:block bg-white rounded-xl shadow overflow-x-auto">
               <table class="w-full min-w-[700px]">
                 <thead class="border-b text-sm text-gray-500">
                   <tr>
@@ -106,17 +80,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="item in cart"
-                    :key="item.id"
-                    class="border-b last:border-b-0"
-                  >
+                  <tr v-for="item in cart" :key="item.id" class="border-b last:border-b-0">
                     <td class="p-4">
                       <div class="flex gap-4 items-center">
-                        <img
-                          :src="item.image"
-                          class="w-10 h-16 object-cover rounded border"
-                        />
+                        <img :src="item.image" class="w-10 h-16 object-cover rounded border" />
                         <div>
                           <p class="font-semibold text-gray-800">
                             {{ item.title }}
@@ -132,11 +99,8 @@
 
                     <td class="p-4">
                       <div class="flex items-center border rounded-lg w-fit">
-                        <button
-                          class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
-                          @click="decreaseQty(item)"
-                          :disabled="item.quantity <= 1"
-                        >
+                        <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="decreaseQty(item)"
+                          :disabled="item.quantity <= 1">
                           -
                         </button>
 
@@ -144,11 +108,8 @@
                           {{ item.quantity }}
                         </span>
 
-                        <button
-                          class="w-8 h-8 hover:bg-gray-100 cursor-pointer"
-                          @click="increaseQty(item)"
-                          :disabled="item.quantity >= item.stockAvailable"
-                        >
+                        <button class="w-8 h-8 hover:bg-gray-100 cursor-pointer" @click="increaseQty(item)"
+                          :disabled="item.quantity >= item.stockAvailable">
                           +
                         </button>
                       </div>
@@ -159,10 +120,8 @@
                     </td>
 
                     <td class="p-4 text-center">
-                      <button
-                        class="text-gray-400 hover:text-red-500 text-lg cursor-pointer"
-                        @click="removeItem(item.id)"
-                      >
+                      <button class="text-gray-400 hover:text-red-500 text-lg cursor-pointer"
+                        @click="removeItem(item.id)">
                         ✕
                       </button>
                     </td>
@@ -173,9 +132,7 @@
           </section>
 
           <!-- RÉCAP -->
-          <aside
-            class="bg-white rounded-xl shadow p-6 h-fit lg:sticky lg:top-28"
-          >
+          <aside class="bg-white rounded-xl shadow p-6 h-fit lg:sticky lg:top-28">
             <h2 class="text-lg font-bold mb-6 text-gray-800">Récapitulatif</h2>
 
             <div class="flex justify-between text-sm mb-3">
@@ -195,17 +152,12 @@
               <span class="text-[#6a0d5f]"> {{ subtotal }} FCFA </span>
             </div>
 
-            <NuxtLink
-              to="/commande"
-              class="block w-full text-center bg-[#6a0d5f] text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
-            >
+            <NuxtLink to="/commande"
+              class="block w-full text-center bg-[#6a0d5f] text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
               Passer au paiement
             </NuxtLink>
 
-            <NuxtLink
-              to="/"
-              class="block text-center text-sm text-gray-500 mt-4 hover:underline"
-            >
+            <NuxtLink to="/" class="block text-center text-sm text-gray-500 mt-4 hover:underline">
               Continuer mes achats
             </NuxtLink>
           </aside>

@@ -102,7 +102,7 @@
 
             <!-- Catalogue avec Dropdown -->
             <div class="group relative py-2">
-              <NuxtLink to="/#livres-list"
+              <NuxtLink to="/catalogue"
                 class="font-bold text-white/90 hover:text-white transition-colors text-[15px] xl:text-[16px] tracking-wide flex items-center gap-1.5 mr-15">
                 Catalogue
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none"
@@ -119,7 +119,7 @@
                 <div
                   class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden py-2">
                   <!-- Tous les livres -->
-                  <NuxtLink to="/#livres-list"
+                  <NuxtLink to="/catalogue"
                     class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:text-[#6a0d5f] hover:bg-gray-50 transition-colors font-semibold text-sm border-b border-gray-100">
                     <svg class="w-4 h-4 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,7 +131,7 @@
                   <!-- Dynamic Categories -->
                   <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
                     <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
-                      :to="`/?category=${cat.libelle}#livres-list`"
+                      :to="`/catalogue?category=${cat.libelle}`"
                       class="flex items-center px-5 py-2.5 text-gray-600 hover:text-[#6a0d5f] hover:bg-gray-50 transition-all text-sm font-medium">
                       {{ cat.libelle }}
                     </NuxtLink>
@@ -221,7 +221,7 @@
             </NuxtLink>
 
             <div class="flex flex-col gap-1">
-              <NuxtLink to="/#livres-list"
+              <NuxtLink to="/catalogue"
                 class="animate-stagger-1 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
                 @click="isMenuOpen = false">
                 <div class="flex items-center gap-3">
@@ -241,14 +241,14 @@
               </NuxtLink>
 
               <!-- Extended Categories Mobile -->
-              <div v-show="isCatalogueExtended" class="flex flex-col gap-1 pl-6 overflow-hidden">
-                <NuxtLink to="/#livres-list"
+              <div v-show="isCatalogueExtended" class="flex flex-col gap-1 pl-6 overflow-hidden transition-all duration-300">
+                <NuxtLink to="/catalogue"
                   class="flex items-center px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
                   @click="isMenuOpen = false">
                   Tous les livres
                 </NuxtLink>
                 <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
-                  :to="`/?category=${cat.libelle}#livres-list`"
+                  :to="`/catalogue?category=${cat.libelle}`"
                   class="flex items-center px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
                   @click="isMenuOpen = false">
                   {{ cat.libelle }}

@@ -1,5 +1,8 @@
 <template>
-  <Breadcrumb :items="[{ label: 'Commande', to: '/commande' }]" />
+  <Breadcrumb :items="[
+    { label: 'Panier', to: '/panier' },
+    { label: 'Commande', to: '#' }
+  ]" />
   <div class="min-h-screen bg-[#F3F0F5] px-6 lg:px-12 py-10">
     <div class="max-w-6xl mx-auto">
       <!-- HEADER -->
