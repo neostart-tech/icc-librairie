@@ -182,6 +182,7 @@
 import { computed } from "vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { useCartStore } from "~~/stores/cart";
+import Swal from 'sweetalert2';
 
 const cartStore = useCartStore();
 
@@ -190,16 +191,67 @@ const subtotal = computed(() => cartStore.subtotal);
 
 const increaseQty = (item) => cartStore.increase(item.id);
 const decreaseQty = (item) => cartStore.decrease(item.id);
+
 const removeItem = (id) => {
-  if (confirm('Voulez-vous retirer cet article ?')) {
-    cartStore.remove(id);
-  }
+  Swal.fire({
+    title: 'Retirer l\'article ?',
+    text: "Cet ouvrage va quitter votre sélection.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#6a0d5f',
+    cancelButtonColor: '#f3f4f6',
+    cancelButtonText: '<span style="color: #9ca3af; font-weight: bold;">Annuler</span>',
+    confirmButtonText: 'Oui, retirer',
+    reverseButtons: true,
+    customClass: {
+      popup: 'rounded-[2rem]',
+      confirmButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm',
+      cancelButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      cartStore.remove(id);
+    }
+  });
 };
 
 const clearCart = () => {
-  if (confirm('Voulez-vous vraiment vider tout votre panier ?')) {
-    cartStore.clear();
-  }
+  Swal.fire({
+    title: 'Vider le panier ?',
+    text: "Tous vos trésors sélectionnés seront retirés.",
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#6a0d5f',
+    cancelButtonColor: '#f3f4f6',
+    cancelButtonText: '<span style="color: #9ca3af; font-weight: bold;">Garder mes articles</span>',
+    confirmButtonText: 'Oui, vider tout',
+    reverseButtons: true,
+    showClass: {
+      popup: 'animate__animated animate__fadeInUp animate__faster'
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutDown animate__faster'
+    },
+    customClass: {
+      popup: 'rounded-[2.5rem] p-12',
+      confirmButton: 'rounded-2xl font-black px-8 py-4 uppercase tracking-widest text-sm shadow-xl shadow-[#6a0d5f]/20',
+      cancelButton: 'rounded-2xl font-black px-8 py-4 uppercase tracking-widest text-sm'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      cartStore.clear();
+      Swal.fire({
+        title: 'Panier vide',
+        text: 'Votre sélection a été réinitialisée.',
+        icon: 'success',
+        confirmButtonColor: '#6a0d5f',
+        customClass: {
+          popup: 'rounded-[2rem]',
+          confirmButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm'
+        }
+      });
+    }
+  });
 };
 
 const formatPrice = (price) => {

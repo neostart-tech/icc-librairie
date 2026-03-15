@@ -22,7 +22,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-12">
       <div class="flex flex-col lg:flex-row gap-10">
         <!-- SIDEBAR FILTERS (Desktop) -->
-        <aside class="hidden lg:block w-72 flex-shrink-0 space-y-8 sticky top-[150px] h-fit">
+        <aside class="hidden lg:block w-72 flex-shrink-0 space-y-8 sticky top-[150px] h-fit reveal-right" v-reveal.repeat>
           <!-- TRI -->
           <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
             <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
@@ -130,7 +130,7 @@
           </div>
 
           <!-- SEARCH BAR -->
-          <div class="mb-12 w-full max-w-2xl relative">
+          <div class="mb-12 w-full max-w-2xl relative" v-reveal.repeat>
             <div
               class="group/search flex items-center bg-white border border-gray-200 rounded-[2rem] px-8 py-5 w-full shadow-sm transition-all duration-300 hover:shadow-xl hover:border-gray-300 focus-within:border-[#6a0d5f] focus-within:ring-8 focus-within:ring-[#6a0d5f]/5 cursor-text">
               <input v-model="search" type="text" placeholder="Titre, auteur ou mot-clé..."
@@ -158,7 +158,8 @@
           <section id="livres-list" class="relative">
             <div v-if="paginatedBooks.length > 0"
               class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-              <div v-for="book in paginatedBooks" :key="book.id"
+              <div v-for="(book, index) in paginatedBooks" :key="book.id"
+                v-reveal.repeat :class="`reveal-delay-${(index % 4) * 100}`"
                 class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 w-full cursor-pointer flex flex-col transform hover:-translate-y-3 border border-gray-50/50">
 
                 <NuxtLink :to="`/livres/${book.id}`" class="absolute inset-0 z-10" />

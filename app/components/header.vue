@@ -367,6 +367,7 @@ const handleClickOutside = (event: MouseEvent) => {
 
 const auth = useAuthStore();
 const cartStore = useCartStore();
+import Swal from 'sweetalert2';
 
 // Initialise le store depuis localStorage
 onMounted(async () => {
@@ -382,8 +383,37 @@ onBeforeUnmount(() => {
 // Computed réactif pour savoir si l’utilisateur est connecté
 const isLoggedIn = computed(() => auth.isLogged);
 const handleLogout = () => {
-  auth.logout();
-  isMenuOpen.value = false;
+  Swal.fire({
+    title: 'Déconnexion ?',
+    text: "Souhaitez-vous vraiment quitter votre session ?",
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444', // Red for logout
+    cancelButtonColor: '#f3f4f6',
+    cancelButtonText: '<span style="color: #9ca3af; font-weight: bold;">Rester</span>',
+    confirmButtonText: 'Oui, me déconnecter',
+    reverseButtons: true,
+    customClass: {
+      popup: 'rounded-[2rem]',
+      confirmButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm',
+      cancelButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      auth.logout();
+      isMenuOpen.value = false;
+      Swal.fire({
+        title: 'À bientôt !',
+        text: 'Vous avez été déconnecté avec succès.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'rounded-[2rem]'
+        }
+      });
+    }
+  });
 };
 </script>
 

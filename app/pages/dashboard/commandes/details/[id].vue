@@ -1,227 +1,155 @@
 <template>
-  <!-- LOADING -->
-  <div
-    v-if="isPageLoading"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-gray-900/70"
-  >
-    <div
-      class="h-12 w-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
-    ></div>
-  </div>
+  <div class="min-h-screen bg-gray-50 pb-20">
+    <!-- Hero Section -->
+    <section class="relative bg-[#6a0d5f] pt-32 pb-48 overflow-hidden">
+       <div class="absolute inset-0 opacity-10">
+         <div class="absolute -top-24 -left-24 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
+         <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-orange-400 rounded-full blur-[100px]"></div>
+       </div>
 
-  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <!-- Breadcrumb -->
-      <div class="mb-6">
-        <nav class="flex items-center text-sm text-gray-500">
-          <NuxtLink to="/dashboard" class="hover:text-gray-700">
-            Tableau de bord
-          </NuxtLink>
-          <span class="mx-2">/</span>
-          <NuxtLink to="/dashboard/commandes" class="hover:text-gray-700">
-            Mes commandes
-          </NuxtLink>
-          <span class="mx-2">/</span>
-          <span class="text-gray-700 font-medium">Détails</span>
-        </nav>
-
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">
-          Commande #{{ commande?.reference }}
-        </h1>
-      </div>
-
-      <!-- Contenu principal -->
-      <div
-        v-if="commande"
-        class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
-      >
-        <!-- SECTION CLIENT -->
-        <div class="p-6 border-b border-gray-200">
-          <div class="flex items-center mb-4">
-            <div class="p-2 bg-blue-50 rounded-lg mr-3">
-              <svg
-                class="w-6 h-6 text-blue-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </div>
-            <h2 class="text-lg font-bold text-gray-900">
-              Informations client
-            </h2>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p class="text-sm text-gray-500">Nom complet</p>
-              <p class="font-medium text-gray-900">
-                {{ commande.user?.prenom }} {{ commande.user?.nom }}
-              </p>
-            </div>
-
-            <div>
-              <p class="text-sm text-gray-500">Email</p>
-              <p class="font-medium text-gray-900">
-                {{ commande.user?.email }}
-              </p>
-            </div>
-
-            <div>
-              <p class="text-sm text-gray-500">Téléphone</p>
-              <p class="font-medium text-gray-900">
-                {{ commande.user?.telephone || "—" }}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION COMMANDE -->
-        <div class="p-6 border-b border-gray-200">
-          <div class="flex items-center mb-4">
-            <div class="p-2 bg-purple-50 rounded-lg mr-3">
-              <svg
-                class="w-6 h-6 text-purple-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                />
-              </svg>
-            </div>
-            <h2 class="text-lg font-bold text-gray-900">
-              Détails de la commande
-            </h2>
-          </div>
-
-          <!-- Liste des livres -->
-          <div class="space-y-4 mb-6">
-            <div
-              v-for="detail in commande.detailcommandes"
-              :key="detail.id"
-              class="flex justify-between items-start py-2 border-b border-gray-100 last:border-0"
-            >
-              <div class="flex-1">
-                <p class="font-medium text-gray-900">
-                  {{ detail.livre?.titre }}
-                </p>
-                <p class="text-sm text-gray-500">
-                  {{ detail.quantite }} ×
-                  {{ detail.prix_unitaire.toLocaleString() }} FCFA
-                </p>
-              </div>
-
-              <span class="font-bold text-gray-900">
-                {{
-                  (detail.prix_unitaire * detail.quantite).toLocaleString()
-                }}
-                FCFA
-              </span>
-            </div>
-          </div>
-
-          <!-- Total -->
-          <div class="pt-4 border-t border-gray-200">
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-bold text-gray-900">Total</span>
-              <span class="text-xl font-bold text-purple-600">
-                {{ commande.prix_total.toLocaleString() }} FCFA
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION PAIEMENT -->
-        <div v-if="commande.paiements?.length" class="p-6">
-          <div class="flex items-center mb-4">
-            <div class="p-2 bg-green-50 rounded-lg mr-3">
-              <svg
-                class="w-6 h-6 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                />
-              </svg>
-            </div>
-            <h2 class="text-lg font-bold text-gray-900">Paiement</h2>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p class="text-sm text-gray-500">Méthode</p>
-              <p class="font-medium text-gray-900">
-                {{
-                  getMoyenPaiementLabel(
-                    commande.paiements[0].moyen_paiement
-                  )
-                }}
-              </p>
-            </div>
-
-            <div>
-              <p class="text-sm text-gray-500">Référence</p>
-              <p class="font-medium text-gray-900">
-                {{ commande.paiements[0].reference_transaction || "—" }}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bouton retour -->
-        <div class="p-6 bg-gray-50">
-          <NuxtLink
-            to="/dashboard/commandes"
-            class="px-5 py-2.5 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium transition-colors"
-          >
+       <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+          <NuxtLink v-reveal to="/dashboard/commandes" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white/80 text-[10px] font-black uppercase tracking-[0.2em] mb-8 hover:bg-white/20 transition-all">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Retour aux commandes
           </NuxtLink>
+          <h1 v-reveal class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none mb-4">
+            Facture <span class="text-orange-400">#{{ commande?.reference }}</span>
+          </h1>
+          <div v-reveal class="flex flex-wrap items-center justify-center gap-4 text-white/60 text-xs font-black uppercase tracking-widest mt-6">
+            <span class="px-3 py-1 bg-white/10 rounded-lg border border-white/10">{{ new Date(commande?.created_at).toLocaleDateString() }}</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+            <span v-if="commande?.statut === 'traite'" class="px-3 py-1 bg-green-500/20 text-green-400 rounded-lg border border-green-500/20">Commande Livrée</span>
+            <span v-else-if="commande?.statut === 'termine'" class="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-lg border border-orange-500/20">En cours de traitement</span>
+          </div>
+       </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 -mt-24 relative z-20">
+      <div v-if="commande" class="space-y-8">
+        <!-- Order Items Card -->
+        <div v-reveal class="bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 border border-white">
+           <div class="flex items-center gap-3 mb-10">
+              <div class="w-12 h-1 text-[#6a0d5f] bg-[#6a0d5f] rounded-full"></div>
+              <h2 class="text-xl font-black text-gray-900 uppercase italic tracking-tighter">Articles de la commande</h2>
+           </div>
+
+           <div class="space-y-6">
+              <div v-for="(detail, idx) in commande.detailcommandes" :key="detail.id" class="flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-[2rem] bg-gray-50 border border-gray-100 group hover:border-[#6a0d5f]/20 transition-all cursor-default">
+                <NuxtLink :to="`/livres/${detail.livre?.id}`" class="flex items-center gap-6 w-full md:w-auto hover:opacity-80 transition-opacity">
+                   <div class="w-20 h-28 rounded-xl bg-gray-200 overflow-hidden shadow-lg border-2 border-white group-hover:scale-110 transition-transform duration-500">
+                      <img v-if="detail.livre?.image" :src="`${useRuntimeConfig().public.storageBase}/${detail.livre.image}`" class="w-full h-full object-cover" alt="" />
+                   </div>
+                   <div class="space-y-1">
+                      <h3 class="text-lg font-black text-gray-900 italic tracking-tight leading-tight group-hover:text-[#6a0d5f] transition-colors">{{ detail.livre?.titre }}</h3>
+                      <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ detail.livre?.titre }} • Quantité : {{ detail.quantite }} • {{ detail.prix_unitaire.toLocaleString() }} FCFA</p>
+                      <div class="inline-flex items-center gap-1 text-[8px] font-black text-orange-500 uppercase tracking-widest mt-2 px-2 py-0.5 bg-orange-50 rounded-md">
+                        <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" stroke-width="3"/></svg>
+                        Voir le livre
+                      </div>
+                   </div>
+                </NuxtLink>
+                <div class="w-full md:w-auto text-right md:text-right border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
+                   <span class="text-xl font-black text-[#6a0d5f] italic tracking-tighter">{{ (detail.prix_unitaire * detail.quantite).toLocaleString() }} FCFA</span>
+                </div>
+              </div>
+           </div>
+
+           <!-- Totals -->
+           <div class="mt-12 pt-10 border-t border-gray-100 space-y-4">
+              <div class="flex justify-between items-center text-gray-400">
+                <span class="text-[10px] font-black uppercase tracking-widest">Sous-Total</span>
+                <span class="font-bold text-gray-900">{{ commande.prix_total.toLocaleString() }} FCFA</span>
+              </div>
+
+              <div class="pt-6 flex justify-between items-end">
+                <div class="space-y-1">
+                   <p class="text-[10px] font-black text-orange-500 uppercase tracking-widest">Montant Total Réglé</p>
+                   <p class="text-4xl font-black text-[#6a0d5f] italic tracking-tighter">{{ commande.prix_total.toLocaleString() }} <span class="text-sm font-bold ml-1">FCFA</span></p>
+                </div>
+                <div class="hidden sm:block px-6 py-3 bg-gray-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl">Statut : Payée</div>
+              </div>
+           </div>
+        </div>
+
+        <!-- Payment & Info Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+           <!-- Customer Card -->
+           <div v-reveal class="reveal-delay-100 bg-white rounded-[3rem] shadow-xl p-10 border border-white space-y-8">
+              <div class="flex items-center gap-3">
+                 <div class="w-10 h-1 text-blue-500 bg-blue-500 rounded-full"></div>
+                 <h2 class="text-lg font-black text-gray-900 uppercase italic tracking-tighter">Client</h2>
+              </div>
+              <div class="space-y-4">
+                 <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500">
+                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                     <div>
+                        <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Nom complet</p>
+                        <p class="font-black text-gray-900 italic tracking-tight">{{ commande.user?.prenom || userStore.user?.prenom }} {{ commande.user?.nom || userStore.user?.nom }}</p>
+                     </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                     <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                     </div>
+                     <div>
+                        <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Email</p>
+                        <p class="font-black text-gray-900 italic tracking-tight">{{ commande.user?.email || userStore.user?.email }}</p>
+                     </div>
+                  </div>
+              </div>
+           </div>
+
+           <!-- Payment Card -->
+           <div v-reveal class="reveal-delay-200 bg-white rounded-[3rem] shadow-xl p-10 border border-white space-y-8">
+              <div class="flex items-center gap-3">
+                 <div class="w-10 h-1 text-green-500 bg-green-500 rounded-full"></div>
+                 <h2 class="text-lg font-black text-gray-900 uppercase italic tracking-tighter">Paiement</h2>
+              </div>
+              <div class="space-y-6">
+                 <div class="p-6 rounded-[2rem] bg-gray-50 border border-gray-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-4">Méthode utilisée</p>
+                    <div class="flex items-center gap-4">
+                       <img v-if="getMoyenPaiementLogo(commande.paiements?.[0]?.moyen_paiement)" :src="getMoyenPaiementLogo(commande.paiements?.[0]?.moyen_paiement)" class="h-8 w-auto" alt="" />
+                       <span class="font-black text-gray-900 text-sm uppercase tracking-widest">{{ getMoyenPaiementLabel(commande.paiements?.[0]?.moyen_paiement) }}</span>
+                    </div>
+                 </div>
+                 <div class="px-6 space-y-1">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">N° de transaction</p>
+                    <p class="font-black text-gray-900 text-[10px] break-all uppercase tracking-tighter">{{ commande.paiements?.[0]?.reference_transaction || '---' }}</p>
+                 </div>
+              </div>
+           </div>
         </div>
       </div>
     </main>
+
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { useCommandeStore } from "~~/stores/commande";
+import { useUserStore } from "~~/stores/user";
 import { useGatewayStore } from "~~/stores/gateway";
 
 const route = useRoute();
 const commandeStore = useCommandeStore();
+const userStore = useUserStore();
 const gatewayStore = useGatewayStore();
 
-const isPageLoading = ref(true);
 const commande = ref(null);
 
 // Récupération sécurisée
 const fetchCommande = async () => {
   if (!route.params.id) return;
-
   try {
-    isPageLoading.value = true;
     const res = await commandeStore.fetchCommande(route.params.id);
     commande.value = res.data;
   } catch (e) {
     console.error("Erreur chargement commande", e);
-  } finally {
-    isPageLoading.value = false;
   }
 };
 
@@ -231,13 +159,24 @@ const getMoyenPaiementLabel = (moyen) => {
   return gateway?.libelle || moyen;
 };
 
+const getMoyenPaiementLogo = (moyen) => {
+  const gateway = gatewayStore.gatewayMap[moyen];
+  return gateway?.logo_url ?? null;
+};
+
 onMounted(async () => {
   await fetchCommande();
   await gatewayStore.fetchGateways();
 });
 
 definePageMeta({
-  layout: "dashboard",
+  layout: "default",
   middleware: "auth",
 });
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>
+

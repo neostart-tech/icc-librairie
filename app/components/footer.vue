@@ -81,12 +81,18 @@
             Navigation
           </h4>
           <ul class="space-y-4">
-            <li v-for="link in ['Accueil', 'Fonctionnalités', 'FAQs', 'Blog', 'Contact']" :key="link">
-              <NuxtLink to="/"
+            <li v-for="link in [
+              { name: 'Accueil', path: '/' },
+              { name: 'Catalogue', path: '/catalogue' },
+              { name: 'Mes commandes', path: '/dashboard/commandes' },
+              { name: 'Mon compte', path: '/dashboard/profil' },
+              { name: 'Contact', path: '/' }
+            ]" :key="link.name">
+              <NuxtLink :to="link.path"
                 class="group flex items-center text-white/70 hover:text-white transition-all duration-300 text-[15px] sm:text-[16px] font-medium w-fit">
                 <span
                   class="w-0 h-[2px] bg-pink-400 mr-0 transition-all duration-300 group-hover:w-4 group-hover:mr-3 opacity-0 group-hover:opacity-100"></span>
-                <span class="group-hover:translate-x-1 transition-transform duration-300">{{ link }}</span>
+                <span class="group-hover:translate-x-1 transition-transform duration-300">{{ link.name }}</span>
               </NuxtLink>
             </li>
           </ul>

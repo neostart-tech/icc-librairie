@@ -5,7 +5,7 @@
 
     <!-- Top Categories Section -->
     <section class="bg-gray-50 py-20 px-4 overflow-hidden">
-      <div class="max-w-7xl mx-auto">
+      <div class="max-w-7xl mx-auto" v-reveal.repeat>
         <div class="relative border-2 border-[#6a0d5f]/10 rounded-[3rem] p-8 md:p-16 bg-white/50 backdrop-blur-sm">
           <!-- Section Title -->
           <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-6">
@@ -28,8 +28,8 @@
               <div ref="scrollContainer"
                 class="flex lg:grid lg:grid-cols-5 gap-6 md:gap-8 overflow-x-auto lg:overflow-visible py-12 -my-12 scrollbar-hide scroll-smooth snap-x snap-mandatory lg:snap-none">
                 <div v-for="(cat, index) in topCategories" :key="cat.id"
-                  class="group flex flex-col items-center text-center animate-fadeInUp w-64 md:w-72 lg:w-auto flex-shrink-0 snap-center"
-                  :style="{ animationDelay: `${index * 150}ms` }">
+                  v-reveal.repeat :class="`reveal-delay-${index * 100}`"
+                  class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-auto flex-shrink-0 snap-center">
 
                   <!-- Circular Image Container -->
                   <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="relative mb-8 block">
@@ -90,7 +90,7 @@
     </section>
     <!-- Recent Books Section -->
     <section class="py-24 px-4 bg-white overflow-hidden">
-      <div class="max-w-7xl mx-auto">
+      <div class="max-w-7xl mx-auto" v-reveal.repeat>
         <!-- Section Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div class="space-y-2">
@@ -119,8 +119,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           <!-- Books Grid -->
           <div class="lg:col-span-9 grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div v-for="(book, index) in recentBooks" :key="book.id" class="group flex flex-col animate-fadeInUp"
-              :style="{ animationDelay: `${index * 100}ms` }">
+            <div v-for="(book, index) in recentBooks" :key="book.id" 
+              v-reveal.repeat :class="`reveal-delay-${index * 100}`"
+              class="group flex flex-col">
 
               <!-- Book Image Container -->
               <NuxtLink :to="`/livres/${book.id}`"
@@ -176,8 +177,7 @@
             </div>
           </div>
 
-          <!-- Vertical Banner -->
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-3 reveal-left" v-reveal.repeat>
             <div class="relative h-full rounded-3xl overflow-hidden group shadow-2xl shadow-[#6a0d5f]/10">
               <img src="/images/ban-cote.webp" alt="Promotion"
                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
