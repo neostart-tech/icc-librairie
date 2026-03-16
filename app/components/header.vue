@@ -241,7 +241,8 @@
               </NuxtLink>
 
               <!-- Extended Categories Mobile -->
-              <div v-show="isCatalogueExtended" class="flex flex-col gap-1 pl-6 overflow-hidden transition-all duration-300">
+              <div v-show="isCatalogueExtended"
+                class="flex flex-col gap-1 pl-6 overflow-hidden transition-all duration-300">
                 <NuxtLink to="/catalogue"
                   class="flex items-center px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
                   @click="isMenuOpen = false">
