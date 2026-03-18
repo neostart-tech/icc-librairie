@@ -5,7 +5,7 @@
     <!-- Header de page dynamique -->
     <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[-2rem]">
       <div class="max-w-7xl mx-auto text-center">
-        <h1 class="text-3xl md:text-5xl font-black text-white mb-4 italic uppercase tracking-tighter">
+        <h1 class="text-xl md:text-3xl font-bold text-white mb-4 uppercase tracking-wide">
           <template v-if="headerTitle === 'Tous les livres'">
             Tous les <span class="text-orange-400">livres</span>
           </template>
@@ -82,7 +82,7 @@
               class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-[#6a0d5f]">
             <div class="flex justify-between mt-3 px-1">
               <span class="text-xs font-bold text-gray-400">0</span>
-              <span class="text-sm font-black text-[#6a0d5f]">{{ formatPrice(filters.maxPrice) }} FCFA</span>
+              <span class="text-sm font-bold text-[#6a0d5f]">{{ formatPrice(filters.maxPrice) }} FCFA</span>
             </div>
           </div>
 
@@ -101,7 +101,7 @@
 
           <!-- RESET -->
           <button @click="resetFilters"
-            class="w-full py-4 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-[#6a0d5f] transition-colors">
+            class="w-full py-4 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-[#6a0d5f] transition-colors">
             Réinitialiser les filtres
           </button>
         </aside>
@@ -173,7 +173,7 @@
                   <!-- Badge Promo -->
                   <div class="absolute top-4 left-4">
                     <span v-if="book.isPromo"
-                      class="bg-red-500 text-white text-[11px] font-black px-3 py-1.5 rounded-xl shadow-xl uppercase tracking-tighter">
+                      class="bg-red-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-xl uppercase tracking-wide">
                       -{{ calculateDiscount(book.oldPrice, book.price) }}%
                     </span>
                   </div>
@@ -187,7 +187,7 @@
                 <!-- Card Content -->
                 <div class="p-6 pt-2 flex flex-col flex-grow">
                   <h3
-                    class="font-black text-sm md:text-base text-gray-900 mb-1 lg:mb-2 line-clamp-2 min-h-[3rem] group-hover:text-[#6a0d5f] transition-colors">
+                    class="font-bold text-sm md:text-base text-gray-900 mb-1 lg:mb-2 line-clamp-2 min-h-[3rem] group-hover:text-[#6a0d5f] transition-colors">
                     {{ book.title }}
                   </h3>
                   <p class="text-xs font-bold text-gray-400 mb-4">{{ book.author }}</p>
@@ -197,13 +197,13 @@
                       <span v-if="book.isPromo" class="text-[10px] text-gray-300 line-through font-bold">
                         {{ formatPrice(book.oldPrice) }} FCFA
                       </span>
-                      <span class="text-base lg:text-lg font-black text-[#6a0d5f]">
-                        {{ formatPrice(book.price) }} <span class="text-[10px] tracking-widest opacity-50">FCFA</span>
+                      <span class="text-base lg:text-lg font-bold text-[#6a0d5f]">
+                        {{ formatPrice(book.price) }} <span class="text-[10px] tracking-wide opacity-50">FCFA</span>
                       </span>
                     </div>
 
                     <button @click.stop.prevent="addToCart(book)" :disabled="!book.stockAvailable"
-                      class="w-full flex items-center justify-center gap-2 bg-[#6a0d5f] text-white py-3.5 rounded-2xl font-black text-[13px] uppercase tracking-wider transition-all duration-300 relative z-20 shadow-lg shadow-[#6a0d5f]/20 hover:shadow-xl hover:bg-[#5a0b50] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed">
+                      class="w-full flex items-center justify-center gap-2 bg-[#6a0d5f] text-white py-3.5 rounded-2xl font-bold text-[13px] uppercase tracking-wide transition-all duration-300 relative z-20 shadow-lg shadow-[#6a0d5f]/20 hover:shadow-xl hover:bg-[#5a0b50] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -225,10 +225,10 @@
                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <p class="text-gray-900 text-2xl font-black mb-2">Aucun livre trouvé</p>
+              <p class="text-gray-900 text-2xl font-bold mb-2">Aucun livre trouvé</p>
               <p class="text-gray-400 font-medium">Modifiez vos critères pour élargir la recherche.</p>
               <button @click="resetFilters"
-                class="mt-8 bg-[#6a0d5f] text-white px-8 py-4 rounded-2xl font-black shadow-lg shadow-[#6a0d5f]/20 hover:scale-105 transition-transform active:scale-95">
+                class="mt-8 bg-[#6a0d5f] text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-[#6a0d5f]/20 hover:scale-105 transition-transform active:scale-95">
                 VOIR TOUT LE CATALOGUE
               </button>
             </div>
@@ -245,9 +245,9 @@
 
                 <div class="flex items-center gap-2">
                   <template v-for="(page, index) in displayedPages" :key="index">
-                    <span v-if="page === '...'" class="px-2 text-gray-300 font-black">...</span>
+                    <span v-if="page === '...'" class="px-2 text-gray-300 font-bold">...</span>
                     <button v-else @click="changePage(page)"
-                      class="w-12 h-12 rounded-2xl text-sm font-black transition-all" :class="page === currentPage
+                      class="w-12 h-12 rounded-2xl text-sm font-bold transition-all" :class="page === currentPage
                         ? 'bg-[#6a0d5f] text-white shadow-xl shadow-[#6a0d5f]/30 scale-110'
                         : 'hover:bg-gray-50 text-gray-400 hover:text-gray-900'
                         ">
@@ -275,7 +275,7 @@
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="isDrawerOpen = false"></div>
         <div class="relative w-full max-w-[320px] bg-white h-full shadow-2xl p-8 flex flex-col animate-slideLeft">
           <div class="flex items-center justify-between mb-8">
-            <h2 class="text-xl font-black text-gray-900 italic tracking-tighter">FILTRES</h2>
+            <h2 class="text-xl font-bold text-gray-900 tracking-wide">FILTRES</h2>
             <button @click="isDrawerOpen = false" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -288,7 +288,7 @@
             <div class="space-y-6">
               <!-- CATEGORIES -->
               <div>
-                <h3 class="font-black text-gray-900 mb-4 text-xs uppercase tracking-widest">Par Catégorie</h3>
+                <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Par Catégorie</h3>
                 <div class="space-y-3">
                   <label v-for="cat in categorieStore.categories" :key="cat.id" class="flex items-center gap-3">
                     <input type="checkbox" :value="cat.libelle" v-model="filters.categories"
@@ -300,15 +300,15 @@
 
               <!-- PRIX -->
               <div>
-                <h3 class="font-black text-gray-900 mb-4 text-xs uppercase tracking-widest">Prix Max</h3>
+                <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Prix Max</h3>
                 <input type="range" min="0" max="50000" step="500" v-model="filters.maxPrice"
                   class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-[#6a0d5f]">
-                <p class="mt-3 font-black text-[#6a0d5f] text-sm">{{ formatPrice(filters.maxPrice) }} FCFA</p>
+                <p class="mt-3 font-bold text-[#6a0d5f] text-sm">{{ formatPrice(filters.maxPrice) }} FCFA</p>
               </div>
 
               <!-- PROMO -->
               <label class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl cursor-pointer">
-                <span class="text-sm font-black text-gray-700">EN PROMO</span>
+                <span class="text-sm font-bold text-gray-700">EN PROMO</span>
                 <input type="checkbox" v-model="filters.onlyPromo"
                   class="w-6 h-6 rounded border-gray-300 text-[#6a0d5f] focus:ring-[#6a0d5f]/20">
               </label>
@@ -316,7 +316,7 @@
           </div>
 
           <button @click="isDrawerOpen = false"
-            class="mt-8 w-full bg-[#6a0d5f] text-white py-5 rounded-3xl font-black shadow-xl shadow-[#6a0d5f]/20">
+            class="mt-8 w-full bg-[#6a0d5f] text-white py-5 rounded-3xl font-bold shadow-xl shadow-[#6a0d5f]/20">
             APPLIQUER LES FILTRES
           </button>
         </div>

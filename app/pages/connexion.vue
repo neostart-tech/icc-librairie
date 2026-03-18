@@ -1,118 +1,127 @@
 <template>
-  <div class="min-h-screen relative flex items-center justify-center px-4 bg-[#f8f9fa] py-12">
-    <!-- Background subtle pattern -->
-    <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
-      <div class="absolute inset-0 bg-gradient-to-br from-[#6a0d5f]/5 to-transparent"></div>
-      <div class="w-full h-full" style="background-image: radial-gradient(#6a0d5f 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
-    </div>
+  <div class="min-h-screen flex items-center justify-center bg-[#6a0d5f] px-4 py-8" style="background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 28px 28px;">
+    
+    <!-- Card principale split-screen -->
+    <div v-reveal class="w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[580px]">
 
-    <!-- Login Card -->
-    <div v-reveal class="relative z-10 w-full max-w-4xl">
-      <div
-        class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden border border-gray-100 flex flex-col md:flex-row min-h-[600px]">
+      <!-- ========== PANNEAU GAUCHE ========== -->
+      <div class="hidden md:flex w-[45%] bg-[#6a0d5f] flex-col justify-between p-12 relative overflow-hidden"
+           style="background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 22px 22px;">
         
-        <!-- Côté Gauche: Branding & Image (Desktop only) -->
-        <div class="hidden md:flex w-2/5 bg-[#6a0d5f] relative overflow-hidden flex-col justify-between p-12 text-white">
-          <!-- Background Decoration -->
-          <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-          <div class="absolute bottom-0 left-0 w-48 h-48 bg-orange-400/20 rounded-full blur-2xl -ml-24 -mb-24"></div>
-          
-          <div class="relative z-10">
-            <NuxtLink to="/">
-              <img src="/logo/logo_librairie(1).png" class="h-16 w-auto brightness-0 invert" alt="Logo" />
-            </NuxtLink>
-          </div>
+        <!-- Blob déco -->
+        <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
 
-          <div class="relative z-10 space-y-6">
-            <h2 class="text-4xl font-bold leading-tight">
-              Bienvenue dans votre <span class="text-orange-400 italic">espace</span>
+        <!-- Logo -->
+        <NuxtLink to="/" class="relative z-10">
+          <img src="/logo/logo_librairie(1).png" class="h-14 w-auto brightness-0 invert" alt="Logo Librairie ICC" />
+        </NuxtLink>
+
+        <!-- Texte central -->
+        <div class="relative z-10 space-y-6">
+          <div>
+            <p class="text-white/60 text-xs font-bold uppercase tracking-widest mb-2">Bienvenue sur</p>
+            <h2 class="text-3xl font-bold text-white leading-snug">
+              Librairie <br/><span class="text-white/80">ICC-Togo</span>
             </h2>
-            <p class="text-white/70 text-sm leading-relaxed font-medium">
-              Accédez à votre collection de livres inspirants et suivez vos commandes en un clin d'œil.
+            <p class="mt-3 text-white/60 text-sm leading-relaxed">
+              Accédez à votre espace personnel, découvrez notre catalogue et suivez vos commandes.
             </p>
-            <div class="flex gap-2">
-              <div class="h-1 w-12 bg-white rounded-full"></div>
-              <div class="h-1 w-4 bg-white/30 rounded-full"></div>
-              <div class="h-1 w-4 bg-white/30 rounded-full"></div>
+          </div>
+
+          <!-- Features -->
+          <div class="space-y-3 pt-2">
+            <div v-for="(item, i) in features" :key="i" class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                <component :is="'span'" class="text-white text-base">{{ item.icon }}</component>
+              </div>
+              <span class="text-white/80 text-sm font-medium">{{ item.label }}</span>
             </div>
           </div>
-
-          <!-- Abstract curved shape at bottom -->
-          <svg class="absolute bottom-0 left-0 w-full h-32 text-orange-400/10 pointer-events-none" preserveAspectRatio="none" viewBox="0 0 100 100">
-            <path d="M0,100 C30,80 70,80 100,100 L100,100 L0,100 Z" fill="currentColor" />
-          </svg>
         </div>
 
-        <!-- Côté Droit: Form -->
-        <div class="flex-1 p-8 md:p-14 flex flex-col justify-center">
-          <div class="mb-10 text-center md:text-left">
-            <h1 class="text-3xl font-bold text-gray-900">Connexion</h1>
-            <div class="h-1.5 w-12 bg-orange-400 rounded-full mt-3 mx-auto md:mx-0"></div>
+        <!-- Footer texte -->
+        <p class="relative z-10 text-white/30 text-[10px] font-bold uppercase tracking-widest">
+          ICC-Togo · Votre librairie chrétienne
+        </p>
+      </div>
+
+      <!-- ========== PANNEAU DROIT ========== -->
+      <div class="flex-1 flex flex-col justify-center p-8 md:p-12">
+
+        <!-- Mobile : logo -->
+        <div class="md:hidden mb-8 text-center">
+          <img src="/logo/logo_librairie(1).png" class="h-12 w-auto mx-auto" style="filter: hue-rotate(0deg)" alt="Logo" />
+        </div>
+
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-gray-900">Connexion</h1>
+          <p class="text-gray-400 text-sm mt-1">Entrez vos identifiants pour continuer</p>
+        </div>
+
+        <form @submit.prevent="handleLogin" class="space-y-5">
+          <!-- Email -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Email</label>
+            <input v-model="email" type="email" placeholder="votre@email.com"
+              class="w-full bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-4 py-3.5 text-gray-900 text-sm outline-none transition-all placeholder:text-gray-300"
+              required />
           </div>
 
-          <form @submit.prevent="handleLogin" class="space-y-6">
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-1">Email</label>
-              <input v-model="email" type="email" placeholder="votre@email.com"
-                class="w-full bg-gray-50 border-2 border-transparent focus:border-[#6a0d5f] focus:bg-white rounded-2xl px-6 py-4 text-gray-900 font-bold outline-none transition-all placeholder:text-gray-300"
+          <!-- Mot de passe -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Mot de passe</label>
+              <a href="#" class="text-xs font-semibold text-[#6a0d5f] hover:underline">Oublié ?</a>
+            </div>
+            <div class="relative">
+              <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="••••••••"
+                class="w-full bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-4 py-3.5 text-gray-900 text-sm outline-none transition-all placeholder:text-gray-300 pr-12"
                 required />
-            </div>
-
-            <div class="space-y-1">
-              <div class="flex justify-between items-center ml-1">
-                <label class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Mot de passe</label>
-                <a href="#" class="text-[10px] font-black text-[#6a0d5f] uppercase tracking-widest hover:underline">Oublié ?</a>
-              </div>
-              <div class="relative">
-                <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="••••••••"
-                  class="w-full bg-gray-50 border-2 border-transparent focus:border-[#6a0d5f] focus:bg-white rounded-2xl px-6 py-4 text-gray-900 font-bold outline-none transition-all placeholder:text-gray-300"
-                  required />
-                <button type="button" @click="showPassword = !showPassword"
-                  class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#6a0d5f]">
-                  <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" />
-                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2" />
-                  </svg>
-                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.96 9.96 0 012.219-3.423m1.43-1.1A9.963 9.963 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.05 10.05 0 01-1.481 2.563M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" />
-                    <path d="M3 3l18 18" stroke-width="2" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <button :disabled="auth.loading"
-              class="w-full bg-[#6a0d5f] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#6a0d5f]/20 hover:bg-[#851178] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-60 flex items-center justify-center gap-2">
-              <svg v-if="auth.loading" class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <span v-else>Se connecter</span>
-            </button>
-          </form>
-
-          <div class="mt-10 space-y-4">
-            <div class="relative py-2 text-center">
-              <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
-              <span class="relative bg-white px-4 text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Ou continuer avec</span>
-            </div>
-
-            <NuxtLink to="/ConnexionIcc"
-              class="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-50 hover:border-[#6a0d5f] hover:text-[#6a0d5f] text-gray-400 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all">
-              <img src="/logo/logo_librairie(1).png" class="h-5 w-auto grayscale opacity-50" alt="" />
-              Compte ICC-Covoiturage
-            </NuxtLink>
-
-            <div class="pt-6 text-center">
-              <p class="text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                Nouveau ici ?
-                <NuxtLink to="/inscription" class="text-[#6a0d5f] hover:text-orange-500 transition-colors ml-2 underline underline-offset-4 decoration-2">
-                  Créer un compte
-                </NuxtLink>
-              </p>
+              <button type="button" @click="showPassword = !showPassword"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#6a0d5f]">
+                <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" />
+                  <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2" />
+                </svg>
+                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.96 9.96 0 012.219-3.423m1.43-1.1A9.963 9.963 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.05 10.05 0 01-1.481 2.563M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" />
+                  <path d="M3 3l18 18" stroke-width="2" />
+                </svg>
+              </button>
             </div>
           </div>
+
+          <!-- Bouton principal -->
+          <button type="submit" :disabled="auth.loading"
+            class="w-full bg-[#6a0d5f] hover:bg-[#7e1073] text-white py-3.5 rounded-xl font-bold text-sm transition-all duration-200 shadow-lg shadow-[#6a0d5f]/30 disabled:opacity-60 flex items-center justify-center gap-2 mt-2">
+            <svg v-if="auth.loading" class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span v-else>Me connecter</span>
+          </button>
+        </form>
+
+        <!-- Séparateur -->
+        <div class="my-6 flex items-center gap-3">
+          <div class="flex-1 h-px bg-gray-100"></div>
+          <span class="text-xs text-gray-300 font-medium">OU</span>
+          <div class="flex-1 h-px bg-gray-100"></div>
         </div>
+
+        <!-- Bouton ICC Covoiturage -->
+        <NuxtLink to="/ConnexionIcc"
+          class="w-full flex items-center justify-center gap-3 border border-gray-200 hover:border-[#6a0d5f] hover:bg-[#6a0d5f]/5 text-gray-500 hover:text-[#6a0d5f] py-3.5 rounded-xl font-semibold text-sm transition-all">
+          <img src="/logo/logo_librairie(1).png" class="h-5 w-auto grayscale opacity-40" alt="" />
+          Connexion avec compte ICC
+        </NuxtLink>
+
+        <!-- Lien inscription -->
+        <p class="mt-6 text-center text-sm text-gray-400">
+          Pas encore de compte ?
+          <NuxtLink to="/inscription" class="text-[#6a0d5f] font-semibold hover:underline ml-1">Créer un compte</NuxtLink>
+        </p>
       </div>
     </div>
   </div>
@@ -122,7 +131,6 @@
 import { useAuthStore } from "~~/stores/auth";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useToast } from "#imports";
 import Swal from 'sweetalert2';
 
 const router = useRouter();
@@ -131,7 +139,12 @@ const route = useRoute();
 const email = ref("");
 const password = ref("");
 const showPassword = ref(false);
-const toast = useToast();
+
+const features = [
+  { icon: '📚', label: 'Catalogue de livres chrétiens' },
+  { icon: '🛒', label: 'Commandes simplifiées' },
+  { icon: '✨', label: 'Offres et promotions exclusives' },
+];
 
 const handleLogin = async () => {
   try {
@@ -153,7 +166,7 @@ const handleLogin = async () => {
       timer: 3000,
       timerProgressBar: true,
       customClass: {
-        popup: 'rounded-2xl border-l-4 border-green-500 shadow-xl'
+        popup: 'rounded-xl border-l-4 border-green-500 shadow-xl'
       }
     });
 
@@ -164,13 +177,12 @@ const handleLogin = async () => {
       icon: 'error',
       confirmButtonColor: '#6a0d5f',
       customClass: {
-        popup: 'rounded-[2.5rem]',
-        confirmButton: 'rounded-xl font-black px-8 py-3 uppercase tracking-widest text-sm'
+        popup: 'rounded-xl',
+        confirmButton: 'rounded-xl font-bold px-8 py-3 text-sm'
       }
     });
   }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 pb-20">
     <!-- Hero Section -->
-    <section class="relative bg-[#6a0d5f] pt-32 pb-48 overflow-hidden">
+    <section class="relative bg-[#6a0d5f] pt-24 pb-32 overflow-hidden">
       <div class="absolute inset-0 opacity-10">
         <div class="absolute -top-24 -left-24 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
         <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-orange-400 rounded-full blur-[100px]"></div>
@@ -9,26 +9,26 @@
 
       <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
         <span v-reveal
-          class="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white/80 text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+          class="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white/80 text-[10px] font-bold uppercase tracking-[0.3em] mb-6">
           Espace Membre
         </span>
         <h1 v-reveal
-          class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none mb-4">
+          class="text-3xl md:text-4xl font-bold text-white uppercase tracking-wide leading-none mb-3">
           Mon <span class="text-orange-400">Profil</span>
         </h1>
-        <p v-reveal class="text-white/60 text-xs font-black uppercase tracking-widest">Gérez vos informations et votre
+        <p v-reveal class="text-white/60 text-xs font-bold uppercase tracking-widest">Gérez vos informations et votre
           sécurité</p>
       </div>
     </section>
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-6 -mt-24 relative z-20 space-y-8">
+    <main class="max-w-4xl mx-auto px-6 -mt-16 relative z-20 space-y-6">
       <!-- Personal Info Card -->
-      <section v-reveal class="bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 border border-white">
+      <section v-reveal class="bg-white rounded-xl shadow-2xl p-6 md:p-8 border border-white">
         <div class="flex items-center justify-between mb-10">
           <div class="flex items-center gap-3">
             <div class="w-12 h-1 text-[#6a0d5f] bg-[#6a0d5f] rounded-full"></div>
-            <h2 class="text-xl font-black text-gray-900 uppercase italic tracking-tighter">Informations Personnelles
+            <h2 class="text-xl font-bold text-gray-900 uppercase tracking-wide">Informations Personnelles
             </h2>
           </div>
           <button @click="isEditingPersonal = !isEditingPersonal"
@@ -42,30 +42,30 @@
             <div class="space-y-2">
               <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Prénom</label>
               <input v-model="userData.firstName" type="text"
-                class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300"
                 required />
             </div>
             <div class="space-y-2">
               <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Nom</label>
               <input v-model="userData.lastName" type="text"
-                class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300"
                 required />
             </div>
           </div>
           <div class="space-y-2">
             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Email</label>
             <input v-model="userData.email" type="email"
-              class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300"
               required />
           </div>
           <div class="space-y-2">
             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Téléphone</label>
             <input v-model="userData.phone" type="tel"
-              class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300" />
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#6a0d5f] outline-none transition-all font-bold placeholder:text-gray-300" />
           </div>
           <div class="pt-4">
             <button type="submit" :disabled="isLoading"
-              class="w-full py-5 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[#6a0d5f] transition-all duration-500 disabled:opacity-50 shadow-xl">
+              class="w-full py-3 bg-gray-900 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[#6a0d5f] transition-all duration-500 disabled:opacity-50 shadow-xl">
               <span v-if="isLoading">Mise à jour...</span>
               <span v-else>Enregistrer les modifications</span>
             </button>
@@ -82,7 +82,7 @@
             </div>
             <div>
               <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Identité</p>
-              <p class="font-black text-gray-900 italic tracking-tight">{{ userData.firstName }} {{ userData.lastName }}
+              <p class="font-bold text-gray-900 tracking-wide">{{ userData.firstName }} {{ userData.lastName }}
               </p>
             </div>
           </div>
@@ -96,18 +96,18 @@
             </div>
             <div>
               <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Contact</p>
-              <p class="font-black text-gray-900 italic tracking-tight">{{ userData.email }}</p>
+              <p class="font-bold text-gray-900 tracking-wide">{{ userData.email }}</p>
             </div>
           </div>
         </div>
       </section>
 
       <!-- Security Section -->
-      <section v-reveal class="reveal-delay-100 bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 border border-white">
+      <section v-reveal class="reveal-delay-100 bg-white rounded-xl shadow-2xl p-6 md:p-8 border border-white">
         <div class="flex items-center justify-between mb-10">
           <div class="flex items-center gap-3">
             <div class="w-12 h-1 text-red-500 bg-red-500 rounded-full"></div>
-            <h2 class="text-xl font-black text-gray-900 uppercase italic tracking-tighter">Sécurité</h2>
+            <h2 class="text-xl font-bold text-gray-900 uppercase tracking-wide">Sécurité</h2>
           </div>
           <button @click="isEditingPassword = !isEditingPassword"
             class="text-[10px] font-black text-red-500 uppercase tracking-widest hover:text-gray-900 transition-colors">
@@ -120,7 +120,7 @@
             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Mot de passe
               actuel</label>
             <input v-model="passwordData.currentPassword" type="password"
-              class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all font-bold"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition-all font-bold"
               required />
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -128,27 +128,27 @@
               <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Nouveau mot de
                 passe</label>
               <input v-model="passwordData.newPassword" type="password"
-                class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all font-bold"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition-all font-bold"
                 required />
             </div>
             <div class="space-y-2">
               <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Confirmer le mot de
                 passe</label>
               <input v-model="passwordData.confirmPassword" type="password"
-                class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none transition-all font-bold"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-red-500 outline-none transition-all font-bold"
                 required />
             </div>
           </div>
           <div class="pt-4">
             <button type="submit" :disabled="isLoading"
-              class="w-full py-5 bg-red-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-red-700 transition-all duration-500 disabled:opacity-50 shadow-xl">
+              class="w-full py-3 bg-red-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-red-700 transition-all duration-500 disabled:opacity-50 shadow-xl">
               <span v-if="isLoading">Mise à jour...</span>
               <span v-else>Mettre à jour la sécurité</span>
             </button>
           </div>
         </form>
 
-        <p v-else class="text-gray-400 text-xs font-medium italic">Votre sécurité est notre priorité. Votre mot de passe
+        <p v-else class="text-gray-400 text-xs font-medium">Votre sécurité est notre priorité. Votre mot de passe
           est crypté et inaccessible par quiconque.</p>
       </section>
 

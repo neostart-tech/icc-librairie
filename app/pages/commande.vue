@@ -8,7 +8,7 @@
     <!-- Page Header -->
     <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[-2rem]">
       <div class="max-w-7xl mx-auto text-center">
-        <h1 class="text-3xl md:text-5xl font-black text-white mb-4 italic uppercase tracking-tighter">
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 uppercase tracking-wide">
           Finaliser la <span class="text-orange-400">commande</span>
         </h1>
         <p class="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-medium">
@@ -31,7 +31,7 @@
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </div>
-              <h2 class="text-2xl font-black text-gray-900 uppercase italic tracking-tighter">Mode de paiement</h2>
+              <h2 class="text-2xl font-bold text-gray-900 uppercase tracking-wide">Mode de paiement</h2>
             </div>
 
             <!-- Gateways Selection Grid -->
@@ -39,11 +39,11 @@
               <!-- LOADING STATE -->
               <div v-if="isPageLoading" class="col-span-full py-10 flex flex-col items-center gap-4">
                 <div class="h-10 w-10 border-4 border-[#6a0d5f] border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-xs font-black text-gray-400 uppercase tracking-widest">Chargement des options...</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Chargement des options...</p>
               </div>
 
               <div v-else-if="!gatewayStore.actifs.length" class="col-span-full py-10 text-center">
-                <p class="text-gray-400 font-bold uppercase tracking-widest text-sm">Aucun moyen de paiement disponible
+                <p class="text-gray-400 font-bold uppercase tracking-wide text-sm">Aucun moyen de paiement disponible
                 </p>
               </div>
 
@@ -57,8 +57,8 @@
                 </div>
 
                 <div class="flex-1">
-                  <p class="font-black text-gray-900 uppercase tracking-tight">{{ gateway.libelle }}</p>
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Paiement Mobile</p>
+                  <p class="font-bold text-gray-900 uppercase tracking-wide">{{ gateway.libelle }}</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Paiement Mobile</p>
                 </div>
 
                 <div
@@ -74,7 +74,7 @@
 
             <!-- PHONE INPUT SECTION -->
             <div v-if="selectedGateway" class="mt-12 pt-12 border-t border-gray-100 animate-fadeInUp">
-              <h3 class="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+              <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-6 flex items-center gap-2">
                 <span
                   class="w-6 h-6 rounded-lg bg-orange-400 text-white flex items-center justify-center text-[10px]">!</span>
                 Numéro de téléphone
@@ -87,10 +87,10 @@
                   <img :src="selectedGateway.logo_url" class="h-6 object-contain opacity-50" alt="" />
                 </div>
               </div>
-              <p v-if="phoneError" class="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-widest">
+              <p v-if="phoneError" class="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-wide">
                 {{ phoneError }}
               </p>
-              <p class="text-[10px] font-bold text-gray-400 mt-4 uppercase tracking-widest leading-relaxed">
+              <p class="text-[10px] font-bold text-gray-400 mt-4 uppercase tracking-wide leading-relaxed">
                 Veuillez saisir le numéro qui effectuera la transaction. <br />
                 Format attendu: <span class="text-gray-900">+228XXXXXXXX</span>
               </p>
@@ -102,7 +102,7 @@
         <aside class="lg:col-span-4 lg:sticky lg:top-24 animate-fadeInUp" style="animation-delay: 200ms">
           <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-8">
             <h2
-              class="text-2xl font-black text-gray-900 italic uppercase tracking-tighter mb-8 flex items-center gap-3">
+              class="text-2xl font-bold text-gray-900 uppercase tracking-wide mb-8 flex items-center gap-3">
               <svg class="w-7 h-7 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" stroke-linecap="round"
                   stroke-linejoin="round" />
@@ -116,7 +116,7 @@
                 class="flex items-center gap-4 py-2 border-b border-gray-50/50 last:border-0 hover:bg-gray-50/50 rounded-xl px-2 transition-colors">
                 <img :src="item.image" class="w-10 h-14 object-contain" alt="" />
                 <div class="flex-1 min-w-0">
-                  <p class="text-xs font-black text-gray-900 truncate uppercase">{{ item.title }}</p>
+                  <p class="text-xs font-bold text-gray-900 truncate uppercase">{{ item.title }}</p>
                   <p class="text-[10px] font-bold text-[#6a0d5f]">
                     {{ item.quantity }} × {{ formatPrice(item.price) }}
                   </p>
@@ -126,20 +126,20 @@
 
             <div class="space-y-4 border-t border-gray-50 pt-6">
               <div class="flex justify-between items-center px-2">
-                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Total Articles</span>
-                <span class="font-black text-gray-800">{{ cartStore.count }}</span>
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-wide">Total Articles</span>
+                <span class="font-bold text-gray-800">{{ cartStore.count }}</span>
               </div>
 
               <div
                 class="mt-8 mb-10 p-6 bg-[#6a0d5f]/5 rounded-[2rem] border border-[#6a0d5f]/10 text-center flex flex-col items-center">
-                <span class="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Total à payer</span>
-                <span class="text-4xl font-black text-[#6a0d5f] italic tracking-tighter">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Total à payer</span>
+                <span class="text-4xl font-bold text-[#6a0d5f] tracking-wide">
                   {{ formatPrice(total) }}
                 </span>
               </div>
 
               <button @click="submitCommande" :disabled="!canSubmit || commandeStore.loading"
-                class="w-full flex items-center justify-center gap-4 bg-[#6a0d5f] text-white py-6 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:grayscale disabled:scale-100">
+                class="w-full flex items-center justify-center gap-4 bg-[#6a0d5f] text-white py-6 rounded-2xl font-bold text-sm uppercase tracking-wide shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:grayscale disabled:scale-100">
                 <span v-if="commandeStore.loading">Traitement...</span>
                 <template v-else>
                   Confirmer l'achat
@@ -151,7 +151,7 @@
               </button>
 
               <NuxtLink to="/panier"
-                class="w-full flex items-center justify-center mt-6 text-gray-400 hover:text-[#6a0d5f] font-black text-[10px] uppercase tracking-widest transition-colors duration-300">
+                class="w-full flex items-center justify-center mt-6 text-gray-400 hover:text-[#6a0d5f] font-bold text-[10px] uppercase tracking-wide transition-colors duration-300">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="3" stroke-linecap="round"
                     stroke-linejoin="round" />
@@ -170,7 +170,7 @@
               </svg>
             </div>
             <div>
-              <p class="text-[10px] font-black text-orange-900 uppercase">Transaction Sécurisée</p>
+              <p class="text-[10px] font-bold text-orange-900 uppercase">Transaction Sécurisée</p>
               <p class="text-[9px] text-orange-800/70 font-bold leading-tight">Payez en toute sécurité</p>
             </div>
           </div>
@@ -251,7 +251,7 @@ const submitCommande = async () => {
       confirmButtonColor: '#6a0d5f',
       customClass: {
         popup: 'rounded-[2rem]',
-        confirmButton: 'rounded-xl font-black px-8 py-4 uppercase tracking-widest text-sm'
+        confirmButton: 'rounded-xl font-bold px-8 py-4 uppercase tracking-wide text-sm'
       }
     });
   } catch (e) {
@@ -263,7 +263,7 @@ const submitCommande = async () => {
       confirmButtonColor: '#6a0d5f',
       customClass: {
         popup: 'rounded-[2rem]',
-        confirmButton: 'rounded-xl font-black px-8 py-4 uppercase tracking-widest text-sm'
+        confirmButton: 'rounded-xl font-bold px-8 py-4 uppercase tracking-wide text-sm'
       }
     });
   }

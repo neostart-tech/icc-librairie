@@ -6,13 +6,13 @@
       { label: book.title || 'Chargement...', to: '#' },
     ]" />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <!-- Bouton retour avec animation -->
       <NuxtLink to="/catalogue"
-        class="group inline-flex items-center text-[#6a0d5f]/60 hover:text-[#6a0d5f] transition-all duration-300 font-medium mb-8">
+        class="group inline-flex items-center text-sm text-[#6a0d5f]/60 hover:text-[#6a0d5f] transition-all duration-300 font-medium mb-6">
         <div
-          class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center mr-3 group-hover:shadow-md group-hover:-translate-x-1 transition-all duration-300">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          class="w-7 h-7 rounded-full bg-white shadow-sm flex items-center justify-center mr-2 group-hover:shadow-md group-hover:-translate-x-1 transition-all duration-300">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
           </svg>
         </div>
@@ -49,29 +49,29 @@
           </div>
 
           <!-- Right Column: Details -->
-          <div class="lg:col-span-7 xl:col-span-7 space-y-8" v-reveal.repeat>
+          <div class="lg:col-span-7 xl:col-span-7 space-y-6" v-reveal.repeat>
             <div class="animate-fade-in-up">
-              <div class="flex items-center space-x-3 mb-6">
+              <div class="flex items-center space-x-3 mb-4">
                 <span
-                  class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase bg-[#6a0d5f]/10 text-[#6a0d5f] border border-[#6a0d5f]/10">
+                  class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase bg-[#6a0d5f]/10 text-[#6a0d5f] border border-[#6a0d5f]/10">
                   {{ book.category || "Littérature" }}
                 </span>
               </div>
 
-              <h1 class="text-4xl lg:text-5xl font-extrabold text-[#1a1a1a] leading-tight mb-4">
+              <h1 class="text-3xl lg:text-4xl font-bold text-[#1a1a1a] leading-tight mb-3">
                 {{ book.title }}
               </h1>
 
-              <div class="flex items-center p-4 bg-gray-50 rounded-2xl border border-gray-100">
+              <div class="flex items-center p-3 bg-gray-50 rounded-xl border border-gray-100">
                 <div
-                  class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#6a0d5f] to-[#8B5A8C] flex items-center justify-center text-white font-bold text-lg mr-4">
+                  class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6a0d5f] to-[#8B5A8C] flex items-center justify-center text-white font-bold text-base mr-3">
                   {{ book.author ? book.author.charAt(0) : "A" }}
                 </div>
                 <div>
-                  <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">
+                  <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
                     Auteur de l'œuvre
                   </p>
-                  <p class="text-xl font-bold text-gray-900">
+                  <p class="text-lg font-bold text-gray-900">
                     {{ book.author }}
                   </p>
                 </div>
@@ -80,21 +80,21 @@
 
             <!-- Price & Actions -->
             <div
-              class="p-8 rounded-[2rem] bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 animate-fade-in-up"
+              class="p-6 rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 animate-fade-in-up"
               style="animation-delay: 100ms">
-              <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="space-y-1">
-                  <p class="text-sm text-gray-500 font-medium">Prix de vente</p>
-                  <div class="flex items-baseline space-x-3">
-                    <span class="text-4xl font-black text-[#6a0d5f]">
+                  <p class="text-xs text-gray-500 font-medium">Prix de vente</p>
+                  <div class="flex items-baseline space-x-2">
+                    <span class="text-3xl font-bold text-[#6a0d5f]">
                       {{ book.price.toLocaleString() }}
-                      <span class="text-xl">FCFA</span>
+                      <span class="text-lg">FCFA</span>
                     </span>
-                    <span v-if="book.isPromo" class="text-xl text-gray-300 line-through">
+                    <span v-if="book.isPromo" class="text-lg text-gray-300 line-through">
                       {{ book.oldPrice.toLocaleString() }}
                     </span>
                   </div>
-                  <p v-if="book.isPromo" class="text-green-600 text-sm font-bold flex items-center mt-1">
+                  <p v-if="book.isPromo" class="text-green-600 text-xs font-bold flex items-center mt-1">
                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -107,7 +107,7 @@
                 <div class="flex-grow max-w-md">
                   <button @click.stop.prevent="addToCart(book)" :disabled="cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
                     "
-                    class="group w-full py-5 rounded-2xl font-black text-lg transition-all duration-300 flex items-center justify-center gap-4 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-1 active:scale-95 overflow-hidden relative"
+                    class="group w-full py-3.5 rounded-xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-1 active:scale-95 overflow-hidden relative"
                     :class="[
                       !book.stockAvailable
                         ? 'bg-gray-100 text-gray-400'
@@ -123,11 +123,11 @@
                     <svg v-if="
                       book.stockAvailable &&
                       cartStore.getQuantity(book.id) === 0
-                    " class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    " class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                       <path stroke-linecap="round" stroke-linejoin="round"
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    <svg v-else-if="cartStore.getQuantity(book.id) > 0" class="w-6 h-6" fill="none"
+                    <svg v-else-if="cartStore.getQuantity(book.id) > 0" class="w-5 h-5" fill="none"
                       stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -148,13 +148,13 @@
 
             <!-- Description with tabs-like feel -->
             <div class="animate-fade-in-up" style="animation-delay: 200ms">
-              <div class="flex items-center space-x-8 border-b border-gray-100 mb-6">
-                <button class="pb-4 text-sm font-bold border-b-2 border-[#6a0d5f] text-[#6a0d5f]">
+              <div class="flex items-center space-x-6 border-b border-gray-100 mb-4">
+                <button class="pb-3 text-sm font-bold border-b-2 border-[#6a0d5f] text-[#6a0d5f]">
                   Synopsis
                 </button>
               </div>
               <p
-                class="text-gray-600 text-lg leading-relaxed first-letter:text-4xl first-letter:font-bold first-letter:text-[#6a0d5f] first-letter:mr-1">
+                class="text-gray-600 text-base leading-relaxed first-letter:text-3xl first-letter:font-bold first-letter:text-[#6a0d5f] first-letter:mr-1">
                 {{ book.description || "Plongez dans cet ouvrage captivant qui explore les thématiques essentielles avec une profondeur inégalée." }}
               </p>
             </div>
@@ -169,15 +169,15 @@
     </div>
 
     <!-- Lively "Vous aimerez aussi" Section -->
-    <div v-if="relatedBooks.length" class="mt-20 py-20 bg-gradient-to-b from-white to-[#f9f5f9] overflow-hidden" v-reveal.repeat>
+    <div v-if="relatedBooks.length" class="mt-12 py-12 bg-gradient-to-b from-white to-[#f9f5f9] overflow-hidden" v-reveal.repeat>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-12">
-          <div class="space-y-2">
-            <h2 class="text-3xl font-black text-gray-900 tracking-tight">
+        <div class="flex items-end justify-between mb-8">
+          <div class="space-y-1.5">
+            <h2 class="text-2xl font-bold text-gray-900 tracking-wide">
               Plus de trésors à découvrir
             </h2>
-            <div class="h-1.5 w-24 bg-gradient-to-r from-[#6a0d5f] to-transparent rounded-full"></div>
-            <p class="text-gray-500 font-medium pt-2">
+            <div class="h-1 w-20 bg-gradient-to-r from-[#6a0d5f] to-transparent rounded-full"></div>
+            <p class="text-sm text-gray-500 font-medium pt-1">
               Basé sur vos intérêts pour {{ book.category }}
             </p>
           </div>
@@ -185,20 +185,20 @@
 
         <div class="relative group/carousel">
           <!-- Navigation Buttons on sides -->
-          <div class="absolute top-[40%] -left-4 lg:-left-16 -translate-y-1/2 z-20 transition-all duration-300">
+          <div class="absolute top-[40%] -left-4 lg:-left-12 -translate-y-1/2 z-20 transition-all duration-300">
             <button @click="scrollLeft" :disabled="!canScrollLeft"
-              class="w-12 h-12 rounded-full border-2 border-gray-100 bg-white shadow-xl flex items-center justify-center hover:border-[#6a0d5f]/30 hover:text-[#6a0d5f] hover:scale-110 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none group">
-              <svg class="w-6 h-6 transform group-active:-translate-x-1 transition-transform" fill="none"
+              class="w-10 h-10 rounded-full border-2 border-gray-100 bg-white shadow-lg flex items-center justify-center hover:border-[#6a0d5f]/30 hover:text-[#6a0d5f] hover:scale-110 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none group">
+              <svg class="w-5 h-5 transform group-active:-translate-x-1 transition-transform" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
           </div>
           
-          <div class="absolute top-[40%] -right-4 lg:-right-16 -translate-y-1/2 z-20 transition-all duration-300">
+          <div class="absolute top-[40%] -right-4 lg:-right-12 -translate-y-1/2 z-20 transition-all duration-300">
             <button @click="scrollRight" :disabled="!canScrollRight"
-              class="w-12 h-12 rounded-full border-2 border-gray-100 bg-white shadow-xl flex items-center justify-center hover:border-[#6a0d5f]/30 hover:text-[#6a0d5f] hover:scale-110 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none group">
-              <svg class="w-6 h-6 transform group-active:translate-x-1 transition-transform" fill="none"
+              class="w-10 h-10 rounded-full border-2 border-gray-100 bg-white shadow-lg flex items-center justify-center hover:border-[#6a0d5f]/30 hover:text-[#6a0d5f] hover:scale-110 transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none group">
+              <svg class="w-5 h-5 transform group-active:translate-x-1 transition-transform" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
               </svg>
@@ -223,7 +223,7 @@
                       <span class="text-white text-xs font-bold uppercase tracking-widest bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full">Explorer</span>
                     </div>
                     <div v-if="relatedBook.isPromo"
-                      class="absolute top-4 left-4 bg-red-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-black shadow-lg">
+                      class="absolute top-4 left-4 bg-red-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow-lg">
                       PROMO
                     </div>
                   </div>
@@ -237,7 +237,7 @@
                       {{ relatedBook.author }}
                     </p>
                     <div class="flex items-center justify-center md:justify-start space-x-2 pt-1">
-                      <span class="text-base md:text-lg font-black text-[#6a0d5f]">
+                      <span class="text-base md:text-lg font-bold text-[#6a0d5f]">
                         {{ relatedBook.price.toLocaleString() }}
                       </span>
                       <span class="text-[10px] text-[#6a0d5f]/50 font-bold uppercase">FCFA</span>

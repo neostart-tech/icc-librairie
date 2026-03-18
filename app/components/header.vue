@@ -26,21 +26,21 @@
 
         <!-- Top Contact Bar (Desktop Only) -->
         <div
-          class="hidden lg:flex h-[48px] border-b border-white/10 items-center justify-between pr-4 sm:pr-8 lg:pr-12 pl-[65px] xl:pl-[80px] text-[14px] text-white/90 bg-[#4a0942] ml-[35px]"
+          class="hidden lg:flex h-[48px] border-b border-white/10 items-center justify-between pr-4 sm:pr-8 lg:pr-12 pl-[65px] xl:pl-[80px] text-[12px] xl:text-[13px] text-white/90 bg-[#4a0942] ml-[35px]"
           style="clip-path: polygon(0 0, 100% 0, 100% 100%, 45px 100%);">
           <!-- Left spacing and clip-path create a slanted edge parallel to the white curve with a violet gap -->
-          <div class="flex items-center gap-5 font-medium tracking-wide">
-            <div class="flex items-center gap-2 cursor-default mr-5">
+          <div class="flex items-center gap-3 xl:gap-4 font-medium tracking-wide whitespace-nowrap">
+            <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path
                   d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                 </path>
               </svg>
-              <span>+33 1 23 45 67 89</span>
+              <span>+228 92 09 02 04</span>
             </div>
             <div class="w-px h-5 bg-white/20"></div>
-            <div class="flex items-center gap-2 cursor-default mr-5">
+            <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -49,13 +49,13 @@
               <span>contact@icc-librairie.com</span>
             </div>
             <div class="w-px h-5 bg-white/20"></div>
-            <div class="flex items-center gap-2 cursor-default mr-5">
+            <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
-              <span>Lun - Sam: 9h00 - 18h00</span>
+              <span>Lun-Ven 8h-17h | Dim 8h-14h</span>
             </div>
           </div>
 
@@ -140,16 +140,31 @@
               </div>
             </div>
 
-            <NuxtLink to="/dashboard/commandes"
+            <NuxtLink v-if="isLoggedIn" to="/dashboard/commandes"
               class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide mr-15">
               Mes commandes
               <span
                 class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </NuxtLink>
 
-            <NuxtLink to="/dashboard"
+            <NuxtLink v-if="isLoggedIn" to="/dashboard"
               class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide">
               Mon compte
+              <span
+                class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+            </NuxtLink>
+
+            <!-- À propos et Contact : visibles uniquement si non connecté -->
+            <NuxtLink v-if="!isLoggedIn" to="/a-propos"
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide mr-15">
+              À propos
+              <span
+                class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+            </NuxtLink>
+
+            <NuxtLink v-if="!isLoggedIn" to="/contact"
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide">
+              Contact
               <span
                 class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </NuxtLink>
@@ -257,7 +272,7 @@
               </div>
             </div>
 
-            <NuxtLink to="/dashboard/commandes"
+            <NuxtLink v-if="isLoggedIn" to="/dashboard/commandes"
               class="animate-stagger-2 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
@@ -272,7 +287,7 @@
               </svg>
             </NuxtLink>
 
-            <NuxtLink to="/dashboard"
+            <NuxtLink v-if="isLoggedIn" to="/dashboard"
               class="animate-stagger-3 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
@@ -283,6 +298,35 @@
                   <rect x="3" y="14" width="7" height="7" rx="2" />
                 </svg>
                 Mon compte
+              </div>
+              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </NuxtLink>
+
+            <!-- À propos et Contact : visibles uniquement si non connecté -->
+            <NuxtLink v-if="!isLoggedIn" to="/a-propos"
+              class="animate-stagger-2 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
+              @click="isMenuOpen = false">
+              <div class="flex items-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                À propos
+              </div>
+              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </NuxtLink>
+
+            <NuxtLink v-if="!isLoggedIn" to="/contact"
+              class="animate-stagger-3 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
+              @click="isMenuOpen = false">
+              <div class="flex items-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                Contact
               </div>
               <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
@@ -396,8 +440,8 @@ const handleLogout = () => {
     reverseButtons: true,
     customClass: {
       popup: 'rounded-[2rem]',
-      confirmButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm',
-      cancelButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm'
+      confirmButton: 'rounded-xl font-bold px-6 py-3 uppercase tracking-widest text-sm',
+      cancelButton: 'rounded-xl font-bold px-6 py-3 uppercase tracking-widest text-sm'
     }
   }).then((result) => {
     if (result.isConfirmed) {

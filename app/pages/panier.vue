@@ -3,9 +3,9 @@
     <Breadcrumb :items="[{ label: 'Mon Panier', to: '#' }]" />
 
     <!-- Page Header -->
-    <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[-2rem]">
+    <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[4rem]">
       <div class="max-w-7xl mx-auto text-center">
-        <h1 class="text-3xl md:text-5xl font-black text-white mb-4 italic uppercase tracking-tighter">
+        <h1 class="text-xl md:text-3xl font-bold text-white mb-4 uppercase tracking-wide">
           Votre <span class="text-orange-400">Sélection</span>
         </h1>
         <p class="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-medium">
@@ -17,23 +17,23 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
       <!-- EMPTY CART STATE -->
       <div v-if="cart.length === 0"
-        class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/5 p-12 md:p-20 text-center animate-fadeInUp relative overflow-hidden border border-gray-100 mt-16">
+        class="bg-white rounded-2xl shadow-2xl shadow-[#6a0d5f]/5 p-8 md:p-12 text-center animate-fadeInUp relative overflow-hidden border border-gray-100 mt-8">
         <div class="absolute -top-12 -right-12 w-64 h-64 bg-[#6a0d5f]/5 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-12 -left-12 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl"></div>
 
         <div class="relative z-10">
-          <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
-            <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+            <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
           </div>
-          <h2 class="text-2xl md:text-3xl font-black text-gray-900 mb-4 uppercase italic">Votre panier est vide</h2>
-          <p class="text-gray-500 max-w-md mx-auto mb-10 font-medium">
+          <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-3 uppercase tracking-wide">Votre panier est vide</h2>
+          <p class="text-gray-500 max-w-md mx-auto mb-6 font-medium">
             Il semblerait que vous n'ayez pas encore trouvé votre prochain compagnon de lecture.
           </p>
           <NuxtLink to="/catalogue"
-            class="inline-flex items-center gap-3 bg-[#6a0d5f] text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-[#851178] transition-all duration-300 shadow-xl shadow-[#6a0d5f]/20 hover:scale-105 active:scale-95">
+            class="inline-flex items-center gap-3 bg-[#6a0d5f] text-white px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-[#851178] transition-all duration-300 shadow-xl shadow-[#6a0d5f]/20 hover:scale-105 active:scale-95">
             Explorer le catalogue
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
@@ -43,15 +43,15 @@
       </div>
 
       <!-- CART CONTENT -->
-      <div v-else class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mt-16">
+      <div v-else class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-8">
         <section class="lg:col-span-8 space-y-6">
           <!-- Clear Cart Header -->
           <div class="flex items-center justify-between px-4 mb-2 animate-fadeInUp">
-            <span class="text-sm font-black text-gray-400 uppercase tracking-widest">
+            <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">
               {{ cart.length }} {{ cart.length > 1 ? 'Articles' : 'Article' }}
             </span>
             <button @click="clearCart"
-              class="text-xs font-black text-red-500 hover:text-red-700 uppercase tracking-widest flex items-center gap-2 transition-colors group">
+              class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-widest flex items-center gap-2 transition-colors group">
               <svg class="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path
@@ -64,12 +64,12 @@
 
           <!-- Items List -->
           <div v-for="(item, index) in cart" :key="item.id"
-            class="group bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row gap-8 transition-all duration-500 hover:shadow-2xl hover:shadow-[#6a0d5f]/5 animate-fadeInUp"
+            class="group bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row gap-5 transition-all duration-500 hover:shadow-2xl hover:shadow-[#6a0d5f]/5 animate-fadeInUp"
             :style="{ animationDelay: `${index * 100}ms` }">
 
             <!-- Book Image -->
             <div
-              class="relative w-full md:w-32 aspect-[3/4] rounded-2xl bg-gray-50 flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform duration-500 shadow-md">
+              class="relative w-full md:w-20 aspect-[3/4] rounded-xl bg-gray-50 flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform duration-500 shadow-md">
               <img :src="item.image" :alt="item.title" class="w-full h-full object-contain p-2" />
             </div>
 
@@ -77,7 +77,7 @@
               <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
                   <h3
-                    class="font-black text-gray-900 text-lg md:text-xl uppercase italic leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                    class="font-bold text-gray-900 text-base md:text-lg uppercase leading-tight group-hover:text-[#6a0d5f] transition-colors">
                     {{ item.title }}
                   </h3>
                   <p v-if="item.author" class="text-gray-400 font-bold text-xs uppercase tracking-widest mt-1">
@@ -93,14 +93,14 @@
                 </button>
               </div>
 
-              <div class="flex flex-wrap items-center justify-between gap-6 mt-6 md:mt-0">
+              <div class="flex flex-wrap items-center justify-between gap-4 mt-4 md:mt-0">
                 <!-- Quantity Controls -->
                 <div class="flex items-center gap-1 p-1 bg-gray-50 rounded-2xl border border-gray-100">
                   <button @click="decreaseQty(item)" :disabled="item.quantity <= 1"
                     class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] hover:shadow-sm disabled:opacity-30 transition-all">
                     ー
                   </button>
-                  <span class="w-12 text-center font-black text-gray-900">{{ item.quantity }}</span>
+                  <span class="w-12 text-center font-bold text-gray-900">{{ item.quantity }}</span>
                   <button @click="increaseQty(item)" :disabled="item.quantity >= item.stockAvailable"
                     class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] hover:shadow-sm disabled:opacity-30 transition-all">
                     ＋
@@ -109,8 +109,8 @@
 
                 <!-- Prices -->
                 <div class="flex flex-col items-end">
-                  <span class="text-xs font-black text-gray-300 uppercase tracking-widest mb-1">Total Article</span>
-                  <span class="text-2xl font-black text-[#6a0d5f] italic">
+                  <span class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-1">Total Article</span>
+                  <span class="text-xl font-bold text-[#6a0d5f] tracking-wide">
                     {{ formatPrice(item.price * item.quantity) }}
                   </span>
                   <span v-if="item.quantity > 1" class="text-[10px] font-bold text-gray-400">
@@ -124,10 +124,10 @@
 
         <!-- ORDER SUMMARY -->
         <aside class="lg:col-span-4 lg:sticky lg:top-24 animate-fadeInUp" style="animation-delay: 400ms">
-          <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-8">
+          <div class="bg-white rounded-2xl shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-5">
             <h2
-              class="text-2xl font-black text-gray-900 italic uppercase tracking-tighter mb-8 flex items-center gap-3">
-              <svg class="w-7 h-7 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-5 flex items-center gap-3">
+              <svg class="w-5 h-5 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
                   stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -138,24 +138,24 @@
             <div class="space-y-4">
               <div class="flex justify-between items-center py-2 border-b border-gray-50">
                 <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Sous-total</span>
-                <span class="font-black text-gray-800">{{ formatPrice(subtotal) }}</span>
+                <span class="font-bold text-gray-800">{{ formatPrice(subtotal) }}</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-50">
                 <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Articles</span>
-                <span class="font-black text-gray-800">{{ cartStore.count }}</span>
+                <span class="font-bold text-gray-800">{{ cartStore.count }}</span>
               </div>
             </div>
 
             <div
-              class="mt-8 mb-10 p-6 bg-[#6a0d5f]/5 rounded-[2rem] border border-[#6a0d5f]/10 text-center flex flex-col items-center">
-              <span class="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Total à payer</span>
-              <span class="text-4xl font-black text-[#6a0d5f] italic tracking-tighter">
+              class="mt-4 mb-5 p-4 bg-[#6a0d5f]/5 rounded-xl border border-[#6a0d5f]/10 text-center flex flex-col items-center">
+               <span class="text-xs font-bold text-gray-400 uppercase tracking-[0.3em] mb-2">Total à payer</span>
+              <span class="text-3xl font-bold text-[#6a0d5f] tracking-wide">
                 {{ formatPrice(subtotal) }}
               </span>
             </div>
 
             <NuxtLink to="/commande"
-              class="w-full flex items-center justify-center gap-4 bg-[#6a0d5f] text-white py-6 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+              class="w-full flex items-center justify-center gap-3 bg-[#6a0d5f] text-white py-4 rounded-xl font-bold text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
               Passer la commande
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
@@ -163,7 +163,7 @@
             </NuxtLink>
 
             <NuxtLink to="/catalogue"
-              class="w-full flex items-center justify-center mt-6 text-gray-400 hover:text-[#6a0d5f] font-black text-[10px] uppercase tracking-widest transition-colors duration-300">
+              class="w-full flex items-center justify-center mt-6 text-gray-400 hover:text-[#6a0d5f] font-bold text-[10px] uppercase tracking-widest transition-colors duration-300">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -205,8 +205,8 @@ const removeItem = (id) => {
     reverseButtons: true,
     customClass: {
       popup: 'rounded-[2rem]',
-      confirmButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm',
-      cancelButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm'
+      confirmButton: 'rounded-xl font-bold px-6 py-3 uppercase tracking-widest text-sm',
+      cancelButton: 'rounded-xl font-bold px-6 py-3 uppercase tracking-widest text-sm'
     }
   }).then((result) => {
     if (result.isConfirmed) {
@@ -234,8 +234,8 @@ const clearCart = () => {
     },
     customClass: {
       popup: 'rounded-[2.5rem] p-12',
-      confirmButton: 'rounded-2xl font-black px-8 py-4 uppercase tracking-widest text-sm shadow-xl shadow-[#6a0d5f]/20',
-      cancelButton: 'rounded-2xl font-black px-8 py-4 uppercase tracking-widest text-sm'
+      confirmButton: 'rounded-2xl font-bold px-8 py-4 uppercase tracking-widest text-sm shadow-xl shadow-[#6a0d5f]/20',
+      cancelButton: 'rounded-2xl font-bold px-8 py-4 uppercase tracking-widest text-sm'
     }
   }).then((result) => {
     if (result.isConfirmed) {
@@ -247,7 +247,7 @@ const clearCart = () => {
         confirmButtonColor: '#6a0d5f',
         customClass: {
           popup: 'rounded-[2rem]',
-          confirmButton: 'rounded-xl font-black px-6 py-3 uppercase tracking-widest text-sm'
+          confirmButton: 'rounded-xl font-bold px-6 py-3 uppercase tracking-widest text-sm'
         }
       });
     }

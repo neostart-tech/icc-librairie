@@ -40,7 +40,7 @@
             <!-- Page actuelle (last item) -->
             <div
               v-if="index === items.length - 1"
-              class="flex items-center px-4 py-2 bg-gradient-to-r from-[#6a0d5f] to-[#8a1d7f] text-white font-black rounded-xl shadow-lg shadow-[#6a0d5f]/20 scale-105"
+              class="flex items-center px-4 py-2 bg-gradient-to-r from-[#6a0d5f] to-[#8a1d7f] text-white font-bold rounded-xl shadow-lg shadow-[#6a0d5f]/20 scale-105"
             >
               {{ item.label }}
             </div>
@@ -59,7 +59,7 @@
         <!-- Right side badge/status (Decorative) -->
         <div class="hidden md:flex items-center gap-2">
           <div class="h-1.5 w-1.5 rounded-full bg-[#6a0d5f] animate-pulse"></div>
-          <span class="text-[10px] uppercase tracking-widest font-black text-gray-300">Librairie Spirituelle</span>
+          <span class="text-[10px] uppercase tracking-widest font-bold text-gray-300">Librairie Spirituelle</span>
         </div>
       </div>
     </div>

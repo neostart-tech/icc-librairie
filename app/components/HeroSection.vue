@@ -19,7 +19,7 @@
     <!-- CONTENU -->
     <div class="relative z-10 h-full flex items-center px-6 sm:px-12 md:px-20 lg:px-32 max-w-[1400px] mx-auto overflow-hidden">
       <div class="text-left text-white max-w-2xl transform transition-all duration-700 translate-y-0 opacity-100">
-        <h1 class="animate-title text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold mb-4 leading-tight tracking-tight">
+        <h1 class="animate-title text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 leading-tight tracking-wide">
           <span class="inline-block bg-clip-text text-transparent bg-gradient-to-r from-white via-pink-200 to-white bg-[length:200%_auto] custom-gradient-text drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             Bienvenue
           </span> 
@@ -34,7 +34,7 @@
           </span>
         </h1>
         <p class="animate-subtitle text-lg md:text-xl lg:text-2xl font-light mb-8 md:mb-10 text-gray-100 max-w-xl leading-relaxed border-l-4 border-[#6a0d5f] pl-5 py-2 backdrop-blur-sm bg-black/20 rounded-r-xl shadow-lg">
-          Découvrez une <strong class="text-white font-bold drop-shadow-lg">collection inspirante</strong> de nos meilleurs ouvrages et <span class="italic text-pink-200 custom-float inline-block drop-shadow-lg font-medium">nouveautés</span>.
+          Découvrez une <strong class="text-white font-bold drop-shadow-lg">collection inspirante</strong> de nos meilleurs ouvrages et <span class="text-pink-200 custom-float inline-block drop-shadow-lg font-medium">nouveautés</span>.
         </p>
         <button
           @click="scrollToSection('livres-list', 100)"

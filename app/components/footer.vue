@@ -86,7 +86,7 @@
               { name: 'Catalogue', path: '/catalogue' },
               { name: 'Mes commandes', path: '/dashboard/commandes' },
               { name: 'Mon compte', path: '/dashboard/profil' },
-              { name: 'Contact', path: '/' }
+              { name: 'Contact', path: '/contact' }
             ]" :key="link.name">
               <NuxtLink :to="link.path"
                 class="group flex items-center text-white/70 hover:text-white transition-all duration-300 text-[15px] sm:text-[16px] font-medium w-fit">

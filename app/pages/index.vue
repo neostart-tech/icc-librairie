@@ -9,7 +9,7 @@
         <div class="relative border-2 border-[#6a0d5f]/10 rounded-[3rem] p-8 md:p-16 bg-white/50 backdrop-blur-sm">
           <!-- Section Title -->
           <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-6">
-            <h2 class="text-2xl md:text-3xl font-black text-[#6a0d5f] uppercase tracking-tighter whitespace-nowrap">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#6a0d5f] uppercase tracking-wide whitespace-nowrap">
               Catégories en vogue
             </h2>
           </div>
@@ -47,7 +47,7 @@
 
                     <!-- Badge Number -->
                     <div
-                      class="absolute top-4 -right-1 w-8 h-8 md:w-10 md:h-10 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center font-black text-xs md:text-sm shadow-xl border-4 border-white group-hover:scale-110 transition-transform duration-300">
+                      class="absolute top-4 -right-1 w-8 h-8 md:w-10 md:h-10 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm shadow-xl border-4 border-white group-hover:scale-110 transition-transform duration-300">
                       0{{ index + 1 }}
                     </div>
                   </NuxtLink>
@@ -55,11 +55,11 @@
                   <!-- Label & Count -->
                   <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="group/link">
                     <h3
-                      class="font-black text-gray-900 group-hover/link:text-[#6a0d5f] text-sm md:text-base mb-1 uppercase tracking-tight transition-colors">
+                      class="font-bold text-gray-900 group-hover/link:text-[#6a0d5f] text-sm md:text-base mb-1 uppercase tracking-tight transition-colors">
                       {{ cat.libelle }}
                     </h3>
                     <span
-                      class="text-[10px] font-black bg-[#6a0d5f]/5 text-[#6a0d5f] px-3 py-1 rounded-full uppercase tracking-widest">
+                      class="text-[10px] font-bold bg-[#6a0d5f]/5 text-[#6a0d5f] px-3 py-1 rounded-full uppercase tracking-widest">
                       {{ cat.bookCount }} Livres
                     </span>
                   </NuxtLink>
@@ -94,7 +94,7 @@
         <!-- Section Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div class="space-y-2">
-            <h2 class="text-4xl md:text-5xl font-black text-gray-900 italic tracking-tighter uppercase">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-wide uppercase">
               Nos livres <span class="text-[#6a0d5f]">récents</span>
             </h2>
             <div class="flex items-center gap-4">
@@ -107,7 +107,7 @@
             </div>
           </div>
           <NuxtLink to="/catalogue"
-            class="group flex items-center gap-3 px-8 py-4 bg-gray-50 hover:bg-[#6a0d5f] text-[#6a0d5f] hover:text-white rounded-full font-black text-sm transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-[#6a0d5f]/20 uppercase tracking-widest border border-gray-100 italic">
+            class="group flex items-center gap-3 px-8 py-4 bg-gray-50 hover:bg-[#6a0d5f] text-[#6a0d5f] hover:text-white rounded-full font-bold text-sm transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-[#6a0d5f]/20 uppercase tracking-widest border border-gray-100">
             Explorer tout le catalogue
             <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none"
               stroke="currentColor" viewBox="0 0 24 24">
@@ -130,11 +130,11 @@
                 <div
                   class="absolute top-4 left-4 flex flex-col gap-2 z-10 transition-transform duration-500 group-hover:translate-x-1">
                   <span v-if="book.isPromo"
-                    class="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
+                    class="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
                     Hot
                   </span>
                   <span v-if="book.isPromo"
-                    class="bg-[#6a0d5f] text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
+                    class="bg-[#6a0d5f] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
                     -30%
                   </span>
                 </div>
@@ -146,7 +146,7 @@
                 <div
                   class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                   <button @click.stop.prevent="addToCart(book)"
-                    class="w-full py-4 bg-white/90 backdrop-blur text-[#6a0d5f] rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-[#6a0d5f] hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+                    class="w-full py-4 bg-white/90 backdrop-blur text-[#6a0d5f] rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl hover:bg-[#6a0d5f] hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
                     </svg>
@@ -157,16 +157,16 @@
 
               <!-- Book Info -->
               <div class="space-y-2 px-2">
-                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                   {{ book.categorie?.libelle || 'Inspirant' }}
                 </span>
                 <h3
-                  class="font-black text-gray-900 text-sm md:text-base line-clamp-2 leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                  class="font-bold text-gray-900 text-sm md:text-base line-clamp-2 leading-tight group-hover:text-[#6a0d5f] transition-colors">
                   {{ book.titre }}
                 </h3>
 
                 <div class="flex items-center gap-3 pt-1">
-                  <span class="text-lg font-black text-[#6a0d5f]">
+                  <span class="text-lg font-bold text-[#6a0d5f]">
                     {{ formatPrice(book.prix_promo || book.prix) }}
                   </span>
                   <span v-if="book.prix_promo" class="text-sm font-bold text-gray-300 line-through">
@@ -184,7 +184,7 @@
               <div
                 class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/90 via-[#6a0d5f]/20 to-transparent p-10 flex flex-col justify-end items-start gap-6">
                 <div class="space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-700">
-                  <h3 class="text-3xl font-black text-white italic leading-tight uppercase">
+                  <h3 class="text-3xl font-bold text-white leading-tight uppercase tracking-wide">
                     Trouvez votre <br />
                     <span class="text-orange-400">meilleur</span> livre
                   </h3>
@@ -193,7 +193,7 @@
                   </p>
                 </div>
                 <NuxtLink to="/catalogue"
-                  class="px-8 py-4 bg-white text-[#6a0d5f] rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all duration-300">
+                  class="px-8 py-4 bg-white text-[#6a0d5f] rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all duration-300">
                   Acheter plus
                 </NuxtLink>
               </div>
