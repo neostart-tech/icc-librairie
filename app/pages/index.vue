@@ -2,275 +2,223 @@
   <div>
     <!-- HERO -->
     <HeroSection />
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6">
-      <!-- FILTRES DROPDOWN - Z-INDEX MOYEN (derrière le header) -->
-      <div class="relative" :class="{'z-40': isFilterOpen, 'z-30': !isFilterOpen}">
-        <FiltersDropdown
-          :categories="categorieStore.categories"
-          :min-price="0"
-          :max-price="20000"
-          @update:filters="updateFilters"
-          @open-change="(val) => isFilterOpen = val"
-        />
+
+    <!-- Top Categories Section -->
+    <section class="bg-gray-50 py-20 px-4 overflow-hidden">
+      <div class="max-w-7xl mx-auto" v-reveal.repeat>
+        <div class="relative border-2 border-[#6a0d5f]/10 rounded-[3rem] p-8 md:p-16 bg-white/50 backdrop-blur-sm">
+          <!-- Section Title -->
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-6">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#6a0d5f] uppercase tracking-wide whitespace-nowrap">
+              Catégories en vogue
+            </h2>
+          </div>
+
+          <div class="relative flex items-center">
+            <!-- Navigation ARROWS -->
+            <button @click="scroll('left')"
+              class="absolute top-[40%] md:top-1/2 -translate-y-1/2 -left-2 md:-left-16 w-10 h-10 md:w-12 md:h-12 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform z-30">
+              <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- Categories Container and Auto-scroll Wrapper -->
+            <div class="w-full relative px-2 md:px-4">
+              <div ref="scrollContainer"
+                class="flex lg:grid lg:grid-cols-5 gap-6 md:gap-8 overflow-x-auto lg:overflow-visible py-12 -my-12 scrollbar-hide scroll-smooth snap-x snap-mandatory lg:snap-none">
+                <div v-for="(cat, index) in topCategories" :key="cat.id"
+                  v-reveal.repeat :class="`reveal-delay-${index * 100}`"
+                  class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-auto flex-shrink-0 snap-center">
+
+                  <!-- Circular Image Container -->
+                  <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="relative mb-8 block">
+                    <!-- Permanent Rotating Decorative Border -->
+                    <div
+                      class="dashed-border absolute -inset-5 border-2 border-dashed border-[#6a0d5f]/20 rounded-full group-hover:border-[#6a0d5f]/50 transition-colors duration-1000">
+                    </div>
+
+                    <!-- Main Circle -->
+                    <div
+                      class="relative w-40 h-40 md:w-48 md:h-48 rounded-full bg-white p-6 shadow-2xl shadow-[#6a0d5f]/5 overflow-hidden ring-4 ring-white group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                      <img :src="cat.lastBookImage" :alt="cat.libelle"
+                        class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
+                    </div>
+
+                    <!-- Badge Number -->
+                    <div
+                      class="absolute top-4 -right-1 w-8 h-8 md:w-10 md:h-10 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm shadow-xl border-4 border-white group-hover:scale-110 transition-transform duration-300">
+                      0{{ index + 1 }}
+                    </div>
+                  </NuxtLink>
+
+                  <!-- Label & Count -->
+                  <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="group/link">
+                    <h3
+                      class="font-bold text-gray-900 group-hover/link:text-[#6a0d5f] text-sm md:text-base mb-1 uppercase tracking-tight transition-colors">
+                      {{ cat.libelle }}
+                    </h3>
+                    <span
+                      class="text-[10px] font-bold bg-[#6a0d5f]/5 text-[#6a0d5f] px-3 py-1 rounded-full uppercase tracking-widest">
+                      {{ cat.bookCount }} Livres
+                    </span>
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <button @click="scroll('right')"
+              class="absolute top-[40%] md:top-1/2 -translate-y-1/2 -right-2 md:-right-16 w-10 h-10 md:w-12 md:h-12 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform z-30">
+              <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Pagination Dots (Desktop) -->
+          <div class="hidden lg:flex justify-center gap-3 mt-12">
+            <div
+              class="w-2.5 h-2.5 rounded-full bg-[#6a0d5f]/10 hover:bg-[#6a0d5f]/30 transition-colors cursor-pointer">
+            </div>
+            <div class="w-8 h-2.5 rounded-full bg-[#6a0d5f] shadow-lg shadow-[#6a0d5f]/20"></div>
+            <div
+              class="w-2.5 h-2.5 rounded-full bg-[#6a0d5f]/10 hover:bg-[#6a0d5f]/30 transition-colors cursor-pointer">
+            </div>
+          </div>
+        </div>
       </div>
-     
-      <!-- CONTENU - Z-INDEX BAS -->
-      <section id="livres-list" class="flex-1 mt-8 relative z-0">
-        <!-- LIVRES -->
-        <div
-          v-if="paginatedBooks.length > 0"
-          class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-5"
-        >
-          <div
-            v-for="book in paginatedBooks"
-            :key="book.id"
-            class="group relative bg-white rounded-xl shadow-sm hover:shadow-2xl transition-all duration-500 w-full cursor-pointer flex flex-col transform hover:-translate-y-1 hover:scale-[1.02]"
-          >
-            <!-- Lien sur toute la carte sauf le bouton -->
-            <NuxtLink :to="`/livres/${book.id}`" class="absolute inset-0 z-10" />
-           
-            <!-- OVERLAY HOVER - Transparent -->
-            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-400 rounded-xl z-20 flex flex-col items-center justify-center p-4">
-              <!-- Bouton principal au centre -->
-              <button
-  @click.stop.prevent="addToCart(book)"
-  :disabled="!book.stockAvailable"
-  class="w-full max-w-[160px] transform hover:scale-110 transition-all duration-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-xl mb-3 relative z-30"
-  :class="[
-    !book.stockAvailable
-      ? 'bg-[#6a0d5f] text-white opacity-60 cursor-not-allowed'
-      : cartStore.getQuantity(book.id) >= 1
-        ? 'bg-[#6a0d5f] text-white cursor-default hover:bg-[#5a0b50]'
-        : 'bg-[#6a0d5f] text-white hover:bg-[#5a0b50]'
-  ]"
->
-  <span v-if="!book.stockAvailable" class="flex items-center justify-center gap-2">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-    </svg>
-    Rupture
-  </span>
-
-  <span v-else-if="cartStore.getQuantity(book.id) >= 1" class="flex items-center justify-center gap-2">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M5 13l4 4L19 7" />
-    </svg>
-    Déjà
-  </span>
-
-  <span v-else class="flex items-center justify-center gap-2">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-    </svg>
-    Ajouter
-  </span>
-              </button>
-
-              <!-- Voir détails -->
-              <span class="text-white/80 text-xs flex items-center gap-1 hover:text-white transition-colors cursor-pointer relative z-30" @click.stop.prevent="$router.push(`/livres/${book.id}`)">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                Détails
-              </span>
-              <!-- Message stock faible -->
-              <span v-if="book.stockAvailable > 0 && book.stockAvailable <= 3" class="absolute bottom-3 left-0 right-0 text-center text-white/90 text-[10px] font-medium">
-                ⚡ Plus que {{ book.stockAvailable }} exemplaire{{ book.stockAvailable > 1 ? 's' : '' }}
-              </span>
-            </div>
-            <!-- Conteneur image avec ratio réduit -->
-            <div class="relative overflow-hidden aspect-[3/3.8] rounded-t-xl">
-              <!-- Image -->
-              <img
-                :src="book.image"
-                :alt="book.title"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                loading="lazy"
-              />
-             
-              <div class="absolute top-2 left-2 flex flex-col gap-1.5 z-0">
-                <!-- Badge SOLDE -->
-                <span
-                  v-if="book.isPromo"
-                  class="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full shadow-lg"
-                >
-                  SOLDE
-                </span>
-
-               
-                <!-- Badge NOUVEAUTÉ -->
-                <span
-                  v-if="isNewBook(book.id)"
-                  class="bg-gradient-to-r from-blue-600 to-blue-500 text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1"
-                >
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  Nouveau
-                </span>
+    </section>
+    <!-- Recent Books Section -->
+    <section class="py-24 px-4 bg-white overflow-hidden">
+      <div class="max-w-7xl mx-auto" v-reveal.repeat>
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div class="space-y-2">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-wide uppercase">
+              Nos livres <span class="text-[#6a0d5f]">récents</span>
+            </h2>
+            <div class="flex items-center gap-4">
+              <div class="h-1.5 w-24 bg-[#6a0d5f] rounded-full relative overflow-hidden animate-pulse-slow">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer-fast"></div>
               </div>
-              <!-- Badges à droite (toujours visibles) -->
-              <div class="absolute top-2 right-2 flex flex-col gap-1.5 z-0">
-                <span
-                  v-if="!book.stockAvailable"
-                  class="bg-gray-900 text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1"
-                >
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                  </svg>
-                  Rupture
-                </span>
-              </div>
+              <p class="text-gray-500 font-medium uppercase tracking-[0.2em] text-xs">
+                Découvrez les dernières pépites de notre collection
+              </p>
             </div>
-            <!-- Informations produit - Hauteur réduite -->
-            <div class="p-3 flex flex-col flex-grow bg-white rounded-b-xl relative z-0">
-              <h3 class="font-semibold text-xs sm:text-sm text-gray-800 mb-0.5 line-clamp-2 min-h-[2rem]">
-                {{ book.title }}
-              </h3>
-             
-              <p class="text-[10px] sm:text-xs text-gray-500 mb-1.5">{{ book.author }}</p>
-             
-              <!-- Prix et évaluation -->
-              <div class="flex items-center justify-between mt-auto">
-                <div class="flex flex-col">
-                  <div class="flex items-baseline gap-1.5">
-                    <span v-if="book.isPromo" class="text-[10px] text-gray-400 line-through">
-                      {{ formatPrice(book.oldPrice) }}
-                    </span>
-                    <span class="text-sm sm:text-base font-bold text-[#6a0d5f]">
-                      {{ formatPrice(book.price) }}
-                    </span>
-                    <span class="text-[8px] sm:text-[10px] text-gray-500">FCFA</span>
-                  </div>
-                  <span v-if="book.stockAvailable > 3" class="text-[9px] text-green-600 mt-0.5 flex items-center gap-0.5">
-                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Disponible
+          </div>
+          <NuxtLink to="/catalogue"
+            class="group flex items-center gap-3 px-8 py-4 bg-gray-50 hover:bg-[#6a0d5f] text-[#6a0d5f] hover:text-white rounded-full font-bold text-sm transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-[#6a0d5f]/20 uppercase tracking-widest border border-gray-100">
+            Explorer tout le catalogue
+            <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </NuxtLink>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <!-- Books Grid -->
+          <div class="lg:col-span-9 grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div v-for="(book, index) in recentBooks" :key="book.id" 
+              v-reveal.repeat :class="`reveal-delay-${index * 100}`"
+              class="group flex flex-col">
+
+              <!-- Book Image Container -->
+              <NuxtLink :to="`/livres/${book.id}`"
+                class="relative aspect-[3/4] rounded-3xl bg-gray-50 p-6 mb-6 overflow-hidden transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-[#6a0d5f]/10 block group-hover:-translate-y-2">
+                <!-- Badges -->
+                <div
+                  class="absolute top-4 left-4 flex flex-col gap-2 z-10 transition-transform duration-500 group-hover:translate-x-1">
+                  <span v-if="book.isPromo"
+                    class="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
+                    Hot
+                  </span>
+                  <span v-if="book.isPromo"
+                    class="bg-[#6a0d5f] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">
+                    -30%
                   </span>
                 </div>
-               
+
+                <img :src="book.image" :alt="book.titre"
+                  class="w-full h-full object-contain drop-shadow-2xl transition-all duration-700 group-hover:scale-110 group-hover:rotate-3" />
+
+                <!-- Overlay Button -->
+                <div
+                  class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                  <button @click.stop.prevent="addToCart(book)"
+                    class="w-full py-4 bg-white/90 backdrop-blur text-[#6a0d5f] rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl hover:bg-[#6a0d5f] hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
+                    </svg>
+                    Ajouter
+                  </button>
+                </div>
+              </NuxtLink>
+
+              <!-- Book Info -->
+              <div class="space-y-2 px-2">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  {{ book.categorie?.libelle || 'Inspirant' }}
+                </span>
+                <h3
+                  class="font-bold text-gray-900 text-sm md:text-base line-clamp-2 leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                  {{ book.titre }}
+                </h3>
+
+                <div class="flex items-center gap-3 pt-1">
+                  <span class="text-lg font-bold text-[#6a0d5f]">
+                    {{ formatPrice(book.prix_promo || book.prix) }}
+                  </span>
+                  <span v-if="book.prix_promo" class="text-sm font-bold text-gray-300 line-through">
+                    {{ formatPrice(book.prix) }}
+                  </span>
+                </div>
               </div>
             </div>
-           
-            <!-- Mini badge "Dans le panier" -->
-            <div
-              v-if="cartStore.getQuantity(book.id) >= 1 && book.stockAvailable > 0"
-              class="absolute top-2 right-2 bg-[#6a0d5f] text-white text-[9px] font-medium py-1 px-2 rounded-full shadow-lg flex items-center gap-1 z-30"
-            >
-              <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Panier
-            </div>
+          </div>
 
+          <div class="lg:col-span-3 reveal-left" v-reveal.repeat>
+            <div class="relative h-full rounded-3xl overflow-hidden group shadow-2xl shadow-[#6a0d5f]/10">
+              <img src="/images/ban-cote.webp" alt="Promotion"
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/90 via-[#6a0d5f]/20 to-transparent p-10 flex flex-col justify-end items-start gap-6">
+                <div class="space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-700">
+                  <h3 class="text-3xl font-bold text-white leading-tight uppercase tracking-wide">
+                    Trouvez votre <br />
+                    <span class="text-orange-400">meilleur</span> livre
+                  </h3>
+                  <p class="text-white/80 text-sm font-medium">
+                    Profitez de -25% sur une sélection limitée !
+                  </p>
+                </div>
+                <NuxtLink to="/catalogue"
+                  class="px-8 py-4 bg-white text-[#6a0d5f] rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all duration-300">
+                  Acheter plus
+                </NuxtLink>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- État vide -->
-        <div v-else class="flex flex-col items-center justify-center py-16 px-4">
-          <div class="bg-gray-50 rounded-full p-5 mb-3">
-            <svg class="w-14 h-14 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <p class="text-gray-900 text-base font-semibold text-center">
-            Aucun livre trouvé
-          </p>
-          <p class="text-gray-500 text-xs mt-1 text-center">
-            Essayez de modifier vos filtres
-          </p>
-        </div>
-        <!-- PAGINATION -->
-        <div v-if="totalPages > 1" class="flex justify-center mt-12 px-2">
-          <nav class="flex items-center gap-1 bg-white rounded-lg shadow-sm p-1">
-            <button
-              @click="changePage(1)"
-              :disabled="currentPage === 1"
-              class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-            >
-              «
-            </button>
-            <button
-              @click="changePage(currentPage - 1)"
-              :disabled="currentPage === 1"
-              class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-            >
-              ‹
-            </button>
-           
-            <template v-for="(page, index) in displayedPages" :key="index">
-              <span v-if="page === '...'" class="px-2.5 py-1.5 text-gray-500 text-xs">...</span>
-              <button
-                v-else
-                @click="changePage(page)"
-                class="min-w-[2.2rem] px-2.5 py-1.5 rounded-md text-xs font-medium transition-all"
-                :class="
-                  page === currentPage
-                    ? 'bg-[#6a0d5f] text-white shadow-md'
-                    : 'hover:bg-gray-100 text-gray-700'
-                "
-              >
-                {{ page }}
-              </button>
-            </template>
-           
-            <button
-              @click="changePage(currentPage + 1)"
-              :disabled="currentPage === totalPages"
-              class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-            >
-              ›
-            </button>
-            <button
-              @click="changePage(totalPages)"
-              :disabled="currentPage === totalPages"
-              class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-            >
-              »
-            </button>
-          </nav>
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import HeroSection from "~/components/HeroSection.vue";
+import { computed, onMounted, ref } from "vue";
 import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
-import HeroSection from "~/components/HeroSection.vue";
-import FiltersDropdown from "~/components/FiltersDropdown.vue";
-import { useSearch } from "~/composables/useSearch";
 import { useCartStore } from "~~/stores/cart";
 
-const cartStore = useCartStore();
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
+const cartStore = useCartStore();
 const config = useRuntimeConfig();
-const { search } = useSearch();
 
-/* État d'ouverture du dropdown */
-const isFilterOpen = ref(false);
+const scrollContainer = ref(null);
 
-/* FILTRES */
-const filters = ref({
-  sort: "default",
-  onlyPromo: false,
-  maxPrice: 20000,
-  categories: [],
-});
-
-const updateFilters = (newFilters) => {
-  filters.value = newFilters;
-  currentPage.value = 1;
-};
-
-/* CHARGEMENT DES LIVRES & CATEGORIES */
 onMounted(async () => {
   await Promise.all([
     livreStore.fetchLivres(),
@@ -278,205 +226,139 @@ onMounted(async () => {
   ]);
 });
 
-/* ADAPTATION DES LIVRES API → UI */
-const books = computed(() =>
-  livreStore.livres.map((livre, index) => ({
-    id: livre.id,
-    title: livre.titre,
-    author: livre.auteur ?? "--",
-    price: livre.prix_promo ?? livre.prix,
-    oldPrice: livre.prix_promo ? livre.prix : null,
-    isPromo: !!livre.prix_promo,
-    stockAvailable: livre.stock?.quantite ?? 0,
-    category: livre.categorie?.libelle ?? "Autre",
-    image: livre.images?.length
-      ? `${config.public.storageBase}/${livre.images[0].path}`
-      : "/images/livre.jpg",
-    rating: (Math.random() * 1.5 + 3.5).toFixed(1),
-    reviews: Math.floor(Math.random() * 30) + 8,
-    createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)
-  }))
-);
+const scroll = (direction) => {
+  if (!scrollContainer.value) return;
+  const container = scrollContainer.value;
+  const scrollAmount = window.innerWidth < 1024 ? container.clientWidth * 0.8 : 500;
 
-/* PAGINATION */
-const currentPage = ref(1);
-const itemsPerPage = 12;
-
-const filteredBooks = computed(() => {
-  let result = books.value;
-  if (search.value) {
-    const q = search.value.toLowerCase();
-    result = result.filter((b) =>
-      b.title.toLowerCase().includes(q) ||
-      b.author.toLowerCase().includes(q)
-    );
-  }
-  result = result.filter((b) => b.price <= filters.value.maxPrice);
-  if (filters.value.onlyPromo) {
-    result = result.filter((b) => b.isPromo);
-  }
-  if (filters.value.categories.length) {
-    result = result.filter((b) =>
-      filters.value.categories.includes(b.category)
-    );
-  }
-  switch (filters.value.sort) {
-    case "priceAsc":
-      result = [...result].sort((a, b) => a.price - b.price);
-      break;
-    case "priceDesc":
-      result = [...result].sort((a, b) => b.price - a.price);
-      break;
-    case "alpha":
-      result = [...result].sort((a, b) => a.title.localeCompare(b.title));
-      break;
-    case "newest":
-      result = [...result].sort((a, b) => b.createdAt - a.createdAt);
-      break;
-  }
-  return result;
-});
-
-const totalPages = computed(() =>
-  Math.ceil(filteredBooks.value.length / itemsPerPage)
-);
-
-const paginatedBooks = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  return filteredBooks.value.slice(start, start + itemsPerPage);
-});
-
-const displayedPages = computed(() => {
-  const delta = 2;
-  const range = [];
-  const rangeWithDots = [];
-  let l;
-  for (let i = 1; i <= totalPages.value; i++) {
-    if (i === 1 || i === totalPages.value || (i >= currentPage.value - delta && i <= currentPage.value + delta)) {
-      range.push(i);
+  if (direction === 'right') {
+    const isAtEnd = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth - 10;
+    if (isAtEnd) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
-  }
-  range.forEach((i) => {
-    if (l) {
-      if (i - l === 2) {
-        rangeWithDots.push(l + 1);
-      } else if (i - l !== 1) {
-        rangeWithDots.push('...');
-      }
+  } else {
+    const isAtStart = container.scrollLeft <= 10;
+    if (isAtStart) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     }
-    rangeWithDots.push(i);
-    l = i;
-  });
-  return rangeWithDots;
-});
-
-const changePage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-    document.getElementById('livres-list')?.scrollIntoView({ behavior: 'smooth' });
-  }
-};
-
-const addToCart = (book) => {
-  if (book.stockAvailable) {
-    cartStore.add({
-      id: book.id,
-      title: book.title,
-      author: book.author,
-      price: book.price,
-      image: book.image,
-      stockAvailable: book.stockAvailable,
-    });
   }
 };
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('fr-FR').format(price);
+  if (price === undefined || price === null) return '0 FCFA';
+  return new Intl.NumberFormat('fr-FR').format(Number(price)) + ' FCFA';
 };
 
-const calculateDiscount = (oldPrice, newPrice) => {
-  if (!oldPrice) return 0;
-  return Math.round(((oldPrice - newPrice) / oldPrice) * 100);
+const addToCart = (book) => {
+  cartStore.add({
+    id: book.id,
+    title: book.titre,
+    price: book.prix_promo || book.prix,
+    image: book.image,
+    stockAvailable: book.stock?.quantite || 1
+  });
 };
 
-const isNewBook = (bookId) => {
-  return bookId <= 5;
-};
+const recentBooks = computed(() => {
+  return [...livreStore.livres]
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 4)
+    .map(book => {
+      const imagePath = book.images?.length
+        ? `${config.public.storageBase}/${book.images[0].path}`
+        : "/images/livre.jpg";
+      return {
+        ...book,
+        image: imagePath,
+        categorie: book.categorie || categorieStore.categories.find(c => c.id === book.categorie_id),
+        isPromo: !!book.prix_promo
+      };
+    });
+});
 
-watch(filters, () => (currentPage.value = 1), { deep: true });
+const topCategories = computed(() => {
+  const cats = [...categorieStore.categories]
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 5);
+
+  return cats.map((cat) => {
+    const catLivres = livreStore.livres.filter(l => l.categorie_id === cat.id);
+    const lastBook = catLivres[0];
+    const imagePath = lastBook?.images?.length
+      ? `${config.public.storageBase}/${lastBook.images[0].path}`
+      : "/images/livre.jpg";
+
+    return {
+      ...cat,
+      bookCount: catLivres.length,
+      lastBookImage: imagePath
+    };
+  });
+});
 </script>
 
 <style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.aspect-\[3\/3\.8\] {
-  aspect-ratio: 3/3.8;
-}
-/* Animation d'apparition */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-.group {
-  animation: fadeInUp 0.5s ease-out;
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
 }
-/* Hover sur toute la carte */
-.group:hover {
-  box-shadow: 0 25px 30px -10px rgba(106, 13, 95, 0.2);
-}
-/* Scale image au hover */
-.group:hover img {
-  transform: scale(1.1);
-}
-/* Overlay qui prend TOUT le bloc - transparent */
-.group:hover .absolute.inset-0.bg-black\/60 {
-  opacity: 1;
-}
-/* Z-index du header - à définir dans App.vue ou layout */
-:global(.header) {
-  z-index: 60 !important;
-}
-/* Z-index du dropdown filtre - toujours derrière le header */
-.z-30 {
-  z-index: 30;
-}
-.z-40 {
-  z-index: 40;
-}
-.z-0 {
-  z-index: 0;
-}
-/* Réduction hauteur carte */
-.group {
-  min-height: 300px;
-}
-@media (min-width: 640px) {
-  .group {
-    min-height: 330px;
+
+/* Continuous rotation for dashed borders */
+@keyframes spinDashedPermanent {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
-/* Animation bouton */
-@keyframes buttonPop {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+
+.dashed-border {
+  animation: spinDashedPermanent 15s linear infinite;
 }
-.group:hover button {
-  animation: buttonPop 0.3s ease-out;
+
+@keyframes shimmer-fast {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  50% { transform: scaleX(1.1); opacity: 0.8; }
+}
+
+.animate-shimmer-fast {
+  animation: shimmer-fast 2s infinite linear;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+  transform-origin: left;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>
