@@ -133,7 +133,7 @@
         <div v-for="value in values" :key="value.title"
           class="group bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:border-[#6a0d5f]/20">
           <div class="w-14 h-14 rounded-2xl bg-[#6a0d5f]/10 flex items-center justify-center mb-5 group-hover:bg-[#6a0d5f] transition-colors duration-300">
-            <span class="text-2xl">{{ value.icon }}</span>
+            <UIcon :name="value.icon" class="w-7 h-7 text-[#6a0d5f] group-hover:text-white transition-colors duration-300" />
           </div>
           <h3 class="text-xl font-bold text-gray-900 mb-3">{{ value.title }}</h3>
           <p class="text-gray-500 leading-relaxed text-[15px]">{{ value.desc }}</p>
@@ -205,32 +205,32 @@ function openLightbox(img: string) {
 
 const values = [
   {
-    icon: '✝️',
+    icon: 'i-lucide-flame',
     title: 'Foi & Spiritualité',
     desc: 'Nous sélectionnons des ouvrages qui nourrissent la foi, approfondissent la connaissance biblique et renforcent la relation avec Dieu.'
   },
   {
-    icon: '📚',
+    icon: 'i-lucide-book-open',
     title: 'Littérature de qualité',
     desc: 'Chaque livre de notre catalogue est soigneusement choisi pour sa valeur éducative, spirituelle et édifiante.'
   },
   {
-    icon: '🌱',
+    icon: 'i-lucide-sprout',
     title: 'Croissance personnelle',
     desc: 'Nous croyons que chaque lecteur mérite d\'être équipé pour grandir dans tous les aspects de sa vie.'
   },
   {
-    icon: '🤝',
+    icon: 'i-lucide-users',
     title: 'Communauté',
     desc: 'La librairie est un espace de rencontre et d\'échange pour toute la communauté chrétienne de Lomé et du Togo.'
   },
   {
-    icon: '❤️',
+    icon: 'i-lucide-heart',
     title: 'Bienveillance',
     desc: 'Un accueil chaleureux pour tous, qu\'ils soient croyants de longue date ou en quête de réponses spirituelles.'
   },
   {
-    icon: '🌍',
+    icon: 'i-lucide-globe',
     title: 'Impact local',
     desc: 'Fondée par l\'ICC Togo, notre librairie s\'inscrit dans la mission d\'évangélisation et d\'édification au Togo et en Afrique.'
   },
