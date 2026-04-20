@@ -51,7 +51,7 @@
               </svg>
               Catégories
             </h3>
-            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               <label v-for="cat in categorieStore.categories" :key="cat.id"
                 class="flex items-center gap-3 group cursor-pointer">
                 <div class="relative flex items-center">
@@ -64,6 +64,33 @@
                 </div>
                 <span class="text-sm font-medium text-gray-500 group-hover:text-[#6a0d5f] transition-colors">
                   {{ cat.libelle }}
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- AUTEURS -->
+          <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+              <svg class="w-5 h-5 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Auteurs
+            </h3>
+            <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <label v-for="auteur in auteurStore.auteurs" :key="auteur.id"
+                class="flex items-center gap-3 group cursor-pointer">
+                <div class="relative flex items-center">
+                  <input type="checkbox" :value="auteur.nom" v-model="filters.authors"
+                    class="peer appearance-none w-5 h-5 rounded-lg border-2 border-gray-200 checked:bg-[#6a0d5f] checked:border-[#6a0d5f] transition-all duration-300">
+                  <svg class="absolute w-3 h-3 text-white left-1 opacity-0 peer-checked:opacity-100 transition-opacity"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span class="text-sm font-medium text-gray-500 group-hover:text-[#6a0d5f] transition-colors">
+                  {{ auteur.nom }}
                 </span>
               </label>
             </div>
@@ -190,7 +217,7 @@
                     class="font-bold text-sm md:text-base text-gray-900 mb-1 lg:mb-2 line-clamp-2 min-h-[3rem] group-hover:text-[#6a0d5f] transition-colors">
                     {{ book.title }}
                   </h3>
-                  <p class="text-xs font-bold text-gray-400 mb-4">{{ book.author }}</p>
+                  <p class="text-xs font-bold text-gray-400 mb-4">{{ book.authorName }}</p>
 
                   <div class="mt-auto pt-4 border-t border-gray-50 space-y-4">
                     <div class="flex flex-col">
@@ -298,6 +325,18 @@
                 </div>
               </div>
 
+              <!-- AUTEURS -->
+              <div>
+                <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Par Auteur</h3>
+                <div class="space-y-3">
+                  <label v-for="auteur in auteurStore.auteurs" :key="auteur.id" class="flex items-center gap-3">
+                    <input type="checkbox" :value="auteur.nom" v-model="filters.authors"
+                      class="w-5 h-5 rounded border-gray-300 text-[#6a0d5f] focus:ring-[#6a0d5f]/20">
+                    <span class="text-sm font-bold text-gray-600">{{ auteur.nom }}</span>
+                  </label>
+                </div>
+              </div>
+
               <!-- PRIX -->
               <div>
                 <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Prix Max</h3>
@@ -330,6 +369,7 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
+import { useAuteurStore } from "~~/stores/auteur";
 import { useSearch } from "~/composables/useSearch";
 import { useCartStore } from "~~/stores/cart";
 
@@ -337,6 +377,7 @@ const route = useRoute();
 const cartStore = useCartStore();
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
+const auteurStore = useAuteurStore();
 const config = useRuntimeConfig();
 const { search } = useSearch();
 
@@ -350,6 +391,7 @@ const filters = ref({
   onlyPromo: false,
   maxPrice: 20000,
   categories: [],
+  authors: [],
 });
 
 // Titre dynamique et Breadcrumb
@@ -385,6 +427,7 @@ const resetFilters = () => {
     onlyPromo: false,
     maxPrice: 20000,
     categories: [],
+    authors: [],
   };
   search.value = "";
   currentPage.value = 1;
@@ -394,6 +437,7 @@ onMounted(async () => {
   await Promise.all([
     livreStore.fetchLivres(),
     categorieStore.fetchCategories(),
+    auteurStore.fetchAuteurs(),
   ]);
 
   // Sync category from URL if present
@@ -416,7 +460,8 @@ const books = computed(() =>
   livreStore.livres.map((livre) => ({
     id: livre.id,
     title: livre.titre,
-    author: livre.auteur ?? "--",
+    authorName: livre.auteurRel?.nom || livre.auteur || "--",
+    author: livre.auteur,
     price: livre.prix_promo ?? livre.prix,
     oldPrice: livre.prix_promo ? livre.prix : null,
     isPromo: !!livre.prix_promo,
@@ -436,7 +481,7 @@ const filteredBooks = computed(() => {
     const q = search.value.toLowerCase();
     result = result.filter((b) =>
       b.title.toLowerCase().includes(q) ||
-      b.author.toLowerCase().includes(q)
+      b.authorName.toLowerCase().includes(q)
     );
   }
 
@@ -449,6 +494,12 @@ const filteredBooks = computed(() => {
   if (filters.value.categories.length) {
     result = result.filter((b) =>
       filters.value.categories.includes(b.category)
+    );
+  }
+
+  if (filters.value.authors.length) {
+    result = result.filter((b) =>
+      filters.value.authors.includes(b.authorName)
     );
   }
 
@@ -511,7 +562,7 @@ const addToCart = (book) => {
     cartStore.add({
       id: book.id,
       title: book.title,
-      author: book.author,
+      author: book.authorName,
       price: book.price,
       image: book.image,
       stockAvailable: book.stockAvailable,

@@ -94,7 +94,7 @@
         <!-- Section Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div class="space-y-2">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-wide uppercase">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-wide uppercase">
               Nos livres <span class="text-[#6a0d5f]">récents</span>
             </h2>
             <div class="flex items-center gap-4">
@@ -161,9 +161,12 @@
                   {{ book.categorie?.libelle || 'Inspirant' }}
                 </span>
                 <h3
-                  class="font-bold text-gray-900 text-sm md:text-base line-clamp-2 leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                  class="font-bold text-gray-900 text-sm md:text-base line-clamp-1 leading-tight group-hover:text-[#6a0d5f] transition-colors">
                   {{ book.titre }}
                 </h3>
+                <p class="text-[10px] font-bold text-gray-500 truncate">
+                  {{ book.auteurRel?.nom || book.auteur || 'Auteur Inconnu' }}
+                </p>
 
                 <div class="flex items-center gap-3 pt-1">
                   <span class="text-lg font-bold text-[#6a0d5f]">

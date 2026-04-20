@@ -8,7 +8,7 @@
     <!-- Page Header -->
     <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[-2rem]">
       <div class="max-w-7xl mx-auto text-center">
-        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 uppercase tracking-wide">
+        <h1 class="text-xl md:text-3xl font-bold text-white mb-4 uppercase tracking-wide">
           Finaliser la <span class="text-orange-400">commande</span>
         </h1>
         <p class="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-medium">

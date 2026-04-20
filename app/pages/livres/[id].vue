@@ -65,14 +65,14 @@
               <div class="flex items-center p-3 bg-gray-50 rounded-xl border border-gray-100">
                 <div
                   class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6a0d5f] to-[#8B5A8C] flex items-center justify-center text-white font-bold text-base mr-3">
-                  {{ book.author ? book.author.charAt(0) : "A" }}
+                  {{ book.authorName ? book.authorName.charAt(0) : "A" }}
                 </div>
                 <div>
                   <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
                     Auteur de l'œuvre
                   </p>
                   <p class="text-lg font-bold text-gray-900">
-                    {{ book.author }}
+                    {{ book.authorName }}
                   </p>
                 </div>
               </div>
@@ -234,7 +234,7 @@
                       {{ relatedBook.title }}
                     </h3>
                     <p class="text-[11px] md:text-xs text-gray-400 font-bold uppercase tracking-wider truncate">
-                      {{ relatedBook.author }}
+                      {{ relatedBook.authorName }}
                     </p>
                     <div class="flex items-center justify-center md:justify-start space-x-2 pt-1">
                       <span class="text-base md:text-lg font-bold text-[#6a0d5f]">
@@ -340,6 +340,7 @@ const book = computed(() => {
   return {
     id: b.id,
     title: b.titre,
+    authorName: b.auteurRel?.nom || b.auteur || "Auteur Inconnu",
     author: b.auteur,
     price: b.prix_promo ?? b.prix,
     oldPrice: b.prix_promo ? b.prix : null,
@@ -362,6 +363,7 @@ const relatedBooks = computed(() => {
     .map((b) => ({
       id: b.id,
       title: b.titre,
+      authorName: b.auteurRel?.nom || b.auteur || "Auteur Inconnu",
       author: b.auteur,
       price: b.prix_promo ?? b.prix,
       oldPrice: b.prix_promo ? b.prix : null,
