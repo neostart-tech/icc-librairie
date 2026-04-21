@@ -262,7 +262,7 @@
             </div>
             
             <div class="flex items-center justify-between pt-4 mt-auto">
-               <p class="text-lg font-black text-gray-900 tracking-tighter">{{ formatPrice(book.prix_promo || book.prix) }}</p>
+               <p class="text-lg font-black text-[#6a0d5f] tracking-tighter">{{ formatPrice(book.prix_promo || book.prix) }}</p>
                <button @click="addToCart(book)" class="w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-[#6a0d5f] hover:bg-[#6a0d5f] hover:text-white transition-all shadow-sm">
                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
