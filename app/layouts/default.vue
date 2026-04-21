@@ -59,12 +59,15 @@
         </svg>
       </button>
     </Transition>
+
+    <PopupModal />
   </div>
 </template>
 
 <script setup>
 import Header from "~/components/header.vue";
 import Footer from "~/components/footer.vue";
+import PopupModal from "~/components/PopupModal.vue";
 import { ref, onMounted, onUnmounted, reactive, watch } from 'vue';
 import { useNuxtApp, useRoute } from '#app';
 

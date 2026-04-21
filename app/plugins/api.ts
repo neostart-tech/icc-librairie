@@ -8,6 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     baseURL: config.public.apiBase,
     headers: {
       Accept: "application/json",
+      "ngrok-skip-browser-warning": "true",
     },
 
     onRequest({ options }) {
