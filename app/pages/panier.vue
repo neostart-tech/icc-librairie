@@ -77,10 +77,10 @@
               <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
                   <h3
-                    class="font-bold text-gray-900 text-base md:text-lg uppercase leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                    class="text-gray-900 text-base md:text-lg leading-tight group-hover:text-[#6a0d5f] transition-colors">
                     {{ item.title }}
                   </h3>
-                  <p v-if="item.author" class="text-gray-400 font-bold text-xs uppercase tracking-widest mt-1">
+                  <p v-if="item.author" class="text-gray-400 text-xs tracking-widest mt-1">
                     {{ item.author }}
                   </p>
                 </div>
@@ -109,8 +109,8 @@
 
                 <!-- Prices -->
                 <div class="flex flex-col items-end">
-                  <span class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-1">Total Article</span>
-                  <span class="text-xl font-bold text-[#6a0d5f] tracking-wide">
+                  <span class="text-xs font-bold text-gray-300 tracking-widest mb-1">Total Article</span>
+                  <span class="text-sm font-semibold text-[#6a0d5f] tracking-wide">
                     {{ formatPrice(item.price * item.quantity) }}
                   </span>
                   <span v-if="item.quantity > 1" class="text-[10px] font-bold text-gray-400">
@@ -137,11 +137,11 @@
 
             <div class="space-y-4">
               <div class="flex justify-between items-center py-2 border-b border-gray-50">
-                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Sous-total</span>
+                <span class="text-sm font-bold text-gray-400 tracking-widest">Sous-total</span>
                 <span class="font-bold text-gray-800">{{ formatPrice(subtotal) }}</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-gray-50">
-                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Articles</span>
+                <span class="text-sm font-bold text-gray-400 tracking-widest">Articles</span>
                 <span class="font-bold text-gray-800">{{ cartStore.count }}</span>
               </div>
             </div>
@@ -155,7 +155,7 @@
             </div>
 
             <NuxtLink to="/commande"
-              class="w-full flex items-center justify-center gap-3 bg-[#6a0d5f] text-white py-4 rounded-xl font-bold text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+              class="w-full flex items-center justify-center gap-3 bg-[#6a0d5f] text-white py-4 rounded-xl font-bold text-sm tracking-[0.2em] shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
               Passer la commande
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />

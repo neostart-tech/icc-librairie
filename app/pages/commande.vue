@@ -31,7 +31,7 @@
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </div>
-              <h2 class="text-2xl font-bold text-gray-900 uppercase tracking-wide">Mode de paiement</h2>
+              <h2 class="text-xl font-semibold text-gray-900 uppercase tracking-wide">Mode de paiement</h2>
             </div>
 
             <!-- Gateways Selection Grid -->
@@ -43,7 +43,7 @@
               </div>
 
               <div v-else-if="!gatewayStore.actifs.length" class="col-span-full py-10 text-center">
-                <p class="text-gray-400 font-bold uppercase tracking-wide text-sm">Aucun moyen de paiement disponible
+                <p class="text-gray-400 font-bold tracking-wide text-sm">Aucun moyen de paiement disponible
                 </p>
               </div>
 
@@ -57,8 +57,8 @@
                 </div>
 
                 <div class="flex-1">
-                  <p class="font-bold text-gray-900 uppercase tracking-wide">{{ gateway.libelle }}</p>
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Paiement Mobile</p>
+                  <p class="font-bold text-gray-900 tracking-wide">{{ gateway.libelle }}</p>
+                  <p class="text-[10px] font-bold text-gray-400 tracking-wide">Paiement Mobile</p>
                 </div>
 
                 <div
@@ -102,7 +102,7 @@
         <aside class="lg:col-span-4 lg:sticky lg:top-24 animate-fadeInUp" style="animation-delay: 200ms">
           <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-8">
             <h2
-              class="text-2xl font-bold text-gray-900 uppercase tracking-wide mb-8 flex items-center gap-3">
+              class="text-xl font-semibold text-gray-900 uppercase tracking-wide mb-8 flex items-center gap-3">
               <svg class="w-7 h-7 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" stroke-linecap="round"
                   stroke-linejoin="round" />
@@ -116,7 +116,7 @@
                 class="flex items-center gap-4 py-2 border-b border-gray-50/50 last:border-0 hover:bg-gray-50/50 rounded-xl px-2 transition-colors">
                 <img :src="item.image" class="w-10 h-14 object-contain" alt="" />
                 <div class="flex-1 min-w-0">
-                  <p class="text-xs font-bold text-gray-900 truncate uppercase">{{ item.title }}</p>
+                  <p class="text-xs font-bold text-gray-900 truncate">{{ item.title }}</p>
                   <p class="text-[10px] font-bold text-[#6a0d5f]">
                     {{ item.quantity }} × {{ formatPrice(item.price) }}
                   </p>
@@ -126,14 +126,14 @@
 
             <div class="space-y-4 border-t border-gray-50 pt-6">
               <div class="flex justify-between items-center px-2">
-                <span class="text-sm font-bold text-gray-400 uppercase tracking-wide">Total Articles</span>
+                <span class="text-sm font-bold text-gray-400 tracking-wide">Total Articles</span>
                 <span class="font-bold text-gray-800">{{ cartStore.count }}</span>
               </div>
 
               <div
                 class="mt-8 mb-10 p-6 bg-[#6a0d5f]/5 rounded-[2rem] border border-[#6a0d5f]/10 text-center flex flex-col items-center">
                 <span class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Total à payer</span>
-                <span class="text-4xl font-bold text-[#6a0d5f] tracking-wide">
+                <span class="text-3xl font-bold text-[#6a0d5f] tracking-wide">
                   {{ formatPrice(total) }}
                 </span>
               </div>

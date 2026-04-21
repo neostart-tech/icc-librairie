@@ -26,6 +26,9 @@ export const useLivreStore = defineStore("livre", {
   state: () => ({
     livres: [] as Livre[],
     livre: null as Livre | null,
+    selectionMois: [] as Livre[],
+    selectionMoisPrecedent: [] as Livre[],
+    enVogue: null as Livre | null,
     loading: false,
   }),
 
@@ -185,6 +188,25 @@ export const useLivreStore = defineStore("livre", {
         if (this.livre?.id === id) this.livre = null;
       } catch (error) {
         console.error("Erreur suppression livre", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    /** ======================
+     * LIVRES EN AVANT
+     ======================= */
+    async fetchFeaturedLivres() {
+      const { $api } = useNuxtApp();
+      this.loading = true;
+
+      try {
+        const res: any = await $api("/livres/featured");
+        this.selectionMois = res.selection_mois || [];
+        this.selectionMoisPrecedent = res.selection_mois_precedent || [];
+        this.enVogue = res.en_vogue || null;
+      } catch (error) {
+        console.error("Erreur fetchFeaturedLivres", error);
       } finally {
         this.loading = false;
       }
