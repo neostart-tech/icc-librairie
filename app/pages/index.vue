@@ -247,41 +247,62 @@
           <p class="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Ouvrages triés sur le volet pour votre croissance</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div v-for="(book, index) in selectionMois" :key="book.id"
-            v-reveal.repeat :class="`reveal-delay-${index * 100}`"
-            class="group bg-gray-50 rounded-2xl p-4 transition-all duration-500 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 flex flex-col h-full">
-            
-            <div class="relative aspect-[3/4.2] mb-6 overflow-hidden rounded-xl bg-gray-200">
-               <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-               <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <NuxtLink :to="`/livres/${book.id}`" class="px-4 py-2 bg-white text-[#6a0d5f] rounded-lg font-bold text-[10px] uppercase tracking-widest transition-transform -translate-y-2 group-hover:translate-y-0 duration-500">
-                     Aperçu
-                  </NuxtLink>
-               </div>
-            </div>
+        <div class="relative flex items-center group/section">
+          <!-- Navigation Arrow Left -->
+          <button @click="scrollSection('moisContainer', 'left')"
+            class="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
+            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          
+          <div class="w-full relative overflow-hidden px-2 py-4">
+            <div ref="moisContainer" class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory">
+              <div v-for="(book, index) in selectionMois" :key="book.id"
+                v-reveal.repeat :class="`reveal-delay-${index * 100}`"
+                @click="navigateTo(`/livres/${book.id}`)"
+                class="cursor-pointer w-64 md:w-72 flex-shrink-0 snap-start group bg-gray-50 rounded-2xl p-4 transition-all duration-500 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 flex flex-col h-full">
+                
+                <div class="relative aspect-[3/4.2] mb-6 overflow-hidden rounded-xl bg-gray-200">
+                   <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                   <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-lg font-bold text-[10px] uppercase tracking-widest transition-transform -translate-y-2 group-hover:translate-y-0 duration-500">
+                         Aperçu
+                      </span>
+                   </div>
+                </div>
 
-            <div class="space-y-2 flex-1">
-               <span class="text-[9px] font-bold uppercase text-[#6a0d5f]/60 tracking-widest block">
-                 {{ book.categorie?.libelle || 'Essentiel' }}
-               </span>
-               <h3 class="text-sm font-black text-gray-900 uppercase tracking-tight line-clamp-2 leading-tight h-10">
-                 {{ book.titre }}
-               </h3>
-               <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest truncate">
-                 {{ book.auteurRel?.nom || book.auteur || 'Anonyme' }}
-               </p>
-            </div>
-            
-            <div class="flex items-center justify-between pt-4 mt-auto">
-               <p class="text-lg font-black text-[#6a0d5f] tracking-tighter">{{ formatPrice(book.prix_promo || book.prix) }}</p>
-               <button @click="addToCart(book)" class="w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-[#6a0d5f] hover:bg-[#6a0d5f] hover:text-white transition-all shadow-sm">
-                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                   <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
-                 </svg>
-               </button>
+                <div class="space-y-2 flex-1">
+                   <span class="text-[9px] font-bold uppercase text-[#6a0d5f]/60 tracking-widest block">
+                     {{ book.categorie?.libelle || 'Essentiel' }}
+                   </span>
+                   <h3 class="text-sm font-black text-gray-900 uppercase tracking-tight line-clamp-2 leading-tight h-10">
+                     {{ book.titre }}
+                   </h3>
+                   <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest truncate">
+                     {{ book.auteurRel?.nom || book.auteur || 'Anonyme' }}
+                   </p>
+                </div>
+                
+                <div class="flex items-center justify-between pt-4 mt-auto">
+                   <p class="text-lg font-black text-[#6a0d5f] tracking-tighter">{{ formatPrice(book.prix_promo || book.prix) }}</p>
+                   <button @click.stop="addToCart(book)" class="w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-[#6a0d5f] hover:bg-[#6a0d5f] hover:text-white transition-all shadow-sm">
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
+                     </svg>
+                   </button>
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Navigation Arrow Right -->
+          <button @click="scrollSection('moisContainer', 'right')"
+            class="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
+            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>
@@ -304,18 +325,38 @@
           </NuxtLink>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
-           <div v-for="book in selectionMoisPrecedent" :key="book.id" class="group space-y-4">
-              <NuxtLink :to="`/livres/${book.id}`" class="relative block aspect-[3/4.2] overflow-hidden rounded-xl shadow-lg transition-all duration-500 group-hover:shadow-2xl">
-                 <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                 <div class="absolute inset-0 bg-[#6a0d5f]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </NuxtLink>
-              <div class="space-y-1">
-                 <h4 class="text-[11px] font-black text-gray-900 uppercase tracking-tight line-clamp-1 group-hover:text-[#6a0d5f] transition-colors leading-tight">{{ book.titre }}</h4>
-                 <p class="text-[9px] font-bold text-gray-400 uppercase">{{ book.auteurRel?.nom || book.auteur }}</p>
-                 <p class="text-xs font-black text-[#6a0d5f] pt-1 tracking-tighter">{{ formatPrice(book.prix) }}</p>
+        <div class="relative flex items-center group/section">
+          <!-- Navigation Arrow Left -->
+          <button @click="scrollSection('precedentContainer', 'left')"
+            class="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
+            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          
+          <div class="w-full relative overflow-hidden px-2 py-4">
+            <div ref="precedentContainer" class="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory">
+              <div v-for="book in selectionMoisPrecedent" :key="book.id" @click="navigateTo(`/livres/${book.id}`)" class="cursor-pointer w-48 md:w-56 flex-shrink-0 snap-start group space-y-4">
+                 <div class="relative block aspect-[3/4.2] overflow-hidden rounded-xl shadow-lg transition-all duration-500 group-hover:shadow-2xl">
+                    <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-[#6a0d5f]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                 </div>
+                 <div class="space-y-1">
+                    <h4 class="text-[11px] font-black text-gray-900 uppercase tracking-tight line-clamp-1 group-hover:text-[#6a0d5f] transition-colors leading-tight">{{ book.titre }}</h4>
+                    <p class="text-[9px] font-bold text-gray-400 uppercase">{{ book.auteurRel?.nom || book.auteur }}</p>
+                    <p class="text-xs font-black text-[#6a0d5f] pt-1 tracking-tighter">{{ formatPrice(book.prix) }}</p>
+                 </div>
               </div>
-           </div>
+            </div>
+          </div>
+
+          <!-- Navigation Arrow Right -->
+          <button @click="scrollSection('precedentContainer', 'right')"
+            class="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
+            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>
@@ -335,6 +376,8 @@ const cartStore = useCartStore();
 const config = useRuntimeConfig();
 
 const scrollContainer = ref(null);
+const moisContainer = ref(null);
+const precedentContainer = ref(null);
 
 onMounted(async () => {
   await Promise.all([
@@ -377,6 +420,29 @@ const scroll = (direction) => {
   if (!scrollContainer.value) return;
   const container = scrollContainer.value;
   const scrollAmount = window.innerWidth < 1024 ? container.clientWidth * 0.8 : 500;
+
+  if (direction === 'right') {
+    const isAtEnd = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth - 10;
+    if (isAtEnd) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  } else {
+    const isAtStart = container.scrollLeft <= 10;
+    if (isAtStart) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    }
+  }
+};
+
+const scrollSection = (refName, direction) => {
+  const container = refName === 'moisContainer' ? moisContainer.value : precedentContainer.value;
+  if (!container) return;
+  
+  const scrollAmount = window.innerWidth < 1024 ? container.clientWidth * 0.8 : container.clientWidth * 0.5;
 
   if (direction === 'right') {
     const isAtEnd = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth - 10;
