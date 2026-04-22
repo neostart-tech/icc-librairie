@@ -62,8 +62,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { usePopupStore } from '~~/stores/popup';
+import { useRoute } from '#app';
 
 const popupStore = usePopupStore();
+const route = useRoute();
 const isVisible = ref(false);
 const popup = ref<any>(null);
 
@@ -73,6 +75,9 @@ const close = () => {
 };
 
 onMounted(async () => {
+  // Only show on the index page (homepage)
+  if (route.path !== '/') return;
+
   // Only show if not shown in this session
   if (!popupStore.hasShown) {
     if (!popupStore.activePopup) {
@@ -81,6 +86,9 @@ onMounted(async () => {
 
     if (popupStore.activePopup) {
       popup.value = popupStore.activePopup;
+      // Mark as shown immediately so it doesn't trigger again on re-mounts
+      popupStore.markAsShown();
+      
       // Small delay for better UX
       setTimeout(() => {
         isVisible.value = true;

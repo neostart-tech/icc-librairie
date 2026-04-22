@@ -1,5 +1,5 @@
 <template>
-  <section class="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden group">
+  <section class="relative w-full h-[500px] md:h-[500px] lg:h-[600px] overflow-hidden group">
     <!-- BANNIÈRES (CARROUSEL) -->
     <transition-group name="fade" tag="div" class="absolute inset-0">
       <div v-for="(img, index) in images" :key="index" v-show="currentIndex === index"

@@ -168,6 +168,18 @@
                </p>
             </div>
 
+            <!-- Image Preview (Mobile Only: appears after paragraph) -->
+            <div class="lg:hidden relative">
+              <div class="relative bg-white/5 backdrop-blur-sm p-4 rounded-3xl border border-white/10 shadow-2xl overflow-hidden group">
+                  <img :src="enVogue.image" :alt="enVogue.titre"
+                    class="w-full h-auto rounded-2xl shadow-2xl transition-transform duration-700 group-hover:scale-105" />
+                  
+                  <div v-if="enVogue.prix_promo" class="absolute top-6 right-6 px-4 py-2 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-xl">
+                     -{{ Math.round((1 - enVogue.prix_promo/enVogue.prix) * 100) }}% Off
+                  </div>
+              </div>
+            </div>
+
             <!-- Details Grid -->
             <div class="grid grid-cols-2 gap-y-6 gap-x-8 py-8 border-y border-white/10">
                <div class="space-y-1">
@@ -206,8 +218,8 @@
             </div>
           </div>
 
-          <!-- Image Preview (5 cols) -->
-          <div class="lg:col-span-5 relative reveal-left" v-reveal.repeat>
+          <!-- Image Preview (Desktop Only: 5 cols) -->
+          <div class="hidden lg:block lg:col-span-5 relative reveal-left" v-reveal.repeat>
             <div class="relative bg-white/5 backdrop-blur-sm p-4 rounded-3xl border border-white/10 shadow-2xl overflow-hidden group">
                 <img :src="enVogue.image" :alt="enVogue.titre"
                   class="w-full h-auto rounded-2xl shadow-2xl transition-transform duration-700 group-hover:scale-105" />

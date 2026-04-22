@@ -236,9 +236,9 @@
             </NuxtLink>
 
             <div class="flex flex-col gap-1">
-              <NuxtLink to="/catalogue"
-                class="animate-stagger-1 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
-                @click="isMenuOpen = false">
+              <div
+                class="animate-stagger-1 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm cursor-pointer"
+                @click="isCatalogueExtended = !isCatalogueExtended">
                 <div class="flex items-center gap-3">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -247,13 +247,13 @@
                   </svg>
                   Catalogue
                 </div>
-                <button @click.stop.prevent="isCatalogueExtended = !isCatalogueExtended" class="p-1">
+                <div class="p-1">
                   <svg class="w-6 h-6 transition-transform duration-300" :class="{ 'rotate-180': isCatalogueExtended }"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
-                </button>
-              </NuxtLink>
+                </div>
+              </div>
 
               <!-- Extended Categories Mobile -->
               <div v-show="isCatalogueExtended"
@@ -394,6 +394,7 @@ const router = useRouter();
 
 router.afterEach(() => {
   isMenuOpen.value = false;
+  isCatalogueExtended.value = false;
 });
 
 const { search } = useSearch();

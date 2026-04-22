@@ -131,6 +131,48 @@
             class="w-full py-4 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-[#6a0d5f] transition-colors">
             Réinitialiser les filtres
           </button>
+
+          <!-- LIVRE EN VOGUE WIDGET -->
+          <NuxtLink :to="`/livres/${enVogue.id}`" v-if="enVogue" class="relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 overflow-hidden group flex flex-col items-center text-center hover:shadow-2xl transition-all duration-700 mt-8 flex-1 block cursor-pointer">
+            <!-- Decorative Background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/5 via-transparent to-[#6a0d5f]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#6a0d5f]/10 rounded-full mb-8 relative z-10">
+              <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-pulse"></span>
+              <span class="text-[10px] font-black text-[#6a0d5f] uppercase tracking-widest">En Vogue</span>
+            </div>
+
+            <!-- Book Cover -->
+            <div class="relative w-full aspect-[3/4] mb-8 shadow-2xl rounded-2xl overflow-hidden group-hover:-translate-y-3 transition-transform duration-700 z-10 block">
+               <img :src="enVogue.image" :alt="enVogue.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+               <div v-if="enVogue.isPromo" class="absolute top-3 right-3 bg-orange-500 text-white text-[10px] font-black px-3 py-1.5 rounded-xl uppercase shadow-xl">
+                 -{{ calculateDiscount(enVogue.oldPrice, enVogue.price) }}%
+               </div>
+            </div>
+
+            <div class="space-y-3 mb-8 relative z-10 w-full flex-1 flex flex-col">
+               <div class="block">
+                 <h4 class="font-black text-gray-900 text-base lg:text-lg line-clamp-2 leading-tight group-hover:text-[#6a0d5f] transition-colors">{{ enVogue.title }}</h4>
+               </div>
+               <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ enVogue.authorName }}</p>
+               
+               <p v-if="enVogue.description" class="text-xs text-gray-500 line-clamp-4 leading-relaxed mt-4 pt-4 border-t border-gray-50 flex-1">
+                 {{ enVogue.description }}
+               </p>
+            </div>
+
+            <div class="flex items-center justify-between w-full relative z-10 pt-6 border-t border-gray-100 mt-auto">
+               <div class="flex flex-col items-start">
+                 <span v-if="enVogue.isPromo" class="text-[10px] text-gray-400 line-through font-bold">{{ formatPrice(enVogue.oldPrice) }}</span>
+                 <span class="text-base font-black text-[#6a0d5f]">{{ formatPrice(enVogue.price) }} FCFA</span>
+               </div>
+               <button @click.stop.prevent="addToCart(enVogue)" :disabled="!enVogue.stockAvailable" class="w-12 h-12 bg-[#6a0d5f] text-white rounded-2xl flex items-center justify-center shadow-lg shadow-[#6a0d5f]/20 hover:scale-110 hover:bg-[#5a0b50] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+               </button>
+            </div>
+          </NuxtLink>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -436,6 +478,7 @@ const resetFilters = () => {
 onMounted(async () => {
   await Promise.all([
     livreStore.fetchLivres(),
+    livreStore.fetchFeaturedLivres(),
     categorieStore.fetchCategories(),
     auteurStore.fetchAuteurs(),
   ]);
@@ -454,6 +497,24 @@ watch(() => route.query.category, (newCat) => {
     filters.value.categories = [];
   }
   currentPage.value = 1;
+});
+
+const enVogue = computed(() => {
+  const book = livreStore.enVogue;
+  if (!book) return null;
+  return {
+    ...book,
+    title: book.titre,
+    authorName: book.auteurRel?.nom || book.auteur || "--",
+    description: book.description,
+    price: book.prix_promo ?? book.prix,
+    oldPrice: book.prix_promo ? book.prix : null,
+    isPromo: !!book.prix_promo,
+    stockAvailable: book.stock?.quantite ?? 0,
+    image: book.images?.length
+      ? `${config.public.storageBase}/${book.images[0].path}`
+      : "/images/livre.jpg",
+  };
 });
 
 const books = computed(() =>
