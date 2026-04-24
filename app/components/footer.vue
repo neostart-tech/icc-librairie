@@ -32,23 +32,23 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
 
         <!-- Colonne 1 : Brand & Description (Prend plus de place) -->
-        <div class="lg:col-span-5 space-y-8 lg:pr-10">
+        <div class="lg:col-span-4 space-y-8 lg:pr-4">
           <!-- Logo -->
           <div class="flex items-center gap-4 group cursor-pointer inline-flex w-fit">
             <div class="relative">
               <div
-                class="absolute -inset-2 rounded-full bg-white/30 blur opacity-0 group-hover:opacity-100 transition duration-500">
+                class="absolute -inset-2 rounded-full bg-white/90 group-hover:opacity-100 transition duration-500">
               </div>
-              <img src="/logo/logo-icc.jpg" alt="Impact Centre Chrétien Togo"
+              <img src="/logo/logo_librairie(1).png" alt="Librairie ICC Lomé"
                 class="relative hover:rotate-6 transition-transform duration-500 h-16 sm:h-20 w-auto rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.2)] border border-white/20" />
             </div>
             <div>
               <h3
-                class="font-bold text-2xl sm:text-3xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-pink-200 group-hover:translate-x-1 transition-transform duration-300">
-                Impact Centre</h3>
+                class="font-bold text-xl sm:text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-pink-200 group-hover:translate-x-1 transition-transform duration-300">
+                Librairie ICC</h3>
               <p
-                class="text-[13px] sm:text-[14px] text-white/80 font-bold tracking-[0.2em] uppercase group-hover:translate-x-1 transition-transform duration-300 delay-75">
-                Chrétien <span class="text-pink-300">TOGO</span></p>
+                class="text-xl sm:text-2xl text-white/80 font-bold tracking-[0.2em] uppercase group-hover:translate-x-1 transition-transform duration-300 delay-75">
+                <span class="text-pink-300">LOMÉ</span></p>
             </div>
           </div>
 
@@ -60,7 +60,12 @@
 
           <!-- Réseaux Sociaux Animés -->
           <div class="flex gap-4 pt-2">
-            <a v-for="(icon, index) in ['facebook', 'tiktok', 'instagram', 'youtube']" :key="icon" href="#"
+            <a v-for="social in [
+              { icon: 'facebook', url: 'https://web.facebook.com/icclome.librairie' },
+              { icon: 'tiktok', url: 'https://www.tiktok.com/@librairie.icc.lome' },
+              { icon: 'instagram', url: 'https://www.instagram.com/egliseicc_lome/' },
+              { icon: 'youtube', url: 'https://www.youtube.com/@icctvlome' }
+            ]" :key="social.icon" :href="social.url" target="_blank" rel="noopener noreferrer"
               class="group relative flex items-center justify-center w-12 h-12 rounded-[16px] bg-white/5 border border-white/20 hover:border-transparent overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.4)] hover:bg-white/10 backdrop-blur-sm">
               <!-- Fond interactif qui monte au survol -->
               <div
@@ -68,19 +73,19 @@
               </div>
 
               <!-- Icone dynamique -->
-              <img :src="`/icone/${icon}.png`" :alt="icon"
+              <img :src="`/icone/${social.icon}.png`" :alt="social.icon"
                 class="w-5 h-5 object-contain relative z-10 transition-all duration-300 group-hover:scale-125 group-hover:brightness-0 group-hover:invert" />
             </a>
           </div>
         </div>
 
         <!-- Colonne 2 : Navigation -->
-        <div class="lg:col-span-3">
+        <div class="lg:col-span-2">
           <h4 class="font-bold text-xl mb-6 sm:mb-8 flex items-center gap-3 text-white">
             <span class="w-8 h-1 bg-gradient-to-r from-pink-400 to-transparent rounded-full inline-block"></span>
             Navigation
           </h4>
-          <ul class="space-y-4">
+          <ul class="space-y-4 ml-10 lg:ml-0">
             <li v-for="link in [
               { name: 'Accueil', path: '/' },
               { name: 'Catalogue', path: '/catalogue' },
@@ -98,28 +103,79 @@
           </ul>
         </div>
 
-        <!-- Colonne 3 : Liens utiles -->
-        <div class="lg:col-span-4">
+        <!-- Colonne 3 : Contact -->
+        <div class="lg:col-span-3 lg:ml-5">
           <h4 class="font-bold text-xl mb-6 sm:mb-8 flex items-center gap-3 text-white">
             <span class="w-8 h-1 bg-gradient-to-r from-pink-400 to-transparent rounded-full inline-block"></span>
-            Liens utiles
+            Contact
           </h4>
-          <ul class="space-y-4">
-            <li v-for="link in [
-              'Prise en main',
-              'Conditions d’utilisation',
-              'Politique de confidentialité',
-              'Suppression de compte',
-              'Mentions légales'
-            ]" :key="link">
-              <NuxtLink to="/"
-                class="group flex items-center text-white/70 hover:text-white transition-all duration-300 text-[15px] sm:text-[16px] font-medium w-fit">
-                <span
-                  class="w-0 h-[2px] bg-pink-400 mr-0 transition-all duration-300 group-hover:w-4 group-hover:mr-3 opacity-0 group-hover:opacity-100"></span>
-                <span class="group-hover:translate-x-1 transition-transform duration-300">{{ link }}</span>
-              </NuxtLink>
+          <ul class="space-y-5">
+            <!-- Téléphones -->
+            <li class="flex items-start gap-3 text-white/70 group">
+              <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-pink-500/20 transition-colors">
+                <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              </div>
+              <div class="flex flex-col font-medium text-[15px]">
+                <a href="tel:+22892090204" class="hover:text-white transition-colors duration-300 block">+228 92 09 02 04</a>
+                <a href="tel:+22890009462" class="hover:text-white transition-colors duration-300 block mt-0.5">+228 90 00 94 62</a>
+              </div>
+            </li>
+            
+            <!-- Email -->
+            <li class="flex items-center gap-3 text-white/70 group">
+              <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-pink-500/20 transition-colors">
+                <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <a href="mailto:contact@icc-librairie.com" class="hover:text-white transition-colors duration-300 font-medium text-[15px]">contact@icc-librairie.com</a>
+            </li>
+
+            <!-- Adresse -->
+            <li class="flex items-start gap-3 text-white/70 group">
+              <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-pink-500/20 transition-colors">
+                <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+              <div class="flex flex-col font-medium">
+                <span class="text-[15px] text-white">Librairie ICC Hountigomé</span>
+                <span class="text-[14px] mt-0.5">Lomé, Togo</span>
+              </div>
             </li>
           </ul>
+        </div>
+
+        <!-- Colonne 4 : Localisation (Carte) -->
+        <div class="lg:col-span-3">
+          <h4 class="font-bold text-xl mb-6 sm:mb-8 flex items-center gap-3 text-white">
+            <span class="w-8 h-1 bg-gradient-to-r from-pink-400 to-transparent rounded-full inline-block"></span>
+            Localisation
+          </h4>
+          <div class="rounded-2xl overflow-hidden shadow-[0_10px_20px_rgba(0,0,0,0.2)] border border-white/10 h-[200px] relative group">
+            <a href="https://maps.app.goo.gl/dR4RifFhWgnLxVps6" target="_blank" rel="noopener noreferrer" 
+               class="absolute inset-0 bg-transparent transition-all duration-500 z-10 cursor-pointer flex items-center justify-center hover:bg-black/20">
+               <div class="bg-[#6a0d5f] text-white text-sm px-4 py-2 rounded-full font-bold shadow-lg opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-2">
+                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                   <circle cx="12" cy="10" r="3"></circle>
+                 </svg>
+                 Ouvrir dans Google Maps
+               </div>
+            </a>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d1.2152!3d6.1375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMDgnMTUuMCJOIDHCsDEyJzU0LjciRQ!5e0!3m2!1sfr!2stg!4v1234567890"
+              class="w-full h-full border-0 transition-all duration-500"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Localisation Librairie ICC Hountigomé Lomé Togo"
+            ></iframe>
+          </div>
         </div>
 
       </div>

@@ -62,18 +62,26 @@
                 {{ book.title }}
               </h1>
 
-              <div class="flex items-center p-3 bg-gray-50 rounded-xl border border-gray-100">
-                <div
-                  class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6a0d5f] to-[#8B5A8C] flex items-center justify-center text-white font-bold text-base mr-3">
-                  {{ book.author ? book.author.charAt(0) : "A" }}
+              <div @click="openAuthorModal" class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:shadow-md hover:border-[#6a0d5f]/30 transition-all group">
+                <div class="flex items-center">
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6a0d5f] to-[#8B5A8C] flex items-center justify-center text-white font-bold text-base mr-3">
+                    {{ book.authorName ? book.authorName.charAt(0) : "A" }}
+                  </div>
+                  <div>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+                      Auteur de l'œuvre
+                    </p>
+                    <p class="text-lg font-bold text-gray-900 group-hover:text-[#6a0d5f] transition-colors">
+                      {{ book.authorName }}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                    Auteur de l'œuvre
-                  </p>
-                  <p class="text-lg font-bold text-gray-900">
-                    {{ book.author }}
-                  </p>
+                <div class="flex items-center text-[#6a0d5f] opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+                  <span class="text-[11px] font-bold uppercase tracking-wider hidden sm:block mr-1.5">En savoir plus</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -211,7 +219,7 @@
               @mouseleave="startAutoScroll"
               class="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-6 md:gap-8 lg:gap-10 pb-10 scroll-smooth">
               <div v-for="relatedBook in relatedBooks" :key="relatedBook.id" 
-                class="flex-shrink-0 w-[calc(100%-1rem)] md:w-[240px] lg:w-[210px] snap-start group perspective-1000 py-4">
+                class="flex-shrink-0 w-40 sm:w-48 md:w-[240px] lg:w-[210px] snap-start group perspective-1000 py-4">
                 <NuxtLink :to="`/livres/${relatedBook.id}`" class="block">
                   <div
                     class="relative aspect-[2/3] mb-6 rounded-2xl overflow-hidden shadow-md group-hover:shadow-2xl group-hover:-translate-y-3 transition-all duration-500 bg-white border border-gray-50/50">
@@ -234,7 +242,7 @@
                       {{ relatedBook.title }}
                     </h3>
                     <p class="text-[11px] md:text-xs text-gray-400 font-bold uppercase tracking-wider truncate">
-                      {{ relatedBook.author }}
+                      {{ relatedBook.authorName }}
                     </p>
                     <div class="flex items-center justify-center md:justify-start space-x-2 pt-1">
                       <span class="text-base md:text-lg font-bold text-[#6a0d5f]">
@@ -250,6 +258,61 @@
         </div>
       </div>
     </div>
+    <!-- Author Modal -->
+    <Teleport to="body">
+      <div v-if="showAuthorModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="showAuthorModal = false"></div>
+        <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh]">
+          
+          <!-- Header -->
+          <div class="p-6 md:p-8 bg-gradient-to-br from-gray-50 to-white border-b border-gray-100 flex items-start justify-between shrink-0">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#6a0d5f] to-[#8B5A8C] flex items-center justify-center text-white font-bold text-2xl shadow-lg shrink-0">
+                {{ book.authorName ? book.authorName.charAt(0) : "A" }}
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-900">{{ book.authorName }}</h3>
+                <p class="text-sm text-[#6a0d5f] font-bold uppercase tracking-widest mt-1">Auteur</p>
+              </div>
+            </div>
+            <button @click="showAuthorModal = false" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500 transition-colors shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="p-6 md:p-8 overflow-y-auto custom-scrollbar flex-1">
+            <div class="mb-8">
+              <h4 class="text-sm font-bold text-gray-900 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Biographie
+              </h4>
+              <p class="text-gray-600 leading-relaxed text-sm whitespace-pre-wrap">
+                {{ book.authorBio || "Biographie non disponible pour cet auteur." }}
+              </p>
+            </div>
+
+            <div>
+              <h4 class="text-sm font-bold text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                Ouvrages par {{ book.authorName }}
+              </h4>
+              
+              <div v-if="authorBooks.length > 0" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <NuxtLink v-for="b in authorBooks" :key="b.id" :to="`/livres/${b.id}`" @click="showAuthorModal = false" class="group block">
+                  <div class="aspect-[3/4.2] rounded-xl overflow-hidden bg-gray-100 mb-2 border border-gray-200/50 relative">
+                    <img :src="b.image" :alt="b.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div class="absolute inset-0 bg-[#6a0d5f]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </div>
+                  <h5 class="text-xs font-bold text-gray-900 line-clamp-2 group-hover:text-[#6a0d5f] transition-colors">{{ b.title }}</h5>
+                </NuxtLink>
+              </div>
+              <p v-else class="text-sm text-gray-500 italic">Aucun autre livre trouvé.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -258,6 +321,7 @@ import Breadcrumb from "@/components/Breadcrumb.vue";
 import { ref, computed, onMounted, onUnmounted, nextTick } from "vue";
 import { useRoute } from "#app";
 import { useLivreStore } from "~~/stores/livre";
+import { useAuteurStore } from "~~/stores/auteur";
 import { useCartStore } from "~~/stores/cart";
 
 const cartStore = useCartStore();
@@ -275,8 +339,14 @@ const addToCart = (book) => {
 
 const route = useRoute();
 const livreStore = useLivreStore();
+const auteurStore = useAuteurStore();
 const bookId = route.params.id;
 const carousel = ref(null);
+
+const showAuthorModal = ref(false);
+const openAuthorModal = () => {
+  showAuthorModal.value = true;
+};
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
 let autoScrollInterval = null;
@@ -315,9 +385,14 @@ const stopAutoScroll = () => {
 const config = useRuntimeConfig();
 
 onMounted(async () => {
+  const promises = [];
   if (!livreStore.livres.length) {
-    await livreStore.fetchLivres();
+    promises.push(livreStore.fetchLivres());
   }
+  if (!auteurStore.auteurs.length) {
+    promises.push(auteurStore.fetchAuteurs());
+  }
+  await Promise.all(promises);
   nextTick(() => {
     updateScrollState();
     if (carousel.value) {
@@ -340,12 +415,14 @@ const book = computed(() => {
   return {
     id: b.id,
     title: b.titre,
+    authorName: b.auteurRel?.nom || b.auteur || "Auteur Inconnu",
     author: b.auteur,
     price: b.prix_promo ?? b.prix,
     oldPrice: b.prix_promo ? b.prix : null,
     isPromo: !!b.prix_promo,
     category: b.categorie?.libelle,
     description: b.description,
+    authorBio: b.auteurRel?.biographie || auteurStore.auteurs.find(a => a.nom === (b.auteurRel?.nom || b.auteur))?.biographie || "",
     stockAvailable: b.stock?.quantite ?? 0,
     image: b.images?.length
       ? `${config.public.storageBase}/${b.images[0].path}`
@@ -362,6 +439,7 @@ const relatedBooks = computed(() => {
     .map((b) => ({
       id: b.id,
       title: b.titre,
+      authorName: b.auteurRel?.nom || b.auteur || "Auteur Inconnu",
       author: b.auteur,
       price: b.prix_promo ?? b.prix,
       oldPrice: b.prix_promo ? b.prix : null,
@@ -373,6 +451,21 @@ const relatedBooks = computed(() => {
     }));
   nextTick(updateScrollState);
   return list;
+});
+
+const authorBooks = computed(() => {
+  if (!book.value.authorName) return [];
+  return livreStore.livres
+    .filter(
+      (l) => (l.auteurRel?.nom === book.value.authorName || l.auteur === book.value.authorName)
+    )
+    .map((b) => ({
+      id: b.id,
+      title: b.titre,
+      image: b.images?.length
+        ? `${config.public.storageBase}/${b.images[0].path}`
+        : "/images/livre.jpg",
+    }));
 });
 
 const scrollLeft = () => {

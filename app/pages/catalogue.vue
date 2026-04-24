@@ -51,7 +51,7 @@
               </svg>
               Catégories
             </h3>
-            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               <label v-for="cat in categorieStore.categories" :key="cat.id"
                 class="flex items-center gap-3 group cursor-pointer">
                 <div class="relative flex items-center">
@@ -64,6 +64,33 @@
                 </div>
                 <span class="text-sm font-medium text-gray-500 group-hover:text-[#6a0d5f] transition-colors">
                   {{ cat.libelle }}
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- AUTEURS -->
+          <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+              <svg class="w-5 h-5 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Auteurs
+            </h3>
+            <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <label v-for="auteur in auteurStore.auteurs" :key="auteur.id"
+                class="flex items-center gap-3 group cursor-pointer">
+                <div class="relative flex items-center">
+                  <input type="checkbox" :value="auteur.nom" v-model="filters.authors"
+                    class="peer appearance-none w-5 h-5 rounded-lg border-2 border-gray-200 checked:bg-[#6a0d5f] checked:border-[#6a0d5f] transition-all duration-300">
+                  <svg class="absolute w-3 h-3 text-white left-1 opacity-0 peer-checked:opacity-100 transition-opacity"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span class="text-sm font-medium text-gray-500 group-hover:text-[#6a0d5f] transition-colors">
+                  {{ auteur.nom }}
                 </span>
               </label>
             </div>
@@ -104,6 +131,48 @@
             class="w-full py-4 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-[#6a0d5f] transition-colors">
             Réinitialiser les filtres
           </button>
+
+          <!-- LIVRE EN VOGUE WIDGET -->
+          <NuxtLink :to="`/livres/${enVogue.id}`" v-if="enVogue" class="relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 overflow-hidden group flex flex-col items-center text-center hover:shadow-2xl transition-all duration-700 mt-8 flex-1 block cursor-pointer">
+            <!-- Decorative Background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/5 via-transparent to-[#6a0d5f]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#6a0d5f]/10 rounded-full mb-8 relative z-10">
+              <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-pulse"></span>
+              <span class="text-[10px] font-black text-[#6a0d5f] uppercase tracking-widest">En Vogue</span>
+            </div>
+
+            <!-- Book Cover -->
+            <div class="relative w-full aspect-[3/4] mb-8 shadow-2xl rounded-2xl overflow-hidden group-hover:-translate-y-3 transition-transform duration-700 z-10 block">
+               <img :src="enVogue.image" :alt="enVogue.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+               <div v-if="enVogue.isPromo" class="absolute top-3 right-3 bg-orange-500 text-white text-[10px] font-black px-3 py-1.5 rounded-xl uppercase shadow-xl">
+                 -{{ calculateDiscount(enVogue.oldPrice, enVogue.price) }}%
+               </div>
+            </div>
+
+            <div class="space-y-3 mb-8 relative z-10 w-full flex-1 flex flex-col">
+               <div class="block">
+                 <h4 class="font-black text-gray-900 text-base lg:text-lg line-clamp-2 leading-tight group-hover:text-[#6a0d5f] transition-colors">{{ enVogue.title }}</h4>
+               </div>
+               <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ enVogue.authorName }}</p>
+               
+               <p v-if="enVogue.description" class="text-xs text-gray-500 line-clamp-4 leading-relaxed mt-4 pt-4 border-t border-gray-50 flex-1">
+                 {{ enVogue.description }}
+               </p>
+            </div>
+
+            <div class="flex items-center justify-between w-full relative z-10 pt-6 border-t border-gray-100 mt-auto">
+               <div class="flex flex-col items-start">
+                 <span v-if="enVogue.isPromo" class="text-[10px] text-gray-400 line-through font-bold">{{ formatPrice(enVogue.oldPrice) }}</span>
+                 <span class="text-base font-black text-[#6a0d5f]">{{ formatPrice(enVogue.price) }} FCFA</span>
+               </div>
+               <button @click.stop.prevent="addToCart(enVogue)" :disabled="!enVogue.stockAvailable" class="w-12 h-12 bg-[#6a0d5f] text-white rounded-2xl flex items-center justify-center shadow-lg shadow-[#6a0d5f]/20 hover:scale-110 hover:bg-[#5a0b50] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+               </button>
+            </div>
+          </NuxtLink>
         </aside>
 
         <!-- MAIN CONTENT -->
@@ -190,7 +259,7 @@
                     class="font-bold text-sm md:text-base text-gray-900 mb-1 lg:mb-2 line-clamp-2 min-h-[3rem] group-hover:text-[#6a0d5f] transition-colors">
                     {{ book.title }}
                   </h3>
-                  <p class="text-xs font-bold text-gray-400 mb-4">{{ book.author }}</p>
+                  <p class="text-xs font-bold text-gray-400 mb-4">{{ book.authorName }}</p>
 
                   <div class="mt-auto pt-4 border-t border-gray-50 space-y-4">
                     <div class="flex flex-col">
@@ -298,6 +367,18 @@
                 </div>
               </div>
 
+              <!-- AUTEURS -->
+              <div>
+                <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Par Auteur</h3>
+                <div class="space-y-3">
+                  <label v-for="auteur in auteurStore.auteurs" :key="auteur.id" class="flex items-center gap-3">
+                    <input type="checkbox" :value="auteur.nom" v-model="filters.authors"
+                      class="w-5 h-5 rounded border-gray-300 text-[#6a0d5f] focus:ring-[#6a0d5f]/20">
+                    <span class="text-sm font-bold text-gray-600">{{ auteur.nom }}</span>
+                  </label>
+                </div>
+              </div>
+
               <!-- PRIX -->
               <div>
                 <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Prix Max</h3>
@@ -330,6 +411,7 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
+import { useAuteurStore } from "~~/stores/auteur";
 import { useSearch } from "~/composables/useSearch";
 import { useCartStore } from "~~/stores/cart";
 
@@ -337,6 +419,7 @@ const route = useRoute();
 const cartStore = useCartStore();
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
+const auteurStore = useAuteurStore();
 const config = useRuntimeConfig();
 const { search } = useSearch();
 
@@ -350,6 +433,7 @@ const filters = ref({
   onlyPromo: false,
   maxPrice: 20000,
   categories: [],
+  authors: [],
 });
 
 // Titre dynamique et Breadcrumb
@@ -385,6 +469,7 @@ const resetFilters = () => {
     onlyPromo: false,
     maxPrice: 20000,
     categories: [],
+    authors: [],
   };
   search.value = "";
   currentPage.value = 1;
@@ -393,7 +478,9 @@ const resetFilters = () => {
 onMounted(async () => {
   await Promise.all([
     livreStore.fetchLivres(),
+    livreStore.fetchFeaturedLivres(),
     categorieStore.fetchCategories(),
+    auteurStore.fetchAuteurs(),
   ]);
 
   // Sync category from URL if present
@@ -412,11 +499,30 @@ watch(() => route.query.category, (newCat) => {
   currentPage.value = 1;
 });
 
+const enVogue = computed(() => {
+  const book = livreStore.enVogue;
+  if (!book) return null;
+  return {
+    ...book,
+    title: book.titre,
+    authorName: book.auteurRel?.nom || book.auteur || "--",
+    description: book.description,
+    price: book.prix_promo ?? book.prix,
+    oldPrice: book.prix_promo ? book.prix : null,
+    isPromo: !!book.prix_promo,
+    stockAvailable: book.stock?.quantite ?? 0,
+    image: book.images?.length
+      ? `${config.public.storageBase}/${book.images[0].path}`
+      : "/images/livre.jpg",
+  };
+});
+
 const books = computed(() =>
   livreStore.livres.map((livre) => ({
     id: livre.id,
     title: livre.titre,
-    author: livre.auteur ?? "--",
+    authorName: livre.auteurRel?.nom || livre.auteur || "--",
+    author: livre.auteur,
     price: livre.prix_promo ?? livre.prix,
     oldPrice: livre.prix_promo ? livre.prix : null,
     isPromo: !!livre.prix_promo,
@@ -436,7 +542,7 @@ const filteredBooks = computed(() => {
     const q = search.value.toLowerCase();
     result = result.filter((b) =>
       b.title.toLowerCase().includes(q) ||
-      b.author.toLowerCase().includes(q)
+      b.authorName.toLowerCase().includes(q)
     );
   }
 
@@ -449,6 +555,12 @@ const filteredBooks = computed(() => {
   if (filters.value.categories.length) {
     result = result.filter((b) =>
       filters.value.categories.includes(b.category)
+    );
+  }
+
+  if (filters.value.authors.length) {
+    result = result.filter((b) =>
+      filters.value.authors.includes(b.authorName)
     );
   }
 
@@ -511,7 +623,7 @@ const addToCart = (book) => {
     cartStore.add({
       id: book.id,
       title: book.title,
-      author: book.author,
+      author: book.authorName,
       price: book.price,
       image: book.image,
       stockAvailable: book.stockAvailable,

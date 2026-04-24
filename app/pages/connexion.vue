@@ -33,7 +33,7 @@
           <div class="space-y-3 pt-2">
             <div v-for="(item, i) in features" :key="i" class="flex items-center gap-3">
               <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
-                <component :is="'span'" class="text-white text-base">{{ item.icon }}</component>
+                <UIcon :name="item.icon" class="text-white w-5 h-5" />
               </div>
               <span class="text-white/80 text-sm font-medium">{{ item.label }}</span>
             </div>
@@ -72,7 +72,7 @@
           <div class="space-y-1.5">
             <div class="flex justify-between items-center">
               <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Mot de passe</label>
-              <a href="#" class="text-xs font-semibold text-[#6a0d5f] hover:underline">Oublié ?</a>
+              <NuxtLink to="/forgot-password" class="text-xs font-semibold text-[#6a0d5f] hover:underline">Oublié ?</NuxtLink>
             </div>
             <div class="relative">
               <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="••••••••"
@@ -114,7 +114,7 @@
         <NuxtLink to="/ConnexionIcc"
           class="w-full flex items-center justify-center gap-3 border border-gray-200 hover:border-[#6a0d5f] hover:bg-[#6a0d5f]/5 text-gray-500 hover:text-[#6a0d5f] py-3.5 rounded-xl font-semibold text-sm transition-all">
           <img src="/logo/logo_librairie(1).png" class="h-5 w-auto grayscale opacity-40" alt="" />
-          Connexion avec compte ICC
+          Connexion avec compte ICC Covoiturage
         </NuxtLink>
 
         <!-- Lien inscription -->
@@ -141,9 +141,9 @@ const password = ref("");
 const showPassword = ref(false);
 
 const features = [
-  { icon: '📚', label: 'Catalogue de livres chrétiens' },
-  { icon: '🛒', label: 'Commandes simplifiées' },
-  { icon: '✨', label: 'Offres et promotions exclusives' },
+  { icon: 'i-lucide-book-open', label: 'Catalogue de livres chrétiens' },
+  { icon: 'i-lucide-shopping-cart', label: 'Commandes simplifiées' },
+  { icon: 'i-lucide-sparkles', label: 'Offres et promotions exclusives' },
 ];
 
 const handleLogin = async () => {

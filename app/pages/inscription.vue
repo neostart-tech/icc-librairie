@@ -33,7 +33,7 @@
           <div class="space-y-3 pt-2">
             <div v-for="(item, i) in features" :key="i" class="flex items-center gap-3">
               <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
-                <span class="text-white text-base">{{ item.icon }}</span>
+                <UIcon :name="item.icon" class="text-white w-5 h-5" />
               </div>
               <span class="text-white/80 text-sm font-medium">{{ item.label }}</span>
             </div>
@@ -153,7 +153,7 @@
           <NuxtLink to="/ConnexionIcc"
             class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#6a0d5f] transition-colors font-medium">
             <img src="/logo/logo_librairie(1).png" class="h-4 w-auto grayscale opacity-40" alt="" />
-            Connexion ICC
+            Connexion ICC Covoiturage
           </NuxtLink>
         </div>
       </div>
@@ -181,9 +181,9 @@ const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
 const features = [
-  { icon: '📚', label: 'Catalogue de livres chrétiens' },
-  { icon: '🛒', label: 'Commandes simplifiées' },
-  { icon: '✨', label: 'Offres et promotions exclusives' },
+  { icon: 'i-lucide-book-open', label: 'Catalogue de livres chrétiens' },
+  { icon: 'i-lucide-shopping-cart', label: 'Commandes simplifiées' },
+  { icon: 'i-lucide-sparkles', label: 'Offres et promotions exclusives' },
 ];
 
 const handleRegister = async () => {

@@ -15,6 +15,7 @@ export interface Livre {
   categorie_id: number;
   images?: Image[];
   categorie?: any;
+  auteurRel?: any;
   stock?: any;
 }
 
@@ -25,6 +26,9 @@ export const useLivreStore = defineStore("livre", {
   state: () => ({
     livres: [] as Livre[],
     livre: null as Livre | null,
+    selectionMois: [] as Livre[],
+    selectionMoisPrecedent: [] as Livre[],
+    enVogue: null as Livre | null,
     loading: false,
   }),
 
@@ -40,7 +44,8 @@ export const useLivreStore = defineStore("livre", {
       this.loading = true;
 
       try {
-        this.livres = await $api("/livres");
+        const res: any = await $api("/livres");
+        this.livres = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []);
       } catch (error) {
         console.error("Erreur fetchLivres", error);
       } finally {
@@ -56,9 +61,13 @@ export const useLivreStore = defineStore("livre", {
       this.loading = true;
 
       try {
-        this.livre = await $api(`/livres/${id}`);
+        const res: any = await $api(`/livres/${id}`);
+        const data = res?.data ?? res;
+        this.livre = data;
+        return data;
       } catch (error) {
         console.error("Erreur fetchLivre", error);
+        return null;
       } finally {
         this.loading = false;
       }
@@ -98,13 +107,14 @@ export const useLivreStore = defineStore("livre", {
           formData.append("images[]", file);
         });
 
-        const res: Livre = await $api("/livres", {
+        const res: any = await $api("/livres", {
           method: "POST",
           body: formData,
         });
 
-        this.livres.unshift(res);
-        return res;
+        const newLivre = res.data ?? res;
+        this.livres.unshift(newLivre);
+        return newLivre;
       } catch (error: any) {
         throw error?.data || error;
       } finally {
@@ -143,17 +153,20 @@ export const useLivreStore = defineStore("livre", {
           }
         });
 
-        const res: Livre = await $api(`/livres/${id}`, {
+        const res: any = await $api(`/livres/${id}`, {
           method: "POST",
           body: formData,
           query: { _method: "PUT" },
         });
 
+        const updatedLivre = res.data ?? res;
         const index = this.livres.findIndex((l) => l.id === id);
-        if (index !== -1) this.livres[index] = res;
+        if (index !== -1) {
+          this.livres[index] = updatedLivre;
+        }
 
-        this.livre = res;
-        return res;
+        this.livre = updatedLivre;
+        return updatedLivre;
       } catch (error: any) {
         throw error?.data || error;
       } finally {
@@ -175,6 +188,25 @@ export const useLivreStore = defineStore("livre", {
         if (this.livre?.id === id) this.livre = null;
       } catch (error) {
         console.error("Erreur suppression livre", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    /** ======================
+     * LIVRES EN AVANT
+     ======================= */
+    async fetchFeaturedLivres() {
+      const { $api } = useNuxtApp();
+      this.loading = true;
+
+      try {
+        const res: any = await $api("/livres/featured");
+        this.selectionMois = res.selection_mois || [];
+        this.selectionMoisPrecedent = res.selection_mois_precedent || [];
+        this.enVogue = res.en_vogue || null;
+      } catch (error) {
+        console.error("Erreur fetchFeaturedLivres", error);
       } finally {
         this.loading = false;
       }
