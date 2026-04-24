@@ -153,7 +153,7 @@
           <NuxtLink to="/ConnexionIcc"
             class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#6a0d5f] transition-colors font-medium">
             <img src="/logo/logo_librairie(1).png" class="h-4 w-auto grayscale opacity-40" alt="" />
-            Connexion ICC
+            Connexion ICC Covoiturage
           </NuxtLink>
         </div>
       </div>
