@@ -1,9 +1,9 @@
 <template>
-  <section class="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden group">
+  <section class="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden group">
     <!-- BANNIÈRES (CARROUSEL) -->
     <transition-group name="fade" tag="div" class="absolute inset-0">
       <div v-for="(img, index) in images" :key="index" v-show="currentIndex === index"
-        class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[10000ms] ease-linear"
+        class="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-[10000ms] ease-linear"
         :class="currentIndex === index ? 'scale-105' : 'scale-100'" :style="{ backgroundImage: `url('${img}')` }"></div>
     </transition-group>
 
@@ -24,7 +24,7 @@
           dans notre
           <br class="hidden sm:block" />
           <span class="relative inline-block mt-1 sm:mt-2 group/title">
-            <span class="relative z-10 drop-shadow-md">bibliothèque</span>
+            <span class="relative z-10 drop-shadow-md">librairie</span>
             <!-- Animation trait souligné -->
             <svg
               class="absolute w-[105%] h-[12px] md:h-[18px] -bottom-1 -left-1 text-[#6a0d5f] z-0 drop-shadow-md max-w-full"
