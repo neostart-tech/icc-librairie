@@ -14,77 +14,95 @@
             </h2>
           </div>
 
-          <div class="relative flex items-center">
-            <!-- Navigation ARROWS -->
-            <button @click="scroll('left')"
-              class="absolute top-[40%] md:top-1/2 -translate-y-1/2 -left-2 md:-left-16 w-10 h-10 md:w-12 md:h-12 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform z-30">
-              <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
+          <div class="relative flex items-center overflow-hidden w-full">
+            <!-- Categories Marquee Wrapper -->
+            <div class="w-full py-12 -my-12">
+              <div class="flex w-max animate-marquee hover:[animation-play-state:paused]">
+                
+                <!-- Set 1 -->
+                <div class="flex gap-6 mt-5 md:gap-8 px-3 md:px-4">
+                  <div v-for="(cat, index) in topCategories" :key="'orig-'+cat.id"
+                    class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-80 flex-shrink-0">
 
-            <!-- Categories Container and Auto-scroll Wrapper -->
-            <div class="w-full relative px-2 md:px-4">
-              <div ref="scrollContainer"
-                class="flex lg:grid lg:grid-cols-5 gap-6 md:gap-8 overflow-x-auto lg:overflow-visible py-12 -my-12 scrollbar-hide scroll-smooth snap-x snap-mandatory lg:snap-none">
-                <div v-for="(cat, index) in topCategories" :key="cat.id"
-                  v-reveal.repeat :class="`reveal-delay-${index * 100}`"
-                  class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-auto flex-shrink-0 snap-center">
+                    <!-- Circular Image Container -->
+                    <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="relative mb-8 block">
+                      <!-- Permanent Rotating Decorative Border -->
+                      <div
+                        class="dashed-border absolute -inset-5 border-2 border-dashed border-[#6a0d5f]/20 rounded-full group-hover:border-[#6a0d5f]/50 transition-colors duration-1000">
+                      </div>
 
-                  <!-- Circular Image Container -->
-                  <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="relative mb-8 block">
-                    <!-- Permanent Rotating Decorative Border -->
-                    <div
-                      class="dashed-border absolute -inset-5 border-2 border-dashed border-[#6a0d5f]/20 rounded-full group-hover:border-[#6a0d5f]/50 transition-colors duration-1000">
-                    </div>
+                      <!-- Main Circle -->
+                      <div
+                        class="relative w-40 h-40 md:w-48 md:h-48 rounded-full bg-white p-6 shadow-2xl shadow-[#6a0d5f]/5 overflow-hidden ring-4 ring-white group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                        <img :src="cat.lastBookImage" :alt="cat.libelle"
+                          class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
+                      </div>
 
-                    <!-- Main Circle -->
-                    <div
-                      class="relative w-40 h-40 md:w-48 md:h-48 rounded-full bg-white p-6 shadow-2xl shadow-[#6a0d5f]/5 overflow-hidden ring-4 ring-white group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
-                      <img :src="cat.lastBookImage" :alt="cat.libelle"
-                        class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
-                    </div>
+                      <!-- Badge Number -->
+                      <div
+                        class="absolute top-4 -right-1 w-8 h-8 md:w-10 md:h-10 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm shadow-xl border-4 border-white group-hover:scale-110 transition-transform duration-300">
+                        0{{ index + 1 }}
+                      </div>
+                    </NuxtLink>
 
-                    <!-- Badge Number -->
-                    <div
-                      class="absolute top-4 -right-1 w-8 h-8 md:w-10 md:h-10 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm shadow-xl border-4 border-white group-hover:scale-110 transition-transform duration-300">
-                      0{{ index + 1 }}
-                    </div>
-                  </NuxtLink>
-
-                  <!-- Label & Count -->
-                  <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="group/link">
-                    <h3
-                      class="font-bold text-gray-900 group-hover/link:text-[#6a0d5f] text-sm md:text-base mb-1 uppercase tracking-tight transition-colors">
-                      {{ cat.libelle }}
-                    </h3>
-                    <span
-                      class="text-[10px] font-bold bg-[#6a0d5f]/5 text-[#6a0d5f] px-3 py-1 rounded-full uppercase tracking-widest">
-                      {{ cat.bookCount }} Livres
-                    </span>
-                  </NuxtLink>
+                    <!-- Label & Count -->
+                    <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="group/link">
+                      <h3
+                        class="font-bold text-gray-900 group-hover/link:text-[#6a0d5f] text-sm md:text-base mb-1 uppercase tracking-tight transition-colors">
+                        {{ cat.libelle }}
+                      </h3>
+                      <span
+                        class="text-[10px] font-bold bg-[#6a0d5f]/5 text-[#6a0d5f] px-3 py-1 rounded-full uppercase tracking-widest">
+                        {{ cat.bookCount }} Livres
+                      </span>
+                    </NuxtLink>
+                  </div>
                 </div>
+
+                <!-- Set 2 (Duplicate for infinite marquee) -->
+                <div class="flex gap-6 md:gap-8 px-3 md:px-4" aria-hidden="true">
+                  <div v-for="(cat, index) in topCategories" :key="'dup-'+cat.id"
+                    class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-80 flex-shrink-0">
+
+                    <!-- Circular Image Container -->
+                    <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="relative mb-8 block">
+                      <!-- Permanent Rotating Decorative Border -->
+                      <div
+                        class="dashed-border absolute -inset-5 border-2 border-dashed border-[#6a0d5f]/20 rounded-full group-hover:border-[#6a0d5f]/50 transition-colors duration-1000">
+                      </div>
+
+                      <!-- Main Circle -->
+                      <div
+                        class="relative w-40 h-40 md:w-48 md:h-48 rounded-full bg-white p-6 shadow-2xl shadow-[#6a0d5f]/5 overflow-hidden ring-4 ring-white group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                        <img :src="cat.lastBookImage" :alt="cat.libelle"
+                          class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
+                      </div>
+
+                      <!-- Badge Number -->
+                      <div
+                        class="absolute top-4 -right-1 w-8 h-8 md:w-10 md:h-10 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm shadow-xl border-4 border-white group-hover:scale-110 transition-transform duration-300">
+                        0{{ index + 1 }}
+                      </div>
+                    </NuxtLink>
+
+                    <!-- Label & Count -->
+                    <NuxtLink :to="`/catalogue?category=${cat.libelle}`" class="group/link">
+                      <h3
+                        class="font-bold text-gray-900 group-hover/link:text-[#6a0d5f] text-sm md:text-base mb-1 uppercase tracking-tight transition-colors">
+                        {{ cat.libelle }}
+                      </h3>
+                      <span
+                        class="text-[10px] font-bold bg-[#6a0d5f]/5 text-[#6a0d5f] px-3 py-1 rounded-full uppercase tracking-widest">
+                        {{ cat.bookCount }} Livres
+                      </span>
+                    </NuxtLink>
+                  </div>
+                </div>
+
               </div>
             </div>
-
-            <button @click="scroll('right')"
-              class="absolute top-[40%] md:top-1/2 -translate-y-1/2 -right-2 md:-right-16 w-10 h-10 md:w-12 md:h-12 bg-[#6a0d5f] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform z-30">
-              <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
           </div>
 
-          <!-- Pagination Dots (Desktop) -->
-          <div class="hidden lg:flex justify-center gap-3 mt-12">
-            <div
-              class="w-2.5 h-2.5 rounded-full bg-[#6a0d5f]/10 hover:bg-[#6a0d5f]/30 transition-colors cursor-pointer">
-            </div>
-            <div class="w-8 h-2.5 rounded-full bg-[#6a0d5f] shadow-lg shadow-[#6a0d5f]/20"></div>
-            <div
-              class="w-2.5 h-2.5 rounded-full bg-[#6a0d5f]/10 hover:bg-[#6a0d5f]/30 transition-colors cursor-pointer">
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -94,20 +112,20 @@
         <!-- Section Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div class="space-y-2">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-wide uppercase">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 uppercase">
               Nos livres <span class="text-[#6a0d5f]">récents</span>
             </h2>
             <div class="flex items-center gap-4">
               <div class="h-1.5 w-24 bg-[#6a0d5f] rounded-full relative overflow-hidden animate-pulse-slow">
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer-fast"></div>
               </div>
-              <p class="text-gray-500 font-medium uppercase tracking-[0.2em] text-xs">
+              <p class="text-gray-500 font-medium uppercase tracking-[0.1em] text-xs">
                 Découvrez les dernières pépites de notre collection
               </p>
             </div>
           </div>
           <NuxtLink to="/catalogue"
-            class="group flex items-center gap-3 px-8 py-4 bg-gray-50 hover:bg-[#6a0d5f] text-[#6a0d5f] hover:text-white rounded-full font-bold text-sm transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-[#6a0d5f]/20 uppercase tracking-widest border border-gray-100">
+            class="group flex items-center gap-3 px-8 py-4 bg-gray-50 hover:bg-[#6a0d5f] text-[#6a0d5f] hover:text-white rounded-full font-bold text-sm transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-[#6a0d5f]/20 uppercase border border-gray-100">
             Explorer tout le catalogue
             <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none"
               stroke="currentColor" viewBox="0 0 24 24">
@@ -261,9 +279,9 @@
               <div v-for="(book, index) in selectionMois" :key="book.id"
                 v-reveal.repeat :class="`reveal-delay-${index * 100}`"
                 @click="navigateTo(`/livres/${book.id}`)"
-                class="cursor-pointer w-64 md:w-72 flex-shrink-0 snap-start group bg-gray-50 rounded-2xl p-4 transition-all duration-500 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 flex flex-col h-full">
+                class="cursor-pointer w-56 md:w-64 flex-shrink-0 snap-start group bg-gray-50 rounded-2xl p-4 transition-all duration-500 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 flex flex-col h-full">
                 
-                <div class="relative aspect-[3/4.2] mb-6 overflow-hidden rounded-xl bg-gray-200">
+                <div class="relative aspect-[2.5/3.5] mb-6 overflow-hidden rounded-xl bg-gray-200">
                    <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-lg font-bold text-[10px] uppercase tracking-widest transition-transform -translate-y-2 group-hover:translate-y-0 duration-500">
@@ -336,7 +354,7 @@
           
           <div class="w-full relative overflow-hidden px-2 py-4">
             <div ref="precedentContainer" class="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory">
-              <div v-for="book in selectionMoisPrecedent" :key="book.id" @click="navigateTo(`/livres/${book.id}`)" class="cursor-pointer w-48 md:w-56 flex-shrink-0 snap-start group space-y-4">
+              <div v-for="book in selectionMoisPrecedent" :key="book.id" @click="navigateTo(`/livres/${book.id}`)" class="cursor-pointer w-40 md:w-48 flex-shrink-0 snap-start group space-y-4">
                  <div class="relative block aspect-[3/4.2] overflow-hidden rounded-xl shadow-lg transition-all duration-500 group-hover:shadow-2xl">
                     <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-[#6a0d5f]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -357,6 +375,28 @@
               <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 px-6 bg-gradient-to-r from-[#6a0d5f] to-[#4a0942] relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 right-0 w-64 h-64 rounded-full bg-white -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-pink-400 translate-y-1/2 -translate-x-1/4 blur-3xl"></div>
+      </div>
+      <div class="relative max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Venez nous rendre visite</h2>
+        <p class="text-white/80 text-lg mb-8">Découvrez notre sélection unique de livres et supports spirituels à Lomé</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <NuxtLink to="/catalogue"
+            class="bg-white text-[#6a0d5f] font-bold px-8 py-4 rounded-full hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-[15px]">
+            Parcourir le catalogue
+          </NuxtLink>
+          <NuxtLink to="/contact"
+            class="bg-white/10 text-white font-bold px-8 py-4 rounded-full border border-white/30 hover:bg-white/20 transition-all hover:-translate-y-0.5 text-[15px]">
+            Nous contacter
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -515,6 +555,15 @@ const topCategories = computed(() => {
 </script>
 
 <style scoped>
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

@@ -1,20 +1,20 @@
 <template>
   <!-- Header fixe -->
   <ClientOnly>
-    <header class="fixed top-0 left-0 right-0 z-50 h-[80px] lg:h-[135px] bg-[#6a0d5f] flex shadow-md">
+    <header class="fixed top-0 left-0 right-0 z-50 h-[60px] lg:h-[100px] bg-[#6a0d5f] flex shadow-md">
 
       <!-- Côté Gauche (Blanc avec la courbe "Bookle") -->
       <!-- Utilisation de z-20 pour que la gauche passe par-dessus la droite -->
       <div
-        class="h-full bg-white flex items-center justify-center relative w-[170px] sm:w-[260px] lg:w-[340px] flex-shrink-0 z-20 transition-all duration-300">
+        class="h-full bg-white flex items-center justify-center relative w-[110px] sm:w-[260px] lg:w-[340px] flex-shrink-0 z-20 transition-all duration-300">
         <NuxtLink to="/"
           class="flex items-center justify-center z-30 transform hover:scale-105 transition-transform duration-300">
           <img src="/logo/logo_librairie(1).png" alt="ICC_Librairie"
-            class="h-[4.5rem] sm:h-[5.5rem] lg:h-[6.5rem] w-auto drop-shadow-md" />
+            class="h-[3.5rem] sm:h-[5.5rem] lg:h-[6.5rem] w-auto drop-shadow-md" />
         </NuxtLink>
 
         <!-- Courbure SVG exacte calquée sur le design "Bookle" -->
-        <svg class="absolute top-0 right-[-59px] h-full w-[60px] text-white pointer-events-none"
+        <svg class="absolute top-0 right-[-39px] sm:right-[-59px] h-full w-[40px] sm:w-[60px] text-white pointer-events-none transition-all duration-300"
           preserveAspectRatio="none" viewBox="0 0 100 100" fill="currentColor">
           <!-- Courbe paramétrée pour garder l'arrondi parfait du haut et tomber droit en bas -->
           <path d="M0,0 L0,100 L97.5,100 L97.5,50 C97.5,30 65,10 0,0 Z" />
@@ -30,7 +30,7 @@
           style="clip-path: polygon(0 0, 100% 0, 100% 100%, 45px 100%);">
           <!-- Left spacing and clip-path create a slanted edge parallel to the white curve with a violet gap -->
           <div class="flex items-center gap-3 xl:gap-4 font-medium tracking-wide whitespace-nowrap">
-            <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
+            <a href="tel:+22892090204" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path
@@ -38,16 +38,16 @@
                 </path>
               </svg>
               <span>+228 92 09 02 04</span>
-            </div>
+            </a>
             <div class="w-px h-5 bg-white/20"></div>
-            <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
+            <a href="mailto:contact@icc-librairie.com" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
               <span>contact@icc-librairie.com</span>
-            </div>
+            </a>
             <div class="w-px h-5 bg-white/20"></div>
             <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
@@ -94,23 +94,25 @@
           <!-- Main Navigation Links (Desktop) -->
           <nav class="hidden md:flex flex-1 items-center justify-center xl:justify-start px-4 lg:px-8 gap-6 lg:gap-10">
             <NuxtLink to="/"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide ml-15 mr-15">
+              exact-active-class="is-active"
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide ml-15 mr-15">
               Accueil
               <span
-                class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+                class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </NuxtLink>
 
             <!-- Catalogue avec Dropdown -->
             <div class="group relative py-2">
               <NuxtLink to="/catalogue"
-                class="font-bold text-white/90 hover:text-white transition-colors text-[15px] xl:text-[16px] tracking-wide flex items-center gap-1.5 mr-15">
+                active-class="is-active"
+                class="font-bold text-white/90 hover:text-white transition-colors text-[14px] xl:text-[15px] tracking-wide flex items-center gap-1.5 mr-15">
                 Catalogue
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none"
                   stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                 </svg>
                 <span
-                  class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+                  class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
               </NuxtLink>
 
               <!-- Dropdown Menu -->
@@ -120,7 +122,7 @@
                   class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden py-2">
                   <!-- Tous les livres -->
                   <NuxtLink to="/catalogue"
-                    class="flex items-center gap-3 px-5 py-3 text-gray-700 hover:text-[#6a0d5f] hover:bg-gray-50 transition-colors font-semibold text-sm border-b border-gray-100">
+                    class="flex items-center gap-3 px-5 py-3 text-gray-700 uppercase hover:text-[#6a0d5f] hover:bg-gray-50 transition-colors font-semibold text-sm border-b border-gray-100">
                     <svg class="w-4 h-4 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -132,7 +134,7 @@
                   <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
                     <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
                       :to="`/catalogue?category=${cat.libelle}`"
-                      class="flex items-center px-5 py-2.5 text-gray-600 hover:text-[#6a0d5f] hover:bg-gray-50 transition-all text-sm font-medium">
+                      class="flex uppercase items-center px-5 py-2.5 text-gray-600 hover:text-[#6a0d5f] hover:bg-gray-50 transition-all text-sm font-medium">
                       {{ cat.libelle }}
                     </NuxtLink>
                   </div>
@@ -141,32 +143,36 @@
             </div>
 
             <NuxtLink v-if="isLoggedIn" to="/dashboard/commandes"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide mr-15">
+              active-class="is-active"
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide mr-15">
               Mes commandes
               <span
-                class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+                class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </NuxtLink>
 
             <NuxtLink v-if="isLoggedIn" to="/dashboard"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide">
+              exact-active-class="is-active"
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               Mon compte
               <span
-                class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+                class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </NuxtLink>
 
             <!-- À propos et Contact : visibles uniquement si non connecté -->
             <NuxtLink v-if="!isLoggedIn" to="/a-propos"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide mr-15">
+              active-class="is-active"
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide mr-15">
               À propos
               <span
-                class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+                class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </NuxtLink>
 
             <NuxtLink v-if="!isLoggedIn" to="/contact"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[15px] xl:text-[16px] tracking-wide">
+              active-class="is-active"
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               Contact
               <span
-                class="absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
+                class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </NuxtLink>
           </nav>
 
@@ -177,9 +183,9 @@
 
             <!-- Panier (Bookle style: white exact circle with dark icon) -->
             <NuxtLink to="/panier"
-              class="group relative flex items-center justify-center bg-white rounded-full w-[46px] h-[46px] lg:w-[50px] lg:h-[50px] shadow-sm hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all duration-300 hover:-translate-y-1 z-20">
+              class="group relative flex items-center justify-center bg-white rounded-full w-[46px] h-[46px] lg:w-[40px] lg:h-[40px] shadow-sm hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all duration-300 hover:-translate-y-1 z-20">
               <svg
-                class="w-5 h-5 lg:w-6 lg:h-6 text-[#1a1a1a] transition-all duration-300 group-hover:text-[#6a0d5f] group-hover:rotate-[-8deg] group-hover:scale-110"
+                class="w-5 h-5 lg:w-5 lg:h-5 text-[#1a1a1a] transition-all duration-300 group-hover:text-[#6a0d5f] group-hover:rotate-[-8deg] group-hover:scale-110"
                 fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round">
                 <circle cx="9" cy="21" r="1"></circle>
@@ -259,13 +265,13 @@
               <div v-show="isCatalogueExtended"
                 class="flex flex-col gap-1 pl-6 overflow-hidden transition-all duration-300">
                 <NuxtLink to="/catalogue"
-                  class="flex items-center px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
+                  class="flex items-center uppercase px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
                   @click="isMenuOpen = false">
                   Tous les livres
                 </NuxtLink>
                 <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
                   :to="`/catalogue?category=${cat.libelle}`"
-                  class="flex items-center px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
+                  class="flex items-center uppercase px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
                   @click="isMenuOpen = false">
                   {{ cat.libelle }}
                 </NuxtLink>
@@ -377,7 +383,7 @@
   </ClientOnly>
 
   <!-- Marge pour compenser le header fixe -->
-  <div class="h-[80px] lg:h-[135px]"></div>
+  <div class="h-[60px] lg:h-[100px]"></div>
 </template>
 
 <script setup lang="ts">
@@ -464,6 +470,14 @@ const handleLogout = () => {
 </script>
 
 <style scoped>
+.is-active {
+  color: white !important;
+}
+
+.is-active .nav-indicator {
+  width: 100% !important;
+}
+
 .badge {
   position: absolute;
   top: -6px;
