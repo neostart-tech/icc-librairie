@@ -424,9 +424,7 @@ const book = computed(() => {
     description: b.description,
     authorBio: b.auteurRel?.biographie || auteurStore.auteurs.find(a => a.nom === (b.auteurRel?.nom || b.auteur))?.biographie || "",
     stockAvailable: b.stock?.quantite ?? 0,
-    image: b.images?.length
-      ? `${config.public.storageBase}/${b.images[0].path}`
-      : "/images/livre.jpg",
+    image: livreStore.getCoverImage(b),
   };
 });
 
@@ -445,9 +443,7 @@ const relatedBooks = computed(() => {
       oldPrice: b.prix_promo ? b.prix : null,
       isPromo: !!b.prix_promo,
       category: b.categorie?.libelle,
-      image: b.images?.length
-        ? `${config.public.storageBase}/${b.images[0].path}`
-        : "/images/livre.jpg",
+      image: livreStore.getCoverImage(b),
     }));
   nextTick(updateScrollState);
   return list;
@@ -462,9 +458,7 @@ const authorBooks = computed(() => {
     .map((b) => ({
       id: b.id,
       title: b.titre,
-      image: b.images?.length
-        ? `${config.public.storageBase}/${b.images[0].path}`
-        : "/images/livre.jpg",
+      image: livreStore.getCoverImage(b),
     }));
 });
 

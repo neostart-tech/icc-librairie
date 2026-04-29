@@ -511,9 +511,7 @@ const enVogue = computed(() => {
     oldPrice: book.prix_promo ? book.prix : null,
     isPromo: !!book.prix_promo,
     stockAvailable: book.stock?.quantite ?? 0,
-    image: book.images?.length
-      ? `${config.public.storageBase}/${book.images[0].path}`
-      : "/images/livre.jpg",
+    image: livreStore.getCoverImage(book),
   };
 });
 
@@ -528,9 +526,7 @@ const books = computed(() =>
     isPromo: !!livre.prix_promo,
     stockAvailable: livre.stock?.quantite ?? 0,
     category: livre.categorie?.libelle ?? "Autre",
-    image: livre.images?.length
-      ? `${config.public.storageBase}/${livre.images[0].path}`
-      : "/images/livre.jpg",
+    image: livreStore.getCoverImage(livre),
     createdAt: new Date(livre.created_at || Date.now())
   }))
 );
