@@ -432,27 +432,21 @@ const enVogue = computed(() => {
   if (!book) return null;
   return {
     ...book,
-    image: book.images?.length
-      ? `${config.public.storageBase}/${book.images[0].path}`
-      : "/images/livre.jpg",
+    image: livreStore.getCoverImage(book),
   };
 });
 
 const selectionMois = computed(() => {
   return (livreStore.selectionMois || []).map(book => ({
     ...book,
-    image: book.images?.length
-      ? `${config.public.storageBase}/${book.images[0].path}`
-      : "/images/livre.jpg",
+    image: livreStore.getCoverImage(book),
   }));
 });
 
 const selectionMoisPrecedent = computed(() => {
   return (livreStore.selectionMoisPrecedent || []).map(book => ({
     ...book,
-    image: book.images?.length
-      ? `${config.public.storageBase}/${book.images[0].path}`
-      : "/images/livre.jpg",
+    image: livreStore.getCoverImage(book),
   }));
 });
 
@@ -521,12 +515,9 @@ const recentBooks = computed(() => {
     .sort((a, b) => b.id - a.id)
     .slice(0, 4)
     .map(book => {
-      const imagePath = book.images?.length
-        ? `${config.public.storageBase}/${book.images[0].path}`
-        : "/images/livre.jpg";
       return {
         ...book,
-        image: imagePath,
+        image: livreStore.getCoverImage(book),
         categorie: book.categorie || categorieStore.categories.find(c => c.id === book.categorie_id),
         isPromo: !!book.prix_promo
       };
@@ -541,14 +532,11 @@ const topCategories = computed(() => {
   return cats.map((cat) => {
     const catLivres = livreStore.livres.filter(l => l.categorie_id === cat.id);
     const lastBook = catLivres[0];
-    const imagePath = lastBook?.images?.length
-      ? `${config.public.storageBase}/${lastBook.images[0].path}`
-      : "/images/livre.jpg";
 
     return {
       ...cat,
       bookCount: catLivres.length,
-      lastBookImage: imagePath
+      lastBookImage: lastBook ? livreStore.getCoverImage(lastBook) : "/images/livre.jpg"
     };
   });
 });

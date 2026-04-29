@@ -13,7 +13,7 @@ export interface Livre {
   prix: number;
   prix_promo?: number;
   categorie_id: number;
-  images?: Image[];
+  image?: string;
   categorie?: any;
   auteurRel?: any;
   stock?: any;
@@ -31,6 +31,16 @@ export const useLivreStore = defineStore("livre", {
     enVogue: null as Livre | null,
     loading: false,
   }),
+
+  getters: {
+    getCoverImage: () => (livre: Livre) => {
+      if (!livre) return "/images/livre.jpg";
+      const config = useRuntimeConfig();
+      return livre.image
+        ? `${config.public.storageBase}/${livre.image}`
+        : "/images/livre.jpg";
+    },
+  },
 
   /* =========================
    * ACTIONS
@@ -83,7 +93,7 @@ export const useLivreStore = defineStore("livre", {
       prix: number;
       prix_promo?: number;
       categorie_id: number;
-      images?: File[];
+      image?: File;
     }) {
       const { $api } = useNuxtApp();
       this.loading = true;
@@ -103,9 +113,9 @@ export const useLivreStore = defineStore("livre", {
           formData.append("prix_promo", payload.prix_promo.toString());
         }
 
-        payload.images?.forEach((file) => {
-          formData.append("images[]", file);
-        });
+        if (payload.image) {
+          formData.append("image", payload.image);
+        }
 
         const res: any = await $api("/livres", {
           method: "POST",
@@ -134,7 +144,7 @@ export const useLivreStore = defineStore("livre", {
         prix: number;
         prix_promo: number;
         categorie_id: number;
-        images: File[];
+        image: File;
       }>,
     ) {
       const { $api } = useNuxtApp();
@@ -146,8 +156,8 @@ export const useLivreStore = defineStore("livre", {
         Object.entries(payload).forEach(([key, value]) => {
           if (value === undefined) return;
 
-          if (key === "images" && Array.isArray(value)) {
-            value.forEach((file) => formData.append("images[]", file));
+          if (key === "image" && value instanceof File) {
+            formData.append("image", value);
           } else {
             formData.append(key, value.toString());
           }
