@@ -1,8 +1,16 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[#6a0d5f] px-4 py-8" style="background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 28px 28px;">
-    
+  <div class="relative min-h-screen flex items-center justify-center px-4 py-8 overflow-hidden">
+    <!-- Image de fond -->
+    <img
+      src="/images/a-propos/img1.jpg"
+      alt="Background"
+      class="absolute inset-0 w-full h-full object-cover object-center scale-105"
+    />
+    <!-- Overlay dégradé violet -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/80 via-[#6a0d5f]/60 to-[#3a0532]/90"></div>
+
     <!-- Card principale split-screen -->
-    <div v-reveal class="w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[580px]">
+    <div v-reveal class="relative z-10 w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[580px]">
 
       <!-- ========== PANNEAU GAUCHE ========== -->
       <div class="hidden md:flex w-[45%] bg-[#6a0d5f] flex-col justify-between p-12 relative overflow-hidden"

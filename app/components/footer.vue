@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="relative bg-gradient-to-b from-[#6a0d5f] to-[#3a0532] text-white pt-24 mt-12 overflow-hidden shadow-[0_-10px_40px_rgba(106,13,95,0.1)]">
+    class="relative bg-gradient-to-b from-[#6a0d5f] to-[#3a0532] text-white pt-2 mt-1 overflow-hidden shadow-[0_-10px_40px_rgba(106,13,95,0.1)]">
     <!-- Décoration d'arrière-plan avec cercles flous (Glassmorphism effect) -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <div
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Séparateur vague en haut -->
-    <div
+    <!-- <div
       class="absolute top-0 left-0 w-full overflow-hidden leading-none z-10 text-white transform rotate-180 drop-shadow-sm">
       <svg class="relative block w-[calc(110%+1.3px)] h-[40px] md:h-[60px]" xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1200 120" preserveAspectRatio="none" fill="currentColor">
@@ -25,7 +25,7 @@
           d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z">
         </path>
       </svg>
-    </div>
+    </div> -->
 
     <!-- Container principal -->
     <div class="relative z-20 container mx-auto px-6 sm:px-10 lg:px-20 py-12 md:py-16">
@@ -47,7 +47,7 @@
                 class="font-bold text-xl sm:text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-pink-200 group-hover:translate-x-1 transition-transform duration-300">
                 Librairie ICC</h3>
               <p
-                class="text-xl sm:text-2xl text-white/80 font-bold tracking-[0.2em] uppercase group-hover:translate-x-1 transition-transform duration-300 delay-75">
+                class="text-xl sm:text-2xl text-white/80 font-bold uppercase group-hover:translate-x-1 transition-transform duration-300 delay-75">
                 <span class="text-pink-300">LOMÉ</span></p>
             </div>
           </div>
@@ -118,6 +118,7 @@
                 </svg>
               </div>
               <div class="flex flex-col font-medium text-[15px]">
+                <a href="tel:+22879762733" class="hover:text-white transition-colors duration-300 block">+228 79 76 27 33</a>
                 <a href="tel:+22892090204" class="hover:text-white transition-colors duration-300 block">+228 92 09 02 04</a>
                 <a href="tel:+22890009462" class="hover:text-white transition-colors duration-300 block mt-0.5">+228 90 00 94 62</a>
               </div>
@@ -131,7 +132,7 @@
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
               </div>
-              <a href="mailto:contact@icc-librairie.com" class="hover:text-white transition-colors duration-300 font-medium text-[15px]">contact@icc-librairie.com</a>
+              <a href="mailto:librairieicclome05gmail.com" class="hover:text-white transition-colors duration-300 font-medium text-[15px]">librairieicclome05gmail.com</a>
             </li>
 
             <!-- Adresse -->

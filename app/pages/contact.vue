@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-white">
     <!-- Hero Section -->
-    <section class="relative h-[50vh] min-h-[340px] overflow-hidden">
+    <section class="relative h-[55vh] min-h-[380px] overflow-hidden">
       <img
         src="/images/a-propos/img2.jpg"
         alt="Contact Librairie ICC"
@@ -19,12 +19,12 @@
           La Librairie ICC Hountigomé à Lomé, Togo
         </p>
       </div>
-      <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+      <!-- <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
         <svg class="relative block w-[calc(100%+1.3px)] h-[60px]" xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120" preserveAspectRatio="none" fill="white">
           <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" />
         </svg>
-      </div>
+      </div> -->
     </section>
 
     <!-- Section Coordonnées + Carte -->
@@ -59,7 +59,7 @@
           </div>
 
           <!-- Email -->
-          <a href="mailto:contact@icc-librairie.com"
+          <a href="mailto:librairieicclome05gmail.com"
             class="group flex items-center gap-4 p-5 bg-gray-50 rounded-3xl border border-gray-100 hover:border-[#6a0d5f]/30 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div class="w-12 h-12 rounded-2xl bg-[#6a0d5f]/10 flex items-center justify-center group-hover:bg-[#6a0d5f] transition-colors duration-300 flex-shrink-0">
               <svg class="w-5 h-5 text-[#6a0d5f] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,7 +68,7 @@
               </svg>
             </div>
             <div>
-              <p class="font-bold text-gray-900 text-[15px] group-hover:text-[#6a0d5f] transition-colors">contact@icc-librairie.com</p>
+              <p class="font-bold text-gray-900 text-[15px] group-hover:text-[#6a0d5f] transition-colors">librairieicclome05gmail.com</p>
               <p class="text-gray-400 text-xs font-medium">Email</p>
             </div>
           </a>
@@ -177,9 +177,9 @@ useHead({
 })
 
 const phones = [
-  { number: '+228 92 09 02 04', raw: '+22892090204', label: 'Principal' },
+  { number: '+228 79 76 27 33', raw: '+22879762733', label: 'Principal' },
+  { number: '+228 92 09 02 04', raw: '+22892090204', label: 'Secondaire' },
   { number: '+228 90 00 94 62', raw: '+22890009462', label: 'Secondaire' },
-  { number: '+228 79 76 27 33', raw: '+22879762733', label: 'Secondaire' },
 ]
 
 const schedules = [
