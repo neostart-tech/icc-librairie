@@ -180,7 +180,7 @@
 
 <script setup>
 import { computed } from "vue";
-import Breadcrumb from "@/components/Breadcrumb.vue";
+import Breadcrumb from "~/components/Breadcrumb.vue";
 import { useCartStore } from "~~/stores/cart";
 import Swal from 'sweetalert2';
 

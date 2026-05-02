@@ -36,7 +36,13 @@ export interface Commande {
 	id: string;
 	reference: string;
 	prix_total: number;
-	statut: "en_cours" | "termine" | "traite";
+	type_livraison: "livraison" | "retrait";
+	adresse_livraison?: string;
+	numero_livraison?: string;
+	frais_livraison: number;
+	statut: "en_cours" | "en_attente_validation" | "valide" | "paiement_refuse" | "traite";
+	preuve_paiement?: string;
+	reference_paiement_client?: string;
 	created_at: string;
 
 	user?: User;
@@ -110,28 +116,18 @@ export const useCommandeStore = defineStore("commande", {
 		},
 
 		/** ======================
-		 *  TRAITER UNE COMMANDE
+		 *  DECLARER PAIEMENT (USER)
 		 ======================= */
-		async traiterCommande(id: string) {
+		async declarerPaiement(id: string, formData: FormData) {
 			const { $api } = useNuxtApp();
 			this.loading = true;
 
 			try {
-				const res: any = await $api(`/commandes/${id}/traiter`, {
-					method: "PUT",
+				const res: any = await $api(`/commandes/${id}/declarer-paiement`, {
+					method: "POST",
+					body: formData,
 				});
-
-				// Met à jour la commande dans la liste
-				const index = this.commandes.findIndex((c) => c.id === id);
-				if (index !== -1) {
-					this.commandes[index].statut = "traite";
-				}
-
-				// Met à jour la commande courante si ouverte
-				if (this.commande?.id === id) {
-					this.commande.statut = "traite";
-				}
-
+				await this.fetchMyOrders();
 				return res;
 			} finally {
 				this.loading = false;
@@ -139,11 +135,86 @@ export const useCommandeStore = defineStore("commande", {
 		},
 
 		/** ======================
-		 *  CREER UNE COMMANDE
+		 *  VALIDER PAIEMENT (ADMIN)
+		 ======================= */
+		async validerPaiement(id: string) {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+
+			try {
+				const res: any = await $api(`/commandes/${id}/valider-paiement`, {
+					method: "POST",
+				});
+				await this.fetchAllOrders();
+				return res;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		/** ======================
+		 *  REFUSER PAIEMENT (ADMIN)
+		 ======================= */
+		async refuserPaiement(id: string, motif: string) {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+
+			try {
+				const res: any = await $api(`/commandes/${id}/refuser-paiement`, {
+					method: "POST",
+					body: { motif },
+				});
+				await this.fetchAllOrders();
+				return res;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		/** ======================
+		 *  FINALISER COMMANDE (ADMIN)
+		 ======================= */
+		async finaliserCommande(id: string) {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+
+			try {
+				const res: any = await $api(`/commandes/${id}/finaliser`, {
+					method: "POST",
+				});
+				await this.fetchAllOrders();
+				return res;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		/** ======================
+		 *  VENTE COMPTOIR (ADMIN)
+		 ======================= */
+		async venteComptoir(payload: any) {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+
+			try {
+				const res: any = await $api("/commandes/vente-comptoir", {
+					method: "POST",
+					body: payload,
+				});
+				await this.fetchAllOrders();
+				return res;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		/** ======================
+		 *  CREER UNE COMMANDE (USER)
 		 ======================= */
 		async createCommande(payload: {
-			phone: string;
-			gateway_id: number;
+			type_livraison: "livraison" | "retrait";
+			adresse_livraison?: string;
+			numero_livraison?: string;
 			livres: {
 				livre_id: string;
 				quantite: number;
@@ -157,13 +228,6 @@ export const useCommandeStore = defineStore("commande", {
 					method: "POST",
 					body: payload,
 				});
-
-				/**
-				 * res = {
-				 *  success: true,
-				 *  payment_url: string
-				 * }
-				 */
 				return res;
 			} catch (error: any) {
 				throw {
