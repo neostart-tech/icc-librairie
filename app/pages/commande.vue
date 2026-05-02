@@ -208,8 +208,7 @@ const formatPrice = (price) => {
 
 const fetchSettings = async () => {
   try {
-    const res = await $api('/settings');
-    const data = res?.data;
+    const data = await $api('/settings');
     deliveryFee.value = parseInt(data?.delivery_fee || 0);
   } catch (e) {
     console.error("Erreur settings:", e);
