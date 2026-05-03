@@ -92,10 +92,10 @@
           class="flex-1 w-full flex items-center justify-end md:justify-between pr-4 sm:pr-8 lg:pr-12 pl-[30px] sm:pl-[40px] text-white gap-4">
 
           <!-- Main Navigation Links (Desktop) -->
-          <nav class="hidden md:flex flex-1 items-center justify-center xl:justify-start px-4 lg:px-8 gap-6 lg:gap-10">
+          <nav class="hidden md:flex flex-1 items-center justify-center px-4 lg:px-8 gap-8 lg:gap-14 xl:gap-20">
             <NuxtLink to="/"
               exact-active-class="is-active"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide ml-15 mr-15">
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               Accueil
               <span
                 class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
@@ -105,7 +105,7 @@
             <div class="group relative py-2">
               <NuxtLink to="/catalogue"
                 active-class="is-active"
-                class="font-bold text-white/90 hover:text-white transition-colors text-[14px] xl:text-[15px] tracking-wide flex items-center gap-1.5 mr-15">
+                class="font-bold text-white/90 hover:text-white transition-colors text-[14px] xl:text-[15px] tracking-wide flex items-center gap-1.5">
                 Catalogue
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none"
                   stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@
 
             <NuxtLink v-if="isLoggedIn" to="/dashboard/commandes"
               active-class="is-active"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide mr-15">
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               Mes commandes
               <span
                 class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
@@ -161,7 +161,7 @@
             <!-- À propos et Contact : visibles uniquement si non connecté -->
             <NuxtLink v-if="!isLoggedIn" to="/a-propos"
               active-class="is-active"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide mr-15">
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               À propos
               <span
                 class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
