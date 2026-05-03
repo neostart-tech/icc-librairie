@@ -284,57 +284,61 @@
             <h2 class="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
               Sélection de <span class="text-[#6a0d5f]">l'Année</span>
             </h2>
-            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Les ouvrages qui ont marqué l'année 2026</p>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Les ouvrages qui ont marqué l'année {{ new Date().getFullYear() }}</p>
           </div>
           
-          <div class="flex gap-3">
-            <button @click="scrollSection('anneeContainer', 'left')"
-              class="w-14 h-14 bg-gray-50 text-[#6a0d5f] rounded-2xl flex items-center justify-center hover:bg-[#6a0d5f] hover:text-white transition-all shadow-sm">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-            <button @click="scrollSection('anneeContainer', 'right')"
-              class="w-14 h-14 bg-gray-50 text-[#6a0d5f] rounded-2xl flex items-center justify-center hover:bg-[#6a0d5f] hover:text-white transition-all shadow-sm">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-          </div>
         </div>
 
-        <div ref="anneeContainer" class="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-8">
-          <div v-for="(book, index) in selectionAnnee" :key="book.id"
-            v-reveal.repeat :class="`reveal-delay-${index * 100}`"
-            @click="navigateTo(`/livres/${book.id}`)"
-            class="cursor-pointer w-64 md:w-72 flex-shrink-0 snap-start group">
-            
-            <div class="relative aspect-[3/4.2] mb-6 overflow-hidden rounded-[2rem] bg-gray-100 shadow-xl group-hover:shadow-2xl transition-all duration-700">
-               <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
-               <div class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div class="absolute bottom-6 left-6 right-6 flex justify-between items-center">
-                     <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-xl">Voir</span>
-                     <button @click.stop="addToCart(book)" class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center shadow-xl">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
-                        </svg>
-                     </button>
-                  </div>
-               </div>
-            </div>
+        <div class="relative group">
+          <!-- Left Button -->
+          <button @click="scrollSection('anneeContainer', 'left')"
+            class="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/95 backdrop-blur-sm text-[#6a0d5f] rounded-2xl flex items-center justify-center hover:bg-[#6a0d5f] hover:text-white transition-all shadow-xl border border-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100 -mt-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
 
-            <div class="space-y-2 px-2">
-               <h3 class="text-base font-black text-gray-900 uppercase tracking-tight line-clamp-1 group-hover:text-[#6a0d5f] transition-colors">
-                 {{ book.titre }}
-               </h3>
-               <div class="flex items-center justify-between">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate max-w-[150px]">
-                    {{ book.auteurRel?.nom || book.auteur }}
-                  </p>
-                  <p class="text-sm font-black text-[#6a0d5f]">{{ formatPrice(book.prix_promo || book.prix) }}</p>
-               </div>
+          <div ref="anneeContainer" class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-8">
+            <div v-for="(book, index) in selectionAnnee" :key="book.id"
+              v-reveal.repeat :class="`reveal-delay-${index * 100}`"
+              @click="navigateTo(`/livres/${book.id}`)"
+              class="cursor-pointer w-56 md:w-60 flex-shrink-0 snap-start group/card">
+              
+              <div class="relative aspect-[3/4.2] mb-5 overflow-hidden rounded-[2rem] bg-gray-100 shadow-xl group-hover/card:shadow-2xl transition-all duration-700">
+                 <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-1000 group-hover/card:scale-110" />
+                 <div class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/80 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
+                    <div class="absolute bottom-6 left-6 right-6 flex justify-between items-center">
+                       <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-xl">Voir</span>
+                       <button @click.stop="addToCart(book)" class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center shadow-xl">
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
+                          </svg>
+                       </button>
+                    </div>
+                 </div>
+              </div>
+
+              <div class="space-y-2 px-2">
+                 <h3 class="text-base font-black text-gray-900 uppercase tracking-tight line-clamp-1 group-hover/card:text-[#6a0d5f] transition-colors">
+                   {{ book.titre }}
+                 </h3>
+                 <div class="flex items-center justify-between">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate max-w-[150px]">
+                      {{ book.auteurRel?.nom || book.auteur }}
+                    </p>
+                    <p class="text-sm font-black text-[#6a0d5f]">{{ formatPrice(book.prix_promo || book.prix) }}</p>
+                 </div>
+              </div>
             </div>
           </div>
+
+          <!-- Right Button -->
+          <button @click="scrollSection('anneeContainer', 'right')"
+            class="absolute -right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/95 backdrop-blur-sm text-[#6a0d5f] rounded-2xl flex items-center justify-center hover:bg-[#6a0d5f] hover:text-white transition-all shadow-xl border border-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100 -mt-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>

@@ -37,7 +37,15 @@
     </section>
 
     <!-- Content Grid -->
-       <main class="max-w-7xl mx-auto px-6 -mt-16 relative z-20 space-y-8">
+    <main class="max-w-7xl mx-auto px-6 -mt-16 relative z-20 space-y-8">
+
+      <!-- Action Quick Bar -->
+      <div v-reveal class="flex justify-end">
+        <button @click="showPaymentInstructions" class="bg-gray-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#6a0d5f] transition-all flex items-center justify-center gap-2 shadow-xl">
+          <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Instructions de paiement
+        </button>
+      </div>
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
          <div v-reveal class="bg-white/80 backdrop-blur-xl rounded-xl p-5 shadow-2xl border border-white hover:-translate-y-2 transition-transform duration-500">
@@ -301,10 +309,13 @@ import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "~~/stores/user";
 import { useCommandeStore } from "~~/stores/commande";
 import { useNotificationStore } from "~~/stores/notification";
+import { useSettingsStore } from "~~/stores/settings";
+import Swal from 'sweetalert2';
 
 const userStore = useUserStore();
 const commandeStore = useCommandeStore();
 const notificationStore = useNotificationStore();
+const settingsStore = useSettingsStore();
 
 const showDetailsModal = ref(false);
 const selectedOrder = ref(null);
@@ -367,9 +378,22 @@ onMounted(async () => {
   await Promise.all([
     userStore.fetchProfile(),
     commandeStore.fetchMyOrders(),
-    notificationStore.fetchNotifications()
+    notificationStore.fetchNotifications(),
+    settingsStore.fetchSettings()
   ]);
 });
+
+const showPaymentInstructions = () => {
+  const instructions = settingsStore.settings?.payment_message || 'Aucune instruction disponible.';
+  Swal.fire({
+    title: 'Instructions de paiement',
+    html: `<div class="text-left text-sm text-gray-600 font-medium whitespace-pre-line">${instructions}</div>`,
+    icon: 'info',
+    confirmButtonColor: '#6a0d5f',
+    confirmButtonText: 'Compris',
+    customClass: { popup: 'rounded-[2rem]' }
+  });
+};
 
 definePageMeta({
   layout: "default",

@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 
 export interface Settings {
-	id?: number;
-	payment_instructions: string;
+	payment_message: string;
 	delivery_fee: number;
 }
 
@@ -18,7 +17,7 @@ export const useSettingsStore = defineStore("settings", {
 			this.loading = true;
 			try {
 				const res: any = await $api("/settings");
-				this.settings = res?.data ?? null;
+				this.settings = res ?? null;
 				return res;
 			} catch (error) {
 				console.error("Erreur fetchSettings", error);
@@ -35,7 +34,7 @@ export const useSettingsStore = defineStore("settings", {
 					method: "POST",
 					body: payload,
 				});
-				this.settings = res?.data ?? null;
+				this.settings = res ?? null;
 				return res;
 			} catch (error) {
 				console.error("Erreur updateSettings", error);

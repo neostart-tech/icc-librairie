@@ -23,7 +23,16 @@
     </section>
 
     <!-- Stats Section -->
-     <div class="max-w-7xl mx-auto px-6 -mt-16 relative z-20">
+     <div class="max-w-7xl mx-auto px-6 -mt-16 relative z-20 space-y-8">
+
+      <!-- Action Quick Bar -->
+      <div v-reveal class="flex justify-end">
+        <button @click="showPaymentInstructions" class="bg-gray-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#6a0d5f] transition-all flex items-center justify-center gap-2 shadow-xl">
+          <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Instructions de paiement
+        </button>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
          <div v-reveal class="bg-white shadow-2xl shadow-purple-900/5 rounded-xl p-5 border border-white flex items-center justify-between group hover:scale-[1.02] transition-all duration-500">
            <div class="space-y-1">
@@ -82,12 +91,22 @@
              <div class="space-y-1 flex-1">
                <div class="flex flex-wrap items-center gap-3">
                   <span class="text-lg font-bold text-gray-900 tracking-wide">#{{ order.reference }}</span>
-                  <span 
-                    class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm border"
-                    :class="getStatusClasses(order.statut)"
-                  >
-                    {{ getStatusLabel(order.statut) }}
-                  </span>
+                  <div class="flex items-center gap-2">
+                    <span 
+                      class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm border"
+                      :class="getStatusClasses(order.statut)"
+                    >
+                      {{ getStatusLabel(order.statut) }}
+                    </span>
+                    <button 
+                      v-if="order.statut === 'paiement_refuse'" 
+                      @click.stop="openRefusalReason(order)"
+                      class="w-6 h-6 rounded-full bg-red-100 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                      title="Voir le motif du refus"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                  </div>
                </div>
                <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
                   <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
@@ -251,15 +270,34 @@
         </div>
       </div>
     </Transition>
+
+    <!-- Modal Motif Refus -->
+    <Transition name="modal">
+      <div v-if="showRefusalModal" class="fixed inset-0 z-[120] flex items-center justify-center px-6 py-10" @click.self="showRefusalModal = false">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-8 animate-fadeInUp text-center">
+          <div class="w-16 h-16 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 uppercase tracking-wide mb-2">Motif du refus</h3>
+          <p class="text-sm text-gray-600 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">{{ refusalReason || 'Aucun motif précisé.' }}</p>
+          <button @click="showRefusalModal = false" class="w-full bg-gray-900 text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-[#6a0d5f] transition-all">
+            Fermer
+          </button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useCommandeStore } from "~~/stores/commande";
+import { useSettingsStore } from "~~/stores/settings";
 import Swal from 'sweetalert2';
 
 const commandeStore = useCommandeStore();
+const settingsStore = useSettingsStore();
 const currentPage = ref(1);
 const itemsPerPage = 8;
 
@@ -271,6 +309,9 @@ const selectedOrderForDecl = ref(null);
 const declarationRef = ref("");
 const declarationFile = ref(null);
 const loadingDeclaration = ref(false);
+
+const showRefusalModal = ref(false);
+const refusalReason = ref("");
 
 const formatPrice = (price) => {
   const amount = parseFloat(price);
@@ -329,6 +370,11 @@ const openDeclarationModal = (order) => {
   showDeclarationModal.value = true;
 };
 
+const openRefusalReason = (order) => {
+  refusalReason.value = order.motif_refus_paiement;
+  showRefusalModal.value = true;
+};
+
 const handleFileChange = (e) => {
   declarationFile.value = e.target.files[0];
 };
@@ -365,9 +411,22 @@ const submitDeclaration = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   commandeStore.fetchMyOrders();
+  await settingsStore.fetchSettings();
 });
+
+const showPaymentInstructions = () => {
+  const instructions = settingsStore.settings?.payment_message || 'Aucune instruction disponible.';
+  Swal.fire({
+    title: 'Instructions de paiement',
+    html: `<div class="text-left text-sm text-gray-600 font-medium whitespace-pre-line">${instructions}</div>`,
+    icon: 'info',
+    confirmButtonColor: '#6a0d5f',
+    confirmButtonText: 'Compris',
+    customClass: { popup: 'rounded-[2rem]' }
+  });
+};
 
 definePageMeta({
   layout: "default",
