@@ -1,5 +1,5 @@
 <template>
-  <section class="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden group">
+  <section class="relative w-full h-[550px] md:h-[500px] lg:h-[600px] overflow-hidden group">
     <!-- BANNIÈRES (CARROUSEL) -->
     <transition-group name="fade" tag="div" class="absolute inset-0">
       <div v-for="(img, index) in images" :key="index" v-show="currentIndex === index"
@@ -13,8 +13,8 @@
 
     <!-- CONTENU -->
     <div
-      class="relative z-10 h-full flex px-6 sm:px-12 md:px-20 lg:px-32 max-w-[1400px] mx-auto overflow-hidden">
-      <div class="text-left text-white max-w-2xl transform transition-all duration-700 translate-y-0 opacity-100">
+      class="relative z-10 h-full flex px-4 sm:px-8 md:px-8 lg:px-8 max-w-[1400px] mx-auto overflow-hidden">
+      <div class="text-white max-w-2xl transform transition-all duration-700 translate-y-0 opacity-100">
         <h1
           class="animate-title text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mt-30 mb-4 leading-tight tracking-wide">
           <span
@@ -58,7 +58,7 @@
     </div>
 
     <!-- CONTROLES DU CARROUSEL (Flèches) -->
-    <button @click="prevSlide"
+    <!-- <button @click="prevSlide"
       class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/20 hover:bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 backdrop-blur-sm">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -69,7 +69,7 @@
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
       </svg>
-    </button>
+    </button> -->
 
     <!-- INDICATEURS (Points progressifs) -->
     <div class="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-3">

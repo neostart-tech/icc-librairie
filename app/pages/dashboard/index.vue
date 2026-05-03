@@ -21,7 +21,13 @@
               <p class="text-white/60 text-sm font-medium max-w-md">Ravi de vous revoir ! Voici un aperçu de vos activités et de vos lectures récentes.</p>
             </div>
             
-            <div class="flex gap-4">
+            <div class="flex items-center gap-4">
+               <button @click="showNotificationsSidebar = true" class="relative w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all group">
+                 <svg class="w-6 h-6 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                 <span v-if="notificationStore.unreadCount > 0" class="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-4 border-[#6a0d5f] animate-bounce">
+                   {{ notificationStore.unreadCount }}
+                 </span>
+               </button>
                <NuxtLink to="/dashboard/profil" class="px-8 py-4 bg-white text-[#6a0d5f] rounded-2xl font-bold text-xs uppercase tracking-wide hover:bg-orange-400 hover:text-white transition-all duration-500 shadow-xl">
                  Mon Profil
                </NuxtLink>
@@ -31,7 +37,15 @@
     </section>
 
     <!-- Content Grid -->
-       <main class="max-w-7xl mx-auto px-6 -mt-16 relative z-20 space-y-8">
+    <main class="max-w-7xl mx-auto px-6 -mt-16 relative z-20 space-y-8">
+
+      <!-- Action Quick Bar -->
+      <div v-reveal class="flex justify-end">
+        <button @click="showPaymentInstructions" class="bg-gray-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#6a0d5f] transition-all flex items-center justify-center gap-2 shadow-xl">
+          <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Instructions de paiement
+        </button>
+      </div>
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
          <div v-reveal class="bg-white/80 backdrop-blur-xl rounded-xl p-5 shadow-2xl border border-white hover:-translate-y-2 transition-transform duration-500">
@@ -109,9 +123,9 @@
                       <span class="px-5 py-2 text-[9px] font-bold uppercase tracking-wide rounded-xl" :class="order.statut === 'Livrée' ? 'bg-green-500/10 text-green-600' : 'bg-orange-500/10 text-orange-600'">
                          {{ order.statut }}
                       </span>
-                      <NuxtLink :to="`/dashboard/commandes/details/${order.id}`" class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white hover:bg-[#6a0d5f] hover:scale-110 transition-all">
+                      <button @click="openDetails(order.original)" class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white hover:bg-[#6a0d5f] hover:scale-110 transition-all">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </NuxtLink>
+                      </button>
                    </div>
                 </div>
              </div>
@@ -150,6 +164,143 @@
       </section>
     </main>
 
+    <!-- Modal Détails -->
+    <Transition name="modal">
+      <div v-if="showDetailsModal" class="fixed inset-0 z-[100] flex items-center justify-center px-6 py-10" @click.self="showDetailsModal = false">
+        <div class="absolute inset-0 bg-[#6a0d5f]/60 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+           <div class="p-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+             <div>
+               <h3 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Commande #{{ selectedOrder?.reference }}</h3>
+               <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Effectuée le {{ formatDate(selectedOrder?.created_at) }}</p>
+             </div>
+             <button @click="showDetailsModal = false" class="p-2 hover:bg-white rounded-xl transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+           </div>
+
+           <div class="flex-1 overflow-y-auto p-6 space-y-6">
+             <!-- Items -->
+             <div class="space-y-4">
+               <div v-for="d in selectedOrder?.detailcommandes" :key="d.id" class="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-4">
+                 <div class="w-12 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-white">
+                   <img :src="d.livre?.image ? `${useRuntimeConfig().public.storageBase}/${d.livre.image}` : '/images/livre.jpg'" class="w-full h-full object-cover" alt="" />
+                 </div>
+                 <div class="flex-1 min-w-0">
+                   <h5 class="font-bold text-gray-900 text-sm truncate">{{ d.livre?.titre }}</h5>
+                   <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ d.quantite }} × {{ formatPrice(d.prix_unitaire) }}</p>
+                 </div>
+                 <div class="font-black text-[#6a0d5f] text-sm">{{ formatPrice(d.prix_unitaire * d.quantite) }}</div>
+               </div>
+             </div>
+
+             <!-- Delivery Info -->
+             <div v-if="selectedOrder?.type_livraison === 'livraison'" class="p-5 bg-blue-50 rounded-2xl border border-blue-100 space-y-2">
+               <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest">Informations de livraison</p>
+               <p class="text-sm font-bold text-gray-800">{{ selectedOrder.adresse_livraison }}</p>
+               <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Contact : {{ selectedOrder.numero_livraison }}</p>
+             </div>
+
+             <!-- Summary -->
+             <div class="bg-gray-900 rounded-2xl p-6 text-white space-y-3">
+               <div class="flex justify-between text-white/50 text-[10px] font-bold uppercase tracking-widest">
+                 <span>Sous-Total</span>
+                 <span>{{ formatPrice(selectedOrder?.prix_total) }}</span>
+               </div>
+               <div v-if="selectedOrder?.frais_livraison > 0" class="flex justify-between text-white/50 text-[10px] font-bold uppercase tracking-widest">
+                 <span>Frais de livraison</span>
+                 <span>{{ formatPrice(selectedOrder?.frais_livraison) }}</span>
+               </div>
+               <div class="h-px bg-white/10 my-2"></div>
+               <div class="flex justify-between items-center">
+                 <span class="text-sm font-black text-orange-400 uppercase tracking-widest">Total</span>
+                 <span class="text-2xl font-bold">{{ formatPrice((selectedOrder?.prix_total || 0) + (selectedOrder?.frais_livraison || 0)) }}</span>
+               </div>
+             </div>
+           </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Notifications Sidebar -->
+    <Transition name="slide">
+      <div v-if="showNotificationsSidebar" class="fixed inset-0 z-[120] overflow-hidden">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showNotificationsSidebar = false"></div>
+        <div class="absolute inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl flex flex-col animate-slideInRight">
+           <!-- Header -->
+           <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+              <div class="flex items-center gap-3">
+                 <div class="w-10 h-10 rounded-xl bg-[#6a0d5f] flex items-center justify-center text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                 </div>
+                 <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Notifications</h2>
+              </div>
+              <button @click="showNotificationsSidebar = false" class="p-2 hover:bg-white rounded-xl transition-all">
+                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+           </div>
+
+           <!-- Content -->
+           <div class="flex-1 overflow-y-auto p-6 space-y-8">
+              <div v-if="notificationStore.notifications.length === 0" class="flex flex-col items-center justify-center py-20 text-center opacity-40">
+                 <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="2"/></svg>
+                 </div>
+                 <p class="text-[10px] font-black uppercase tracking-widest">Aucune notification pour le moment</p>
+              </div>
+
+              <template v-else>
+                 <div v-if="notificationStore.unreadCount > 0" class="mb-6">
+                    <button @click="notificationStore.markAllAsRead()" class="w-full py-3 rounded-xl bg-orange-50 text-orange-600 text-[10px] font-black uppercase tracking-widest hover:bg-orange-100 transition-all">
+                       Tout marquer comme lu
+                    </button>
+                 </div>
+
+                 <!-- Groupes de notifications -->
+                 <div v-for="(notifs, group) in notificationStore.groupedNotifications" :key="group">
+                    <template v-if="notifs.length > 0">
+                       <h3 class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                          <span class="w-6 h-px bg-gray-200"></span>
+                          {{ group === 'today' ? "Aujourd'hui" : group === 'yesterday' ? "Hier" : group === 'thisWeek' ? "Cette semaine" : "Plus ancien" }}
+                       </h3>
+                       <div class="space-y-3">
+                          <div v-for="notif in notifs" :key="notif.id" 
+                             class="relative p-4 rounded-2xl border transition-all group/item"
+                             :class="!notif.read_at ? 'bg-purple-50/50 border-purple-100 shadow-sm' : 'bg-white border-gray-100 opacity-60 hover:opacity-100'"
+                          >
+                             <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" 
+                                   :class="!notif.read_at ? 'bg-white shadow-sm' : 'bg-gray-50'"
+                                >
+                                   <svg v-if="notif.type.includes('Commande')" class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2"/></svg>
+                                   <svg v-else-if="notif.type.includes('Paiement')" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
+                                   <svg v-else class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
+                                </div>
+                                <div class="flex-1 min-w-0 space-y-1">
+                                   <div class="flex items-center justify-between">
+                                      <p class="text-xs font-bold text-gray-900 leading-tight">{{ notif.data.title || 'Information' }}</p>
+                                      <span class="text-[8px] font-bold text-gray-400 uppercase">{{ notificationStore.formatDate(notif.created_at) }}</span>
+                                   </div>
+                                   <p class="text-[10px] text-gray-500 leading-relaxed">{{ notif.data.message }}</p>
+                                   
+                                   <div class="flex items-center gap-3 pt-2">
+                                      <button v-if="!notif.read_at" @click="notificationStore.markAsRead(notif.id)" class="text-[9px] font-black text-purple-600 uppercase tracking-widest hover:underline">
+                                         Marquer comme lu
+                                      </button>
+                                      <button @click="notificationStore.deleteNotification(notif.id)" class="text-[9px] font-black text-red-400 uppercase tracking-widest hover:underline opacity-0 group-hover/item:opacity-100 transition-opacity">
+                                         Supprimer
+                                      </button>
+                                   </div>
+                                </div>
+                             </div>
+                             <div v-if="!notif.read_at" class="absolute top-4 right-4 w-2 h-2 bg-[#6a0d5f] rounded-full animate-pulse"></div>
+                          </div>
+                       </div>
+                    </template>
+                 </div>
+              </template>
+           </div>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -157,11 +308,38 @@
 import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "~~/stores/user";
 import { useCommandeStore } from "~~/stores/commande";
+import { useNotificationStore } from "~~/stores/notification";
+import { useSettingsStore } from "~~/stores/settings";
+import Swal from 'sweetalert2';
 
 const userStore = useUserStore();
 const commandeStore = useCommandeStore();
+const notificationStore = useNotificationStore();
+const settingsStore = useSettingsStore();
+
+const showDetailsModal = ref(false);
+const selectedOrder = ref(null);
+const showNotificationsSidebar = ref(false);
 
 const userFirstName = computed(() => userStore.user?.prenom);
+
+const formatPrice = (price) => {
+  const amount = parseFloat(price);
+  if (isNaN(amount)) return '0 FCFA';
+  return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).toLocaleDateString('fr-FR', {
+    day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
+};
+
+const openDetails = (order) => {
+  selectedOrder.value = order;
+  showDetailsModal.value = true;
+};
 
 const booksPurchased = computed(() =>
   commandeStore.commandes
@@ -192,15 +370,30 @@ const recentOrders = computed(() =>
       date: new Date(c.created_at).toLocaleDateString("fr-FR"),
       total: c.prix_total,
       statut: c.statut === "traite" ? "Livr\xE9e" : "En cours de traitement",
+      original: c
     })),
 );
 
 onMounted(async () => {
   await Promise.all([
     userStore.fetchProfile(),
-    commandeStore.fetchMyOrders()
+    commandeStore.fetchMyOrders(),
+    notificationStore.fetchNotifications(),
+    settingsStore.fetchSettings()
   ]);
 });
+
+const showPaymentInstructions = () => {
+  const instructions = settingsStore.settings?.payment_message || 'Aucune instruction disponible.';
+  Swal.fire({
+    title: 'Instructions de paiement',
+    html: `<div class="text-left text-sm text-gray-600 font-medium whitespace-pre-line">${instructions}</div>`,
+    icon: 'info',
+    confirmButtonColor: '#6a0d5f',
+    confirmButtonText: 'Compris',
+    customClass: { popup: 'rounded-[2rem]' }
+  });
+};
 
 definePageMeta({
   layout: "default",
@@ -213,5 +406,17 @@ definePageMeta({
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 .reveal-delay-100 { animation-delay: 0.1s; }
 .reveal-delay-200 { animation-delay: 0.2s; }
-</style>
 
+.modal-enter-active, .modal-leave-active { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.modal-enter-from, .modal-leave-to { opacity: 0; transform: scale(0.95) translateY(20px); }
+
+/* Sidebar Animation */
+.slide-enter-active, .slide-leave-active { transition: opacity 0.5s ease; }
+.slide-enter-from, .slide-leave-to { opacity: 0; }
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.animate-slideInRight { animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+</style>

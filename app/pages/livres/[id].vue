@@ -317,7 +317,7 @@
 </template>
 
 <script setup>
-import Breadcrumb from "@/components/Breadcrumb.vue";
+import Breadcrumb from "~/components/Breadcrumb.vue";
 import { ref, computed, onMounted, onUnmounted, nextTick } from "vue";
 import { useRoute } from "#app";
 import { useLivreStore } from "~~/stores/livre";

@@ -137,9 +137,9 @@
             <!-- Decorative Background -->
             <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/5 via-transparent to-[#6a0d5f]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#6a0d5f]/10 rounded-full mb-8 relative z-10">
-              <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-pulse"></span>
-              <span class="text-[10px] font-black text-[#6a0d5f] uppercase tracking-widest">En Vogue</span>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-orange-500/10 rounded-full mb-8 relative z-10">
+              <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+              <span class="text-[10px] font-black text-orange-500 uppercase tracking-widest">Livre du mois</span>
             </div>
 
             <!-- Book Cover -->
@@ -500,7 +500,7 @@ watch(() => route.query.category, (newCat) => {
 });
 
 const enVogue = computed(() => {
-  const book = livreStore.enVogue;
+  const book = livreStore.livreDuMois;
   if (!book) return null;
   return {
     ...book,

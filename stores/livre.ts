@@ -17,6 +17,7 @@ export interface Livre {
   categorie?: any;
   auteurRel?: any;
   stock?: any;
+  featured_order?: number;
 }
 
 export const useLivreStore = defineStore("livre", {
@@ -26,9 +27,9 @@ export const useLivreStore = defineStore("livre", {
   state: () => ({
     livres: [] as Livre[],
     livre: null as Livre | null,
-    selectionMois: [] as Livre[],
-    selectionMoisPrecedent: [] as Livre[],
-    enVogue: null as Livre | null,
+    selectionAnnee: [] as Livre[],
+    livreDuMois: null as Livre | null,
+    livreDuo: null as Livre | null,
     loading: false,
   }),
 
@@ -212,9 +213,9 @@ export const useLivreStore = defineStore("livre", {
 
       try {
         const res: any = await $api("/livres/featured");
-        this.selectionMois = res.selection_mois || [];
-        this.selectionMoisPrecedent = res.selection_mois_precedent || [];
-        this.enVogue = res.en_vogue || null;
+        this.selectionAnnee = res.selection_annee || [];
+        this.livreDuMois = res.livre_du_mois || null;
+        this.livreDuo = res.livre_duo || null;
       } catch (error) {
         console.error("Erreur fetchFeaturedLivres", error);
       } finally {

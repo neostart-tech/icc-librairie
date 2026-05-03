@@ -1,8 +1,16 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[#6a0d5f] px-4 py-8" style="background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 28px 28px;">
-    
+  <div class="relative min-h-screen flex items-center justify-center px-4 py-8 overflow-hidden">
+    <!-- Image de fond -->
+    <img
+      src="/images/a-propos/img1.jpg"
+      alt="Background"
+      class="absolute inset-0 w-full h-full object-cover object-center scale-105"
+    />
+    <!-- Overlay dégradé violet -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/80 via-[#6a0d5f]/60 to-[#3a0532]/90"></div>
+
     <!-- Card principale split-screen -->
-    <div v-reveal class="w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[580px]">
+    <div v-reveal class="relative z-10 w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[580px]">
 
       <!-- ========== PANNEAU GAUCHE ========== -->
       <div class="hidden md:flex w-[45%] bg-[#6a0d5f] flex-col justify-between p-12 relative overflow-hidden"
@@ -60,12 +68,33 @@
         </div>
 
         <form @submit.prevent="handleLogin" class="space-y-5">
+          <!-- Tabs Email / Téléphone -->
+          <div class="flex gap-4 mb-6">
+            <button type="button" @click="loginMethod = 'email'" :class="[loginMethod === 'email' ? 'border-[#6a0d5f] text-[#6a0d5f] font-bold border-b-2' : 'text-gray-500 font-medium border-b-2 border-transparent', 'pb-2 flex-1 text-sm transition-all']">Email</button>
+            <button type="button" @click="loginMethod = 'phone'" :class="[loginMethod === 'phone' ? 'border-[#6a0d5f] text-[#6a0d5f] font-bold border-b-2' : 'text-gray-500 font-medium border-b-2 border-transparent', 'pb-2 flex-1 text-sm transition-all']">Téléphone</button>
+          </div>
+
           <!-- Email -->
-          <div class="space-y-1.5">
+          <div v-if="loginMethod === 'email'" class="space-y-1.5">
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Email</label>
-            <input v-model="email" type="email" placeholder="votre@email.com"
+            <input v-model="emailInput" type="email" placeholder="votre@email.com"
               class="w-full bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-4 py-3.5 text-gray-900 text-sm outline-none transition-all placeholder:text-gray-300"
               required />
+          </div>
+
+          <!-- Téléphone -->
+          <div v-else class="space-y-1.5">
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Téléphone</label>
+            <div class="flex gap-2">
+              <select v-model="selectedCountryCode" class="w-1/3 bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-2 py-3.5 text-gray-900 text-sm outline-none transition-all">
+                <option v-for="country in countries" :key="country.code" :value="country.dialCode">
+                  {{ country.flag }} {{ country.dialCode }} ({{ country.name }})
+                </option>
+              </select>
+              <input v-model="phoneInput" type="tel" placeholder="Numéro"
+                class="w-2/3 bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-4 py-3.5 text-gray-900 text-sm outline-none transition-all placeholder:text-gray-300"
+                required />
+            </div>
           </div>
 
           <!-- Mot de passe -->
@@ -111,7 +140,7 @@
         </div>
 
         <!-- Bouton ICC Covoiturage -->
-        <NuxtLink to="/ConnexionIcc"
+        <NuxtLink :to="{ path: '/ConnexionIcc', query: route.query.redirect ? { redirect: route.query.redirect } : {} }"
           class="w-full flex items-center justify-center gap-3 border border-gray-200 hover:border-[#6a0d5f] hover:bg-[#6a0d5f]/5 text-gray-500 hover:text-[#6a0d5f] py-3.5 rounded-xl font-semibold text-sm transition-all">
           <img src="/logo/logo_librairie(1).png" class="h-5 w-auto grayscale opacity-40" alt="" />
           Connexion avec compte ICC Covoiturage
@@ -129,16 +158,42 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "~~/stores/auth";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from 'sweetalert2';
+
+definePageMeta({ middleware: 'guest' });
 
 const router = useRouter();
 const auth = useAuthStore();
 const route = useRoute();
-const email = ref("");
+
+const loginMethod = ref("email");
+const emailInput = ref("");
+const phoneInput = ref("");
+const selectedCountryCode = ref("+228");
+const countries = ref<any[]>([]);
+
 const password = ref("");
 const showPassword = ref(false);
+
+onMounted(async () => {
+  try {
+    const res = await fetch('https://restcountries.com/v3.1/all?fields=name,idd,flag,cca2');
+    const data = await res.json();
+    countries.value = data
+      .filter((c: any) => c.idd && c.idd.root)
+      .flatMap((c: any) => {
+        if (!c.idd.suffixes || c.idd.suffixes.length === 0 || c.idd.suffixes.length > 1) {
+          return [{ name: c.name.common, code: c.cca2, dialCode: c.idd.root, flag: c.flag }];
+        }
+        return [{ name: c.name.common, code: c.cca2, dialCode: c.idd.root + c.idd.suffixes[0], flag: c.flag }];
+      })
+      .sort((a: any, b: any) => a.name.localeCompare(b.name));
+  } catch (err) {
+    console.error('Erreur chargement pays', err);
+  }
+});
 
 const features = [
   { icon: 'i-lucide-book-open', label: 'Catalogue de livres chrétiens' },
@@ -148,7 +203,12 @@ const features = [
 
 const handleLogin = async () => {
   try {
-    await auth.login(email.value, password.value);
+    const finalPhone = phoneInput.value.replace(/^0+/, '');
+    const loginPayload = loginMethod.value === 'phone' 
+      ? `${selectedCountryCode.value}${finalPhone}` 
+      : emailInput.value;
+
+    await auth.login(loginPayload, password.value);
 
     const redirect =
       typeof route.query.redirect === "string"

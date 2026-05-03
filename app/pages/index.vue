@@ -106,6 +106,7 @@
         </div>
       </div>
     </section>
+
     <!-- Recent Books Section -->
     <section class="py-24 px-4 bg-white overflow-hidden">
       <div class="max-w-7xl mx-auto" v-reveal.repeat>
@@ -163,215 +164,178 @@
       </div>
     </section>
 
-    <!-- LIVRE EN VOGUE SECTION (SIMPLE & DETAILED) -->
-    <section v-if="enVogue" class="py-20 bg-[#6a0d5f] relative overflow-hidden">
+    <!-- LIVRE DU MOIS & LIVRE DUO SECTION -->
+    <section v-if="livreDuMois || livreDuo" class="py-24 bg-[#6a0d5f] relative overflow-hidden">
       <!-- Background subtle glow -->
       <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[120px] rounded-full translate-x-1/2"></div>
+      <div class="absolute bottom-0 left-0 w-1/2 h-full bg-orange-500/5 blur-[120px] rounded-full -translate-x-1/2"></div>
       
-      <div class="max-w-5xl mx-auto px-6 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          <!-- Text Content (7 cols) -->
-          <div class="lg:col-span-7 space-y-8 reveal-right" v-reveal.repeat>
-            <div class="inline-flex items-center gap-3 px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/10">
-              <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Ouvrage du moment</span>
-            </div>
-
-            <div class="space-y-4">
-               <h2 class="text-3xl md:text-5xl font-black text-white leading-tight uppercase tracking-tight">
-                 {{ enVogue.titre }}
-               </h2>
-               <p class="text-white/60 text-base leading-relaxed max-w-lg">
-                 {{ enVogue.description || "Une immersion profonde et transformative à ne pas manquer. Découvrez l'ouvrage qui captive tous nos lecteurs ce mois-ci." }}
-               </p>
-            </div>
-
-            <!-- Image Preview (Mobile Only: appears after paragraph) -->
-            <div class="lg:hidden relative">
-              <div class="relative bg-white/5 backdrop-blur-sm p-4 rounded-3xl border border-white/10 shadow-2xl overflow-hidden group">
-                  <img :src="enVogue.image" :alt="enVogue.titre"
-                    class="w-full h-auto rounded-2xl shadow-2xl transition-transform duration-700 group-hover:scale-105" />
-                  
-                  <div v-if="enVogue.prix_promo" class="absolute top-6 right-6 px-4 py-2 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-xl">
-                     -{{ Math.round((1 - enVogue.prix_promo/enVogue.prix) * 100) }}% Off
-                  </div>
-              </div>
-            </div>
-
-            <!-- Details Grid -->
-            <div class="grid grid-cols-2 gap-y-6 gap-x-8 py-8 border-y border-white/10">
-               <div class="space-y-1">
-                  <p class="text-white/30 text-[10px] font-black uppercase tracking-widest">Auteur</p>
-                  <p class="text-white font-bold text-lg">{{ enVogue.auteurRel?.nom || enVogue.auteur || 'Inconnu' }}</p>
-               </div>
-               <div class="space-y-1">
-                  <p class="text-white/30 text-[10px] font-black uppercase tracking-widest">Catégorie</p>
-                  <p class="text-white font-bold text-lg">{{ enVogue.categorie?.libelle || 'Inspiration' }}</p>
-               </div>
-               <div class="space-y-1">
-                  <p class="text-white/30 text-[10px] font-black uppercase tracking-widest">Disponibilité</p>
-                  <p class="text-green-400 font-bold text-sm flex items-center gap-2">
-                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                     En stock
-                  </p>
-               </div>
-               <div class="space-y-1">
-                  <p class="text-white/30 text-[10px] font-black uppercase tracking-widest">Prix Spécial</p>
-                  <div class="flex items-baseline gap-2">
-                     <p class="text-white font-black text-2xl">{{ formatPrice(enVogue.prix_promo || enVogue.prix) }}</p>
-                     <p v-if="enVogue.prix_promo" class="text-white/30 line-through text-xs italic">{{ formatPrice(enVogue.prix) }}</p>
-                  </div>
-               </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-4 pt-2">
-              <NuxtLink :to="`/livres/${enVogue.id}`"
-                class="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest transition-all hover:-translate-y-1 text-center shadow-lg shadow-orange-500/20">
-                Fiche détaillée
-              </NuxtLink>
-              <button @click="addToCart(enVogue)"
-                class="px-8 py-4 bg-white/10 hover:bg-white text-white hover:text-[#6a0d5f] rounded-xl font-bold text-xs uppercase tracking-widest backdrop-blur-md border border-white/20 transition-all text-center">
-                Ajouter au panier
-              </button>
-            </div>
-          </div>
-
-          <!-- Image Preview (Desktop Only: 5 cols) -->
-          <div class="hidden lg:block lg:col-span-5 relative reveal-left" v-reveal.repeat>
-            <div class="relative bg-white/5 backdrop-blur-sm p-4 rounded-3xl border border-white/10 shadow-2xl overflow-hidden group">
-                <img :src="enVogue.image" :alt="enVogue.titre"
-                  class="w-full h-auto rounded-2xl shadow-2xl transition-transform duration-700 group-hover:scale-105" />
-                
-                <!-- Promo Overlay -->
-                <div v-if="enVogue.prix_promo" class="absolute top-6 right-6 px-4 py-2 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-xl">
-                   -{{ Math.round((1 - enVogue.prix_promo/enVogue.prix) * 100) }}% Off
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- LIVRES DU MOIS SECTION (COMPACT GRID) -->
-    <section v-if="selectionMois.length" class="py-20 bg-white">
-      <div class="max-w-6xl mx-auto px-6" v-reveal.repeat>
-        <div class="text-center mb-16 space-y-3">
-          <div class="inline-block px-3 py-1 bg-[#6a0d5f]/5 rounded-lg">
-             <span class="text-[#6a0d5f] text-[9px] font-black uppercase tracking-widest">Nouveautés</span>
-          </div>
-          <h2 class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tight">
-            Sélection du <span class="text-[#6a0d5f]">Mois</span>
-          </h2>
-          <p class="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Ouvrages triés sur le volet pour votre croissance</p>
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-20 space-y-4 reveal-up" v-reveal.repeat>
+           <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
+             Les Vedettes de <span class="text-orange-500">ICC Librairie</span>
+           </h2>
+           <p class="text-white/60 text-lg max-w-2xl mx-auto font-medium">L'essentiel pour votre croissance spirituelle et votre transformation.</p>
         </div>
 
-        <div class="relative flex items-center group/section">
-          <!-- Navigation Arrow Left -->
-          <button @click="scrollSection('moisContainer', 'left')"
-            class="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
-            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
           
-          <div class="w-full relative overflow-hidden px-2 py-4">
-            <div ref="moisContainer" class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory">
-              <div v-for="(book, index) in selectionMois" :key="book.id"
-                v-reveal.repeat :class="`reveal-delay-${index * 100}`"
-                @click="navigateTo(`/livres/${book.id}`)"
-                class="cursor-pointer w-56 md:w-64 flex-shrink-0 snap-start group bg-gray-50 rounded-2xl p-4 transition-all duration-500 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 flex flex-col h-full">
+          <!-- LIVRE DU MOIS (MAJOR) -->
+          <div v-if="livreDuMois" class="lg:col-span-7 xl:col-span-8 relative group reveal-right" v-reveal.repeat>
+             <div class="h-full flex flex-col md:flex-row gap-10 items-center bg-white/10 backdrop-blur-2xl p-10 md:p-14 rounded-[3rem] border border-white/20 shadow-2xl relative overflow-hidden group">
+                <!-- Decorative background for Livre du mois -->
+                <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-orange-500/10 blur-[80px] rounded-full"></div>
                 
-                <div class="relative aspect-[2.5/3.5] mb-6 overflow-hidden rounded-xl bg-gray-200">
-                   <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                   <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-lg font-bold text-[10px] uppercase tracking-widest transition-transform -translate-y-2 group-hover:translate-y-0 duration-500">
-                         Aperçu
-                      </span>
+                <NuxtLink :to="`/livres/${livreDuMois.id}`" class="w-56 md:w-72 flex-shrink-0 relative group/img">
+                   <div class="absolute -inset-6 bg-orange-500/30 blur-3xl rounded-full animate-pulse transition-all group-hover/img:bg-orange-500/40"></div>
+                   <img :src="livreDuMois.image" :alt="livreDuMois.titre" class="relative z-10 w-full h-auto drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-700 group-hover:scale-105 group-hover:-rotate-2" />
+                   <div class="absolute top-0 -right-4 z-20 bg-orange-500 text-white px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest shadow-2xl shadow-orange-500/40 ring-4 ring-[#6a0d5f]">
+                      Livre du mois
+                   </div>
+                </NuxtLink>
+
+                <div class="flex-1 space-y-8 text-center md:text-left relative z-10">
+                   <div class="space-y-4">
+                      <NuxtLink :to="`/livres/${livreDuMois.id}`" class="block group/title">
+                        <h3 class="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-tight group-hover/title:text-orange-500 transition-colors">
+                          {{ livreDuMois.titre }}
+                        </h3>
+                      </NuxtLink>
+                      <p class="text-orange-500 font-bold uppercase tracking-[0.2em] text-sm">{{ livreDuMois.auteurRel?.nom || livreDuMois.auteur }}</p>
+                   </div>
+                   <p class="text-white/70 text-base md:text-lg leading-relaxed line-clamp-4 font-medium">
+                      {{ livreDuMois.description || "Une immersion profonde et transformative à ne pas manquer ce mois-ci pour nourrir votre esprit." }}
+                   </p>
+                   <div class="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4">
+                      <div class="space-y-1">
+                        <p class="text-3xl font-black text-white">{{ formatPrice(livreDuMois.prix_promo || livreDuMois.prix) }}</p>
+                        <p v-if="livreDuMois.prix_promo" class="text-white/40 line-through text-sm">{{ formatPrice(livreDuMois.prix) }}</p>
+                      </div>
+                      <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                        <button @click="addToCart(livreDuMois)" class="w-full sm:w-auto px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-orange-500 transition-all shadow-xl shadow-orange-500/20 flex items-center justify-center gap-3">
+                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                           </svg>
+                           Ajouter au panier
+                        </button>
+                        <NuxtLink :to="`/livres/${livreDuMois.id}`" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-2xl font-black text-xs uppercase tracking-widest transition-all text-center flex items-center justify-center">
+                          Détails
+                        </NuxtLink>
+                      </div>
                    </div>
                 </div>
-
-                <div class="space-y-2 flex-1">
-                   <span class="text-[9px] font-bold uppercase text-[#6a0d5f]/60 tracking-widest block">
-                     {{ book.categorie?.libelle || 'Essentiel' }}
-                   </span>
-                   <h3 class="text-sm font-black text-gray-900 uppercase tracking-tight line-clamp-2 leading-tight h-10">
-                     {{ book.titre }}
-                   </h3>
-                   <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest truncate">
-                     {{ book.auteurRel?.nom || book.auteur || 'Anonyme' }}
-                   </p>
-                </div>
-                
-                <div class="flex items-center justify-between pt-4 mt-auto">
-                   <p class="text-lg font-black text-[#6a0d5f] tracking-tighter">{{ formatPrice(book.prix_promo || book.prix) }}</p>
-                   <button @click.stop="addToCart(book)" class="w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-[#6a0d5f] hover:bg-[#6a0d5f] hover:text-white transition-all shadow-sm">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                       <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
-                     </svg>
-                   </button>
-                </div>
-              </div>
-            </div>
+             </div>
           </div>
 
-          <!-- Navigation Arrow Right -->
-          <button @click="scrollSection('moisContainer', 'right')"
-            class="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
-            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
+          <!-- LIVRE DUO (SECONDARY) -->
+          <div v-if="livreDuo" class="lg:col-span-5 xl:col-span-4 relative group reveal-left" v-reveal.repeat>
+             <div class="h-full flex flex-col items-center justify-center bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 shadow-2xl text-center group">
+                <div class="relative mb-10 w-40 md:w-48 group/img">
+                   <div class="absolute -inset-4 bg-blue-500/20 blur-2xl rounded-full animate-pulse transition-all group-hover/img:bg-blue-500/30"></div>
+                   <NuxtLink :to="`/livres/${livreDuo.id}`" class="block">
+                    <img :src="livreDuo.image" :alt="livreDuo.titre" class="relative z-10 w-full h-auto drop-shadow-[0_25px_25px_rgba(0,0,0,0.3)] transition-all duration-700 group-hover:scale-105" />
+                   </NuxtLink>
+                   <div class="absolute -top-2 -right-2 z-20 bg-blue-500 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20">
+                      Livre Duo
+                   </div>
+                </div>
+                <div class="space-y-6">
+                   <div class="space-y-2">
+                      <NuxtLink :to="`/livres/${livreDuo.id}`" class="block group/title">
+                        <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight leading-tight line-clamp-2 group-hover/title:text-blue-400 transition-colors">{{ livreDuo.titre }}</h3>
+                      </NuxtLink>
+                      <p class="text-blue-400 font-bold uppercase tracking-widest text-[10px]">{{ livreDuo.auteurRel?.nom || livreDuo.auteur }}</p>
+                   </div>
+                   <p class="text-white/50 text-sm leading-relaxed line-clamp-3">
+                      {{ livreDuo.description || "Le complément idéal pour approfondir votre lecture et maximiser votre impact." }}
+                   </p>
+                   <div class="space-y-4 pt-4">
+                      <p class="text-2xl font-black text-white">{{ formatPrice(livreDuo.prix_promo || livreDuo.prix) }}</p>
+                      <div class="flex flex-col gap-3">
+                        <button @click="addToCart(livreDuo)" class="w-full px-6 py-4 bg-white text-[#6a0d5f] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all shadow-lg flex items-center justify-center gap-2">
+                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                           </svg>
+                           Ajouter au panier
+                        </button>
+                        <NuxtLink :to="`/livres/${livreDuo.id}`" class="w-full px-6 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all text-center flex items-center justify-center">
+                          Détails
+                        </NuxtLink>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- LIVRES DU MOIS PRECEDENT SECTION (COMPACT) -->
-    <section v-if="selectionMoisPrecedent.length" class="py-20 bg-gray-50/50">
-      <div class="max-w-6xl mx-auto px-6" v-reveal.repeat>
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6 pb-8 border-b border-gray-200">
-          <div class="space-y-1">
-            <h2 class="text-xl md:text-2xl font-black text-gray-900 uppercase tracking-tight">
-              Vous avez manqué : <span class="text-[#6a0d5f]">Mois précédent</span>
+
+    <!-- SELECTION DE L'ANNEE SECTION (SLIDER) -->
+    <section v-if="selectionAnnee.length" class="py-24 bg-white relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6" v-reveal.repeat>
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+          <div class="space-y-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#6a0d5f]/5 rounded-lg">
+               <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-ping"></span>
+               <span class="text-[#6a0d5f] text-[10px] font-black uppercase tracking-[0.2em]">Incontournables</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
+              Sélection de <span class="text-[#6a0d5f]">l'Année</span>
             </h2>
-            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Les favoris du cycle écoulé</p>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Les ouvrages qui ont marqué l'année {{ new Date().getFullYear() }}</p>
           </div>
-          <NuxtLink to="/catalogue" class="text-[10px] font-black text-[#6a0d5f] uppercase tracking-[0.2em] flex items-center gap-2 group hover:gap-4 transition-all">
-             Toute la collection
-             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-               <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-             </svg>
-          </NuxtLink>
+          
         </div>
 
-        <div class="relative flex items-center group/section">
-          <!-- Navigation Arrow Left -->
-          <button @click="scrollSection('precedentContainer', 'left')"
-            class="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
-            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="relative group">
+          <!-- Left Button -->
+          <button @click="scrollSection('anneeContainer', 'left')"
+            class="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/95 backdrop-blur-sm text-[#6a0d5f] rounded-2xl flex items-center justify-center hover:bg-[#6a0d5f] hover:text-white transition-all shadow-xl border border-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100 -mt-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          
-          <div class="w-full relative overflow-hidden px-2 py-4">
-            <div ref="precedentContainer" class="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory">
-              <div v-for="book in selectionMoisPrecedent" :key="book.id" @click="navigateTo(`/livres/${book.id}`)" class="cursor-pointer w-40 md:w-48 flex-shrink-0 snap-start group space-y-4">
-                 <div class="relative block aspect-[3/4.2] overflow-hidden rounded-xl shadow-lg transition-all duration-500 group-hover:shadow-2xl">
-                    <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div class="absolute inset-0 bg-[#6a0d5f]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+          <div ref="anneeContainer" class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-8">
+            <div v-for="(book, index) in selectionAnnee" :key="book.id"
+              v-reveal.repeat :class="`reveal-delay-${index * 100}`"
+              @click="navigateTo(`/livres/${book.id}`)"
+              class="cursor-pointer w-56 md:w-60 flex-shrink-0 snap-start group/card">
+              
+              <div class="relative aspect-[3/4.2] mb-5 overflow-hidden rounded-[2rem] bg-gray-100 shadow-xl group-hover/card:shadow-2xl transition-all duration-700">
+                 <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-1000 group-hover/card:scale-110" />
+                 <div class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/80 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
+                    <div class="absolute bottom-6 left-6 right-6 flex justify-between items-center">
+                       <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-xl">Voir</span>
+                       <button @click.stop="addToCart(book)" class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center shadow-xl">
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
+                          </svg>
+                       </button>
+                    </div>
                  </div>
-                 <div class="space-y-1">
-                    <h4 class="text-[11px] font-black text-gray-900 uppercase tracking-tight line-clamp-1 group-hover:text-[#6a0d5f] transition-colors leading-tight">{{ book.titre }}</h4>
-                    <p class="text-[9px] font-bold text-gray-400 uppercase">{{ book.auteurRel?.nom || book.auteur }}</p>
-                    <p class="text-xs font-black text-[#6a0d5f] pt-1 tracking-tighter">{{ formatPrice(book.prix) }}</p>
+              </div>
+
+              <div class="space-y-2 px-2">
+                 <h3 class="text-base font-black text-gray-900 uppercase tracking-tight line-clamp-1 group-hover/card:text-[#6a0d5f] transition-colors">
+                   {{ book.titre }}
+                 </h3>
+                 <div class="flex items-center justify-between">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate max-w-[150px]">
+                      {{ book.auteurRel?.nom || book.auteur }}
+                    </p>
+                    <p class="text-sm font-black text-[#6a0d5f]">{{ formatPrice(book.prix_promo || book.prix) }}</p>
                  </div>
               </div>
             </div>
           </div>
 
-          <!-- Navigation Arrow Right -->
-          <button @click="scrollSection('precedentContainer', 'right')"
-            class="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-6 w-10 h-10 md:w-12 md:h-12 bg-white text-[#6a0d5f] border border-gray-100 rounded-full flex items-center justify-center shadow-lg hover:bg-[#6a0d5f] hover:text-white transition-all z-30 opacity-0 group-hover/section:opacity-100 focus:opacity-100">
-            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Right Button -->
+          <button @click="scrollSection('anneeContainer', 'right')"
+            class="absolute -right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/95 backdrop-blur-sm text-[#6a0d5f] rounded-2xl flex items-center justify-center hover:bg-[#6a0d5f] hover:text-white transition-all shadow-xl border border-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100 -mt-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
@@ -400,15 +364,131 @@
         </div>
       </div>
     </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="py-28 bg-gray-50 relative overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-[#6a0d5f]/3 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-400/5 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-20 space-y-4" v-reveal>
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#6a0d5f]/5 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-ping"></span>
+            <span class="text-[#6a0d5f] text-[10px] font-black uppercase tracking-[0.25em]">Simple &amp; Rapide</span>
+          </div>
+          <h2 class="text-2xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
+            Comment <span class="text-[#6a0d5f]">ça marche</span> ?
+          </h2>
+          <p class="text-gray-400 font-medium text-sm max-w-xl mx-auto">Commandez vos livres en quelques étapes simples, depuis chez vous.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <div class="hidden md:block absolute top-16 left-[calc(16.67%+2rem)] right-[calc(16.67%+2rem)] h-px border-t-2 border-dashed border-[#6a0d5f]/15 z-0"></div>
+
+          <div v-reveal class="relative flex flex-col items-center text-center group">
+            <div class="relative mb-8 z-10">
+              <div class="w-32 h-32 rounded-[2.5rem] bg-white shadow-2xl shadow-[#6a0d5f]/5 border border-gray-100 flex items-center justify-center group-hover:bg-[#6a0d5f] group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                <svg class="w-14 h-14 text-[#6a0d5f] group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+              </div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-500 text-white text-xs font-black flex items-center justify-center shadow-lg shadow-orange-500/30 border-2 border-white">01</div>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-3">Choisissez vos livres</h3>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Parcourez notre catalogue et ajoutez vos coups de cœur dans votre panier.</p>
+          </div>
+
+          <div v-reveal class="reveal-delay-100 relative flex flex-col items-center text-center group">
+            <div class="relative mb-8 z-10">
+              <div class="w-32 h-32 rounded-[2.5rem] bg-white shadow-2xl shadow-[#6a0d5f]/5 border border-gray-100 flex items-center justify-center group-hover:bg-[#6a0d5f] group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                <svg class="w-14 h-14 text-[#6a0d5f] group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+              </div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-500 text-white text-xs font-black flex items-center justify-center shadow-lg shadow-orange-500/30 border-2 border-white">02</div>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-3">Passez commande</h3>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Validez votre panier, choisissez livraison ou retrait et effectuez votre virement.</p>
+          </div>
+
+          <div v-reveal class="reveal-delay-200 relative flex flex-col items-center text-center group">
+            <div class="relative mb-8 z-10">
+              <div class="w-32 h-32 rounded-[2.5rem] bg-white shadow-2xl shadow-[#6a0d5f]/5 border border-gray-100 flex items-center justify-center group-hover:bg-[#6a0d5f] group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                <svg class="w-14 h-14 text-[#6a0d5f] group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+              </div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-500 text-white text-xs font-black flex items-center justify-center shadow-lg shadow-orange-500/30 border-2 border-white">03</div>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-3">Recevez vos livres</h3>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Après validation de votre paiement, vos livres vous sont livrés ou disponibles au retrait.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS BANNER -->
+    <section ref="statsSectionRef" class="py-20 bg-[#6a0d5f] relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 -translate-y-1/2 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-400 rounded-full -translate-x-1/3 translate-y-1/2 blur-3xl"></div>
+      </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
+
+          <div class="text-center space-y-3 group py-6 sm:py-0">
+            <p class="text-5xl sm:text-6xl font-black text-white group-hover:text-orange-400 transition-colors duration-300">
+              {{ statsStarted ? displayedStats[0] : '0' }}<span class="text-orange-400">+</span>
+            </p>
+            <div class="w-12 h-1 bg-orange-400/40 rounded-full mx-auto"></div>
+            <p class="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">Références disponibles</p>
+          </div>
+
+          <div class="text-center space-y-3 group py-6 sm:py-0 border-t border-b sm:border-t-0 sm:border-b-0 sm:border-l sm:border-r border-white/10">
+            <p class="text-5xl sm:text-6xl font-black text-white group-hover:text-orange-400 transition-colors duration-300">
+              {{ statsStarted ? displayedStats[1] : '0' }}<span class="text-orange-400">%</span>
+            </p>
+            <div class="w-12 h-1 bg-orange-400/40 rounded-full mx-auto"></div>
+            <p class="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">Paiement sécurisé</p>
+          </div>
+
+          <div class="text-center space-y-3 group py-6 sm:py-0">
+            <p class="text-5xl sm:text-6xl font-black text-white group-hover:text-orange-400 transition-colors duration-300">
+              7j<span class="text-orange-400">/7</span>
+            </p>
+            <div class="w-12 h-1 bg-orange-400/40 rounded-full mx-auto"></div>
+            <p class="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">Commande en ligne</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
 import HeroSection from "~/components/HeroSection.vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
 import { useCartStore } from "~~/stores/cart";
+
+// --- Stats counter ---
+const statsSectionRef = ref(null);
+const statsStarted = ref(false);
+const statsTargets = [500, 100];
+const displayedStats = ref([0, 0]);
+
+let statsObserver = null;
+
+function animateCount(index, target, duration = 1800) {
+  const start = performance.now();
+  const step = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    displayedStats.value[index] = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
@@ -416,8 +496,7 @@ const cartStore = useCartStore();
 const config = useRuntimeConfig();
 
 const scrollContainer = ref(null);
-const moisContainer = ref(null);
-const precedentContainer = ref(null);
+const anneeContainer = ref(null);
 
 onMounted(async () => {
   await Promise.all([
@@ -425,10 +504,29 @@ onMounted(async () => {
     livreStore.fetchFeaturedLivres(),
     categorieStore.fetchCategories(),
   ]);
+
+  // IntersectionObserver for stats counter
+  if (statsSectionRef.value) {
+    statsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !statsStarted.value) {
+          statsStarted.value = true;
+          statsTargets.forEach((target, i) => animateCount(i, target));
+          statsObserver.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    statsObserver.observe(statsSectionRef.value);
+  }
 });
 
-const enVogue = computed(() => {
-  const book = livreStore.enVogue;
+onBeforeUnmount(() => {
+  if (statsObserver) statsObserver.disconnect();
+});
+
+const livreDuMois = computed(() => {
+  const book = livreStore.livreDuMois;
   if (!book) return null;
   return {
     ...book,
@@ -436,44 +534,24 @@ const enVogue = computed(() => {
   };
 });
 
-const selectionMois = computed(() => {
-  return (livreStore.selectionMois || []).map(book => ({
+const livreDuo = computed(() => {
+  const book = livreStore.livreDuo;
+  if (!book) return null;
+  return {
+    ...book,
+    image: livreStore.getCoverImage(book),
+  };
+});
+
+const selectionAnnee = computed(() => {
+  return (livreStore.selectionAnnee || []).map(book => ({
     ...book,
     image: livreStore.getCoverImage(book),
   }));
 });
-
-const selectionMoisPrecedent = computed(() => {
-  return (livreStore.selectionMoisPrecedent || []).map(book => ({
-    ...book,
-    image: livreStore.getCoverImage(book),
-  }));
-});
-
-const scroll = (direction) => {
-  if (!scrollContainer.value) return;
-  const container = scrollContainer.value;
-  const scrollAmount = window.innerWidth < 1024 ? container.clientWidth * 0.8 : 500;
-
-  if (direction === 'right') {
-    const isAtEnd = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth - 10;
-    if (isAtEnd) {
-      container.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  } else {
-    const isAtStart = container.scrollLeft <= 10;
-    if (isAtStart) {
-      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
-    } else {
-      container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    }
-  }
-};
 
 const scrollSection = (refName, direction) => {
-  const container = refName === 'moisContainer' ? moisContainer.value : precedentContainer.value;
+  const container = refName === 'anneeContainer' ? anneeContainer.value : null;
   if (!container) return;
   
   const scrollAmount = window.innerWidth < 1024 ? container.clientWidth * 0.8 : container.clientWidth * 0.5;

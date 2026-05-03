@@ -1,8 +1,15 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[#6a0d5f] px-4 py-8"
-    style="background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 28px 28px;">
+  <div class="relative min-h-screen flex items-center justify-center px-4 py-8 overflow-hidden">
+    <!-- Image de fond -->
+    <img
+      src="/images/a-propos/img1.jpg"
+      alt="Background"
+      class="absolute inset-0 w-full h-full object-cover object-center scale-105"
+    />
+    <!-- Overlay dégradé violet -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/80 via-[#6a0d5f]/60 to-[#3a0532]/90"></div>
 
-    <div v-reveal class="w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-2xl p-8 md:p-10">
+    <div v-reveal class="relative z-10 w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-2xl p-8 md:p-10">
 
       <div class="mb-8 text-center">
         <NuxtLink to="/connexion">

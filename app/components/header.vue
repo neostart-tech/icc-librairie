@@ -30,23 +30,23 @@
           style="clip-path: polygon(0 0, 100% 0, 100% 100%, 45px 100%);">
           <!-- Left spacing and clip-path create a slanted edge parallel to the white curve with a violet gap -->
           <div class="flex items-center gap-3 xl:gap-4 font-medium tracking-wide whitespace-nowrap">
-            <a href="tel:+22892090204" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
+            <a href="tel:+22879762733" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path
                   d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                 </path>
               </svg>
-              <span>+228 92 09 02 04</span>
+              <span>+228 79 76 27 33</span>
             </a>
             <div class="w-px h-5 bg-white/20"></div>
-            <a href="mailto:contact@icc-librairie.com" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
+            <a href="mailto:librairieicclome05gmail.com" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
-              <span>contact@icc-librairie.com</span>
+              <span>librairieicclome05gmail.com</span>
             </a>
             <div class="w-px h-5 bg-white/20"></div>
             <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
@@ -92,10 +92,10 @@
           class="flex-1 w-full flex items-center justify-end md:justify-between pr-4 sm:pr-8 lg:pr-12 pl-[30px] sm:pl-[40px] text-white gap-4">
 
           <!-- Main Navigation Links (Desktop) -->
-          <nav class="hidden md:flex flex-1 items-center justify-center xl:justify-start px-4 lg:px-8 gap-6 lg:gap-10">
+          <nav class="hidden md:flex flex-1 items-center justify-center px-4 lg:px-8 gap-8 lg:gap-14 xl:gap-20">
             <NuxtLink to="/"
               exact-active-class="is-active"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide ml-15 mr-15">
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               Accueil
               <span
                 class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
@@ -105,7 +105,7 @@
             <div class="group relative py-2">
               <NuxtLink to="/catalogue"
                 active-class="is-active"
-                class="font-bold text-white/90 hover:text-white transition-colors text-[14px] xl:text-[15px] tracking-wide flex items-center gap-1.5 mr-15">
+                class="font-bold text-white/90 hover:text-white transition-colors text-[14px] xl:text-[15px] tracking-wide flex items-center gap-1.5">
                 Catalogue
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none"
                   stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@
 
             <NuxtLink v-if="isLoggedIn" to="/dashboard/commandes"
               active-class="is-active"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide mr-15">
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               Mes commandes
               <span
                 class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
@@ -161,7 +161,7 @@
             <!-- À propos et Contact : visibles uniquement si non connecté -->
             <NuxtLink v-if="!isLoggedIn" to="/a-propos"
               active-class="is-active"
-              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide mr-15">
+              class="group relative font-bold text-white/90 hover:text-white transition-colors py-2 text-[14px] xl:text-[15px] tracking-wide">
               À propos
               <span
                 class="nav-indicator absolute bottom-0 left-0 w-0 h-[2.5px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>

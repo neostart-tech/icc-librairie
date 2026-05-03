@@ -17,41 +17,50 @@
             Mes <span class="text-orange-400">Commandes</span>
           </h1>
           <p v-reveal class="text-white/60 text-lg font-medium max-w-2xl">
-            Retrouvez l'historique complet de vos acquisitions littéraires et suivez l'évolution de vos lectures.
+            Suivez l'état de vos commandes et déclarez vos paiements en quelques clics.
           </p>
        </div>
     </section>
 
-    <!-- Stats Section (Floated) -->
-     <div class="max-w-7xl mx-auto px-6 -mt-16 relative z-20">
+    <!-- Stats Section -->
+     <div class="max-w-7xl mx-auto px-6 -mt-16 relative z-20 space-y-8">
+
+      <!-- Action Quick Bar -->
+      <div v-reveal class="flex justify-end">
+        <button @click="showPaymentInstructions" class="bg-gray-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#6a0d5f] transition-all flex items-center justify-center gap-2 shadow-xl">
+          <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Instructions de paiement
+        </button>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-         <div v-reveal class="reveal-delay-100 bg-white shadow-2xl shadow-purple-900/5 rounded-xl p-5 border border-white flex items-center justify-between group hover:scale-[1.02] transition-all duration-500">
+         <div v-reveal class="bg-white shadow-2xl shadow-purple-900/5 rounded-xl p-5 border border-white flex items-center justify-between group hover:scale-[1.02] transition-all duration-500">
            <div class="space-y-1">
              <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Commandes</p>
-               <p class="text-2xl font-bold text-[#6a0d5f] tracking-wide">{{ totalProcessedOrders }}</p>
+               <p class="text-2xl font-bold text-[#6a0d5f] tracking-wide">{{ commandeStore.commandes.length }}</p>
            </div>
             <div class="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-[#6a0d5f] group-hover:bg-[#6a0d5f] group-hover:text-white transition-all duration-300">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
            </div>
         </div>
 
-         <div v-reveal class="reveal-delay-200 bg-white shadow-2xl shadow-purple-900/5 rounded-xl p-5 border border-white flex items-center justify-between group hover:scale-[1.02] transition-all duration-500">
+         <div v-reveal class="bg-white shadow-2xl shadow-purple-900/5 rounded-xl p-5 border border-white flex items-center justify-between group hover:scale-[1.02] transition-all duration-500">
            <div class="space-y-1">
-             <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Investissement Total</p>
-               <p class="text-2xl font-bold text-orange-500 tracking-wide">{{ totalSpent }} <span class="text-sm font-bold ml-1">FCFA</span></p>
+             <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">En attente de paiement</p>
+               <p class="text-2xl font-bold text-orange-500 tracking-wide">{{ pendingPaymentCount }}</p>
            </div>
-            <div class="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
            </div>
         </div>
 
-         <div v-reveal class="reveal-delay-300 bg-white shadow-2xl shadow-purple-900/5 rounded-xl p-5 border border-white flex items-center justify-between group hover:scale-[1.02] transition-all duration-500">
+         <div v-reveal class="bg-white shadow-2xl shadow-purple-900/5 rounded-xl p-5 border border-white flex items-center justify-between group hover:scale-[1.02] transition-all duration-500">
            <div class="space-y-1">
-             <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Panier Moyen</p>
-               <p class="text-2xl font-bold text-blue-500 tracking-wide">{{ averageOrder }} <span class="text-sm font-bold ml-1">FCFA</span></p>
+             <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Commandes livrées</p>
+               <p class="text-2xl font-bold text-green-500 tracking-wide">{{ deliveredCount }}</p>
            </div>
-            <div class="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center text-green-500 group-hover:bg-green-500 group-hover:text-white transition-all duration-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
            </div>
         </div>
       </div>
@@ -61,8 +70,8 @@
      <main class="max-w-7xl mx-auto px-6 mt-8">
        <div v-reveal class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div class="space-y-1">
-           <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Historique des transactions</h2>
-          <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ processedOrders.length }} commandes enregistrées</p>
+           <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Historique des commandes</h2>
+          <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ commandeStore.commandes.length }} commandes enregistrées</p>
         </div>
       </div>
 
@@ -72,91 +81,91 @@
           v-for="(order, idx) in paginatedOrders" 
           :key="order.reference"
           v-reveal
-           class="bg-white rounded-xl p-4 md:p-5 shadow-xl shadow-purple-900/5 border border-white flex flex-col md:flex-row items-center justify-between gap-4 hover:shadow-2xl hover:border-[#6a0d5f]/10 transition-all duration-500 group"
+           class="bg-white rounded-2xl p-6 shadow-xl shadow-purple-900/5 border border-white flex flex-col lg:flex-row items-center justify-between gap-6 hover:shadow-2xl hover:border-[#6a0d5f]/10 transition-all duration-500 group"
         >
           <!-- Order Info -->
-           <div class="flex items-center gap-4 w-full md:w-auto">
-              <div class="w-12 h-12 rounded-xl bg-[#6a0d5f]/5 flex items-center justify-center text-[#6a0d5f] font-black text-sm group-hover:bg-[#6a0d5f] group-hover:text-white transition-colors duration-500">
+           <div class="flex items-center gap-5 w-full lg:w-auto">
+              <div class="w-14 h-14 rounded-2xl bg-[#6a0d5f]/5 flex items-center justify-center text-[#6a0d5f] font-black text-sm group-hover:bg-[#6a0d5f] group-hover:text-white transition-all duration-500">
                {{ (currentPage - 1) * itemsPerPage + idx + 1 }}
              </div>
-             <div class="space-y-1">
-               <div class="flex items-center gap-3">
-                  <span class="text-base font-bold text-gray-900 tracking-wide">#{{ order.reference }}</span>
-                   <span 
-                    class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest shadow-sm"
-                    :class="order.statut === 'traite' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'"
-                  >
-                    {{ order.statut === 'traite' ? 'Livr\xE9e' : 'En cours de traitement' }}
-                  </span>
+             <div class="space-y-1 flex-1">
+               <div class="flex flex-wrap items-center gap-3">
+                  <span class="text-lg font-bold text-gray-900 tracking-wide">#{{ order.reference }}</span>
+                  <div class="flex items-center gap-2">
+                    <span 
+                      class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm border"
+                      :class="getStatusClasses(order.statut)"
+                    >
+                      {{ getStatusLabel(order.statut) }}
+                    </span>
+                    <button 
+                      v-if="order.statut === 'paiement_refuse'" 
+                      @click.stop="openRefusalReason(order)"
+                      class="w-6 h-6 rounded-full bg-red-100 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                      title="Voir le motif du refus"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                  </div>
                </div>
-               <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"/></svg>
-                 {{ order.date }} à {{ order.heure }}
-               </p>
+               <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"/></svg>
+                    {{ formatDate(order.created_at) }}
+                  </p>
+                  <p v-if="order.type_livraison === 'livraison'" class="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center gap-2">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 18h7l2-4h-7m-4 4h1a2 2 0 100-4h-1m-7 4h1a2 2 0 100-4H7m3-4V7a2 2 0 012-2h6" stroke-width="2" /></svg>
+                    Livraison à domicile
+                  </p>
+               </div>
              </div>
           </div>
 
-          <!-- Price & Payment -->
-          <div class="w-full md:w-auto flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-2">
-              <div class="text-lg font-bold text-[#6a0d5f] tracking-wide">{{ order.montant }}</div>
-             <div class="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-lg text-gray-400">
-                <span class="text-[8px] font-bold uppercase tracking-widest items-center flex gap-1">
-                  <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-width="3"/></svg>
-                  Paiement Rapide
-                </span>
-             </div>
+          <!-- Price -->
+          <div class="w-full lg:w-auto flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-2 px-4 py-2 bg-gray-50 rounded-xl lg:bg-transparent">
+              <span class="lg:hidden text-[10px] font-black text-gray-400 uppercase tracking-widest">Montant Total</span>
+              <div class="text-xl font-bold text-[#6a0d5f] tracking-wide">{{ formatPrice((order.prix_total || 0) + (order.frais_livraison || 0)) }}</div>
           </div>
 
-          <!-- Action -->
-          <button 
-            @click="openDetails(order._raw)"
-             class="w-full md:w-auto bg-gray-900 text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#6a0d5f] hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl shadow-black/10"
-          >
-            Détails Commande
-          </button>
+          <!-- Actions -->
+          <div class="w-full lg:w-auto flex flex-wrap gap-3">
+            <button 
+              v-if="order.statut === 'en_cours' || order.statut === 'paiement_refuse'"
+              @click="openDeclarationModal(order)"
+              class="flex-1 lg:flex-none bg-orange-500 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl shadow-orange-500/20"
+            >
+              Déclarer le paiement
+            </button>
+            <button 
+              @click="openDetails(order)"
+               class="flex-1 lg:flex-none bg-gray-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#6a0d5f] hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl shadow-black/10"
+            >
+              Détails
+            </button>
+          </div>
         </div>
 
-        <!-- Pagination Controls -->
-        <div v-if="totalPages > 1" v-reveal class="flex justify-center items-center gap-2 mt-12 pt-10 border-t border-gray-100">
-           <button 
-             @click="currentPage > 1 && (currentPage--)" 
-             :disabled="currentPage === 1"
-             class="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-[#6a0d5f] hover:border-[#6a0d5f] hover:shadow-xl transition-all disabled:opacity-30 disabled:hover:shadow-none active:scale-90"
-           >
+        <!-- Pagination -->
+        <div v-if="totalPages > 1" class="flex justify-center items-center gap-2 mt-12 pt-10 border-t border-gray-100">
+           <button @click="currentPage > 1 && (currentPage--)" :disabled="currentPage === 1" class="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-[#6a0d5f] disabled:opacity-30">
              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
            </button>
-
-           <div class="flex items-center gap-2 px-3">
-             <button 
-               v-for="p in totalPages" :key="p"
-               @click="currentPage = p"
-               class="w-12 h-12 rounded-2xl font-black text-[10px] transition-all duration-500"
-               :class="currentPage === p ? 'bg-[#6a0d5f] text-white shadow-xl shadow-purple-900/20 scale-110' : 'bg-white border border-gray-100 text-gray-400 hover:text-[#6a0d5f] hover:border-[#6a0d5f]'"
-             >
-               {{ p < 10 ? '0' + p : p }}
-             </button>
-           </div>
-
-           <button 
-             @click="currentPage < totalPages && (currentPage++)" 
-             :disabled="currentPage === totalPages"
-             class="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-[#6a0d5f] hover:border-[#6a0d5f] hover:shadow-xl transition-all disabled:opacity-30 disabled:hover:shadow-none active:scale-90"
-           >
+           <button v-for="p in totalPages" :key="p" @click="currentPage = p" class="w-12 h-12 rounded-2xl font-black text-[10px] transition-all" :class="currentPage === p ? 'bg-[#6a0d5f] text-white shadow-xl' : 'bg-white border border-gray-100 text-gray-400'">
+             {{ p }}
+           </button>
+           <button @click="currentPage < totalPages && (currentPage++)" :disabled="currentPage === totalPages" class="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-[#6a0d5f] disabled:opacity-30">
              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
            </button>
         </div>
       </div>
 
       <!-- Empty State -->
-      <div v-else v-reveal class="bg-white rounded-xl p-20 text-center border-4 border-dashed border-gray-100 mt-10">
-        <div class="w-32 h-32 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-8 animate-bounce">
+      <div v-else class="bg-white rounded-2xl p-20 text-center border-4 border-dashed border-gray-100 mt-10">
+        <div class="w-32 h-32 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-8">
            <svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2"/></svg>
         </div>
-        <h3 class="text-3xl font-bold text-gray-900 tracking-wide mb-4 uppercase">Aucune commande</h3>
-        <p class="text-gray-400 font-medium max-w-sm mx-auto mb-10">
-          Vous n'avez pas encore effectué d'achats. Une multitude de trésors littéraires vous attendent !
-        </p>
-        <NuxtLink to="/catalogue" class="inline-block bg-[#6a0d5f] text-white px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-[#851178] transition-all">
+        <h3 class="text-2xl font-bold text-gray-900 uppercase mb-4">Aucune commande</h3>
+        <NuxtLink to="/catalogue" class="inline-block bg-[#6a0d5f] text-white px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl">
           Découvrir le catalogue
         </NuxtLink>
       </div>
@@ -164,191 +173,260 @@
 
     <!-- Modal Détails -->
     <Transition name="modal">
-      <div 
-        v-if="showDetailsModal" 
-        class="fixed inset-0 z-[100] flex items-center justify-center px-6 py-10 overflow-hidden"
-        @click.self="showDetailsModal = false"
-      >
+      <div v-if="showDetailsModal" class="fixed inset-0 z-[100] flex items-center justify-center px-6 py-10" @click.self="showDetailsModal = false">
         <div class="absolute inset-0 bg-[#6a0d5f]/60 backdrop-blur-md"></div>
-        
-        <div v-reveal class="relative w-full max-w-2xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-          <!-- Header Modal -->
-           <div class="p-5 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
-            <div class="space-y-1">
-               <h3 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Facture #{{ selectedCommande?.reference }}</h3>
-              <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                Commande payée le {{ new Date(selectedCommande?.created_at).toLocaleDateString() }}
-              </p>
-            </div>
-            <button @click="showDetailsModal = false" class="p-4 bg-white rounded-2xl shadow-lg border border-gray-100 text-gray-400 hover:text-red-500 transition-all active:scale-90">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </div>
+        <div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+           <div class="p-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+             <div>
+               <h3 class="text-lg font-bold text-gray-900 uppercase tracking-wide">Commande #{{ selectedOrder?.reference }}</h3>
+               <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Effectuée le {{ formatDate(selectedOrder?.created_at) }}</p>
+             </div>
+             <button @click="showDetailsModal = false" class="p-2 hover:bg-white rounded-xl transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+           </div>
 
-          <!-- Body Modal -->
-           <div class="flex-1 overflow-y-auto p-5 space-y-6">
-            <div class="space-y-6">
-              <div class="flex items-center gap-3">
-                 <div class="w-10 h-1 text-orange-400 bg-orange-400 rounded-full"></div>
-                 <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Articles commandés</h4>
-              </div>
-              <div class="space-y-4">
-                <div v-for="d in selectedCommande?.detailcommandes" :key="d.id" class="p-5 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between gap-4 group hover:border-[#6a0d5f]/20 transition-all">
-                  <NuxtLink :to="`/livres/${d.livre?.id}`" class="flex items-center gap-4 hover:opacity-80 transition-opacity flex-1">
-                    <div class="w-12 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-white group-hover:scale-105 transition-transform">
-                       <img v-if="d.livre?.image" :src="`${useRuntimeConfig().public.storageBase}/${d.livre.image}`" class="w-full h-full object-cover" alt="" />
-                    </div>
-                    <div>
-                      <h5 class="font-bold text-gray-900 text-sm tracking-wide group-hover:text-[#6a0d5f] transition-colors">{{ d.livre?.titre }}</h5>
-                      <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">{{ d.livre?.titre }} • Qté : {{ d.quantite }} • {{ d.prix_unitaire.toLocaleString() }} FCFA / u</p>
-                    </div>
-                  </NuxtLink>
-                  <div class="font-black text-[#6a0d5f] text-sm">{{ (d.prix_unitaire * d.quantite).toLocaleString() }} FCFA</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Summary -->
-             <div class="bg-gray-900 rounded-xl p-5 text-white space-y-4 shadow-2xl">
-               <div class="flex justify-between items-center text-white/50">
-                 <span class="text-[10px] font-bold uppercase tracking-widest">Sous-Total</span>
-                 <span class="font-bold">{{ selectedCommande?.prix_total.toLocaleString() }} FCFA</span>
-               </div>
-               <div class="h-px bg-white/10"></div>
-               <div class="flex justify-between items-end">
-                 <div class="space-y-1">
-                   <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Montant Total Payé</p>
-                     <p class="text-xl font-bold tracking-wide">{{ selectedCommande?.prix_total.toLocaleString() }} <span class="text-sm border-l border-white/20 ml-2 pl-2">FCFA</span></p>
+           <div class="flex-1 overflow-y-auto p-6 space-y-6">
+             <!-- Items -->
+             <div class="space-y-4">
+               <div v-for="d in selectedOrder?.detailcommandes" :key="d.id" class="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-4">
+                 <div class="w-12 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-white">
+                   <img :src="d.livre?.image ? `${useRuntimeConfig().public.storageBase}/${d.livre.image}` : '/images/livre.jpg'" class="w-full h-full object-cover" alt="" />
                  </div>
-                 <div class="bg-white/10 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/10">Facture Payée</div>
-               </div>
-            </div>
-
-            <!-- Payment Info -->
-            <div class="space-y-4">
-               <div class="flex items-center gap-3">
-                 <div class="w-10 h-1 text-blue-400 bg-blue-400 rounded-full"></div>
-                 <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Mode de règlement</h4>
-               </div>
-               <div class="grid grid-cols-2 gap-4">
-                  <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col gap-2">
-                   <span class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Processeur</span>
-                   <div class="flex items-center gap-3">
-                      <img v-if="getMoyenPaiementLogo(selectedCommande?.paiements?.[0]?.moyen_paiement)" :src="getMoyenPaiementLogo(selectedCommande?.paiements?.[0]?.moyen_paiement)" class="h-6 w-auto" alt="" />
-                      <span class="font-black text-gray-900 text-[10px] uppercase tracking-widest">{{ getMoyenPaiementLabel(selectedCommande?.paiements?.[0]?.moyen_paiement) }}</span>
-                   </div>
+                 <div class="flex-1 min-w-0">
+                   <h5 class="font-bold text-gray-900 text-sm truncate">{{ d.livre?.titre }}</h5>
+                   <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ d.quantite }} × {{ formatPrice(d.prix_unitaire) }}</p>
                  </div>
-                  <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col gap-2 overflow-hidden">
-                   <span class="text-[8px] font-black text-gray-400 uppercase tracking-widest">N° Transaction</span>
-                   <span class="font-black text-gray-900 text-[10px] uppercase tracking-tighter break-all truncate">{{ selectedCommande?.paiements?.[0]?.reference_transaction || '---' }}</span>
-                 </div>
+                 <div class="font-black text-[#6a0d5f] text-sm">{{ formatPrice(d.prix_unitaire * d.quantite) }}</div>
                </div>
-            </div>
-          </div>
+             </div>
 
-          <!-- Footer Modal -->
-           <div class="p-4 bg-white border-t border-gray-100 flex justify-center">
-             <button @click="showDetailsModal = false" class="w-full bg-gray-900 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-[#6a0d5f] transition-all duration-300">
-              Fermer la visualisation
-            </button>
-          </div>
+             <!-- Delivery Info -->
+             <div v-if="selectedOrder?.type_livraison === 'livraison'" class="p-5 bg-blue-50 rounded-2xl border border-blue-100 space-y-2">
+               <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest">Informations de livraison</p>
+               <p class="text-sm font-bold text-gray-800">{{ selectedOrder.adresse_livraison }}</p>
+               <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Contact : {{ selectedOrder.numero_livraison }}</p>
+             </div>
+
+             <!-- Summary -->
+             <div class="bg-gray-900 rounded-2xl p-6 text-white space-y-3">
+               <div class="flex justify-between text-white/50 text-[10px] font-bold uppercase tracking-widest">
+                 <span>Sous-Total</span>
+                 <span>{{ formatPrice(selectedOrder?.prix_total) }}</span>
+               </div>
+               <div v-if="selectedOrder?.frais_livraison > 0" class="flex justify-between text-white/50 text-[10px] font-bold uppercase tracking-widest">
+                 <span>Frais de livraison</span>
+                 <span>{{ formatPrice(selectedOrder?.frais_livraison) }}</span>
+               </div>
+               <div class="h-px bg-white/10 my-2"></div>
+               <div class="flex justify-between items-center">
+                 <span class="text-sm font-black text-orange-400 uppercase tracking-widest">Total</span>
+                 <span class="text-2xl font-bold">{{ formatPrice((selectedOrder?.prix_total || 0) + (selectedOrder?.frais_livraison || 0)) }}</span>
+               </div>
+             </div>
+           </div>
         </div>
       </div>
     </Transition>
 
+    <!-- Modal Déclaration Paiement -->
+    <Transition name="modal">
+      <div v-if="showDeclarationModal" class="fixed inset-0 z-[110] flex items-center justify-center px-6 py-10" @click.self="showDeclarationModal = false">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8 animate-fadeInUp">
+          <button @click="showDeclarationModal = false" class="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <h3 class="text-xl font-bold text-gray-900 uppercase tracking-wide mb-2">Déclarer mon paiement</h3>
+          <p class="text-xs text-gray-400 font-medium mb-8">Veuillez fournir la référence ou une capture d'écran de votre transaction.</p>
+
+          <form @submit.prevent="submitDeclaration" class="space-y-6">
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Référence de transaction</label>
+              <input v-model="declarationRef" type="text" placeholder="Ex: TXN123456789" class="w-full bg-gray-50 border-2 border-transparent focus:border-[#6a0d5f] focus:bg-white rounded-2xl px-6 py-4 text-gray-900 font-bold outline-none transition-all placeholder:text-gray-300" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Capture d'écran (Optionnel)</label>
+              <div class="relative group">
+                <input type="file" @change="handleFileChange" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                <div class="w-full bg-gray-50 border-2 border-dashed border-gray-200 group-hover:border-[#6a0d5f] rounded-2xl p-8 text-center transition-all">
+                  <svg v-if="!declarationFile" class="w-10 h-10 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" /></svg>
+                  <p v-if="!declarationFile" class="text-[10px] font-bold text-gray-400 uppercase">Cliquez pour ajouter une image</p>
+                  <p v-else class="text-[10px] font-bold text-[#6a0d5f] uppercase">{{ declarationFile.name }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+              <button type="button" @click="showDeclarationModal = false" class="flex-1 bg-gray-100 text-gray-500 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-200 transition-all">
+                Annuler
+              </button>
+              <button type="submit" :disabled="loadingDeclaration || (!declarationRef && !declarationFile)" class="flex-[2] bg-[#6a0d5f] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-[#851178] disabled:opacity-50 transition-all">
+                <span v-if="loadingDeclaration">Envoi en cours...</span>
+                <span v-else>Envoyer</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Modal Motif Refus -->
+    <Transition name="modal">
+      <div v-if="showRefusalModal" class="fixed inset-0 z-[120] flex items-center justify-center px-6 py-10" @click.self="showRefusalModal = false">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-8 animate-fadeInUp text-center">
+          <div class="w-16 h-16 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 uppercase tracking-wide mb-2">Motif du refus</h3>
+          <p class="text-sm text-gray-600 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">{{ refusalReason || 'Aucun motif précisé.' }}</p>
+          <button @click="showRefusalModal = false" class="w-full bg-gray-900 text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-[#6a0d5f] transition-all">
+            Fermer
+          </button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useCommandeStore } from "~~/stores/commande";
-import { useGatewayStore } from "~~/stores/gateway";
+import { useSettingsStore } from "~~/stores/settings";
 import Swal from 'sweetalert2';
 
-const gatewayStore = useGatewayStore();
 const commandeStore = useCommandeStore();
-
-// Pagination
-const itemsPerPage = 5;
+const settingsStore = useSettingsStore();
 const currentPage = ref(1);
+const itemsPerPage = 8;
 
-// Modale
 const showDetailsModal = ref(false);
-const selectedCommande = ref(null);
+const selectedOrder = ref(null);
 
-// Fonction pour ouvrir la modale
-const openDetails = (commande) => {
-  selectedCommande.value = commande;
-  showDetailsModal.value = true;
+const showDeclarationModal = ref(false);
+const selectedOrderForDecl = ref(null);
+const declarationRef = ref("");
+const declarationFile = ref(null);
+const loadingDeclaration = ref(false);
+
+const showRefusalModal = ref(false);
+const refusalReason = ref("");
+
+const formatPrice = (price) => {
+  const amount = parseFloat(price);
+  if (isNaN(amount)) return '0 FCFA';
+  return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
 };
 
-const getMoyenPaiementLabel = (moyen) => {
-  if (!moyen) return "-";
-  const gateway = gatewayStore.gatewayMap[moyen];
-  if (!gateway) return moyen;
-  return gateway.libelle;
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).toLocaleDateString('fr-FR', {
+    day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
 };
 
-const getMoyenPaiementLogo = (moyen) => {
-  const gateway = gatewayStore.gatewayMap[moyen];
-  return gateway?.logo_url ?? null;
+const getStatusLabel = (statut) => {
+  const labels = {
+    'en_cours': 'En attente de paiement',
+    'en_attente_validation': 'Paiement en attente de validation',
+    'valide': 'Payée & En préparation',
+    'traite': 'Livrée / Terminée',
+    'paiement_refuse': 'Paiement refusé'
+  };
+  return labels[statut] || statut;
 };
 
-// Commandes traitées et terminées
-const processedOrders = computed(() =>
-  commandeStore.commandes
-    .filter((c) => c.statut === "termine" || c.statut === "traite")
-    .slice() // Copy to avoid mutating store if needed
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Most recent first
-    .map((c) => {
-      const d = new Date(c.created_at);
-      return {
-        reference: c.reference,
-        date: d.toLocaleDateString("fr-FR"),
-        heure: d.toLocaleTimeString("fr-FR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        statut: c.statut,
-        montant: c.prix_total.toLocaleString() + " FCFA",
-        _raw: c,
-      };
-    })
-);
-
-// Unified Pagination Logic
-const totalPages = computed(() => Math.ceil(processedOrders.value.length / itemsPerPage));
+const getStatusClasses = (statut) => {
+  const classes = {
+    'en_cours': 'bg-orange-50 text-orange-500 border-orange-100',
+    'en_attente_validation': 'bg-blue-50 text-blue-500 border-blue-100',
+    'valide': 'bg-green-50 text-green-500 border-green-100',
+    'traite': 'bg-gray-50 text-gray-500 border-gray-100',
+    'paiement_refuse': 'bg-red-50 text-red-500 border-red-100'
+  };
+  return classes[statut] || '';
+};
 
 const paginatedOrders = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
-  return processedOrders.value.slice(start, start + itemsPerPage);
+  return commandeStore.commandes.slice(start, start + itemsPerPage);
 });
 
-// Statistiques
-const totalProcessedOrders = computed(
-  () => processedOrders.value.length
-);
+const totalPages = computed(() => Math.ceil(commandeStore.commandes.length / itemsPerPage));
 
-const totalSpent = computed(() =>
-  processedOrders.value
-    .reduce((sum, o) => sum + o._raw.prix_total, 0)
-    .toLocaleString()
-);
+const pendingPaymentCount = computed(() => commandeStore.commandes.filter(c => c.statut === 'en_cours' || c.statut === 'paiement_refuse').length);
+const deliveredCount = computed(() => commandeStore.commandes.filter(c => c.statut === 'traite').length);
 
-const averageOrder = computed(() => {
-  if (processedOrders.value.length === 0) return 0;
-  const total = processedOrders.value.reduce((sum, o) => sum + o._raw.prix_total, 0);
-  return Math.round(total / processedOrders.value.length).toLocaleString();
-});
+const openDetails = (order) => {
+  selectedOrder.value = order;
+  showDetailsModal.value = true;
+};
 
-// Chargement des commandes
+const openDeclarationModal = (order) => {
+  selectedOrderForDecl.value = order;
+  declarationRef.value = "";
+  declarationFile.value = null;
+  showDeclarationModal.value = true;
+};
+
+const openRefusalReason = (order) => {
+  refusalReason.value = order.motif_refus_paiement;
+  showRefusalModal.value = true;
+};
+
+const handleFileChange = (e) => {
+  declarationFile.value = e.target.files[0];
+};
+
+const submitDeclaration = async () => {
+  if (!selectedOrderForDecl.value) return;
+  
+  loadingDeclaration.value = true;
+  try {
+    const formData = new FormData();
+    if (declarationRef.value) formData.append('reference_paiement_client', declarationRef.value);
+    if (declarationFile.value) formData.append('preuve_paiement', declarationFile.value);
+
+    await commandeStore.declarerPaiement(selectedOrderForDecl.value.id, formData);
+    
+    showDeclarationModal.value = false;
+    Swal.fire({
+      title: 'Déclaration envoyée !',
+      text: 'Votre paiement est en cours de vérification par nos administrateurs. Vous recevrez une notification dès validation.',
+      icon: 'success',
+      confirmButtonColor: '#6a0d5f',
+      customClass: { popup: 'rounded-[2rem]' }
+    });
+  } catch (e) {
+    console.error(e);
+    Swal.fire({
+      title: 'Erreur',
+      text: 'Impossible d\'envoyer la déclaration. Veuillez vérifier vos fichiers.',
+      icon: 'error',
+      confirmButtonColor: '#6a0d5f'
+    });
+  } finally {
+    loadingDeclaration.value = false;
+  }
+};
+
 onMounted(async () => {
-  await Promise.all([
-    commandeStore.fetchMyOrders(),
-    gatewayStore.fetchGateways(),
-  ]);
+  commandeStore.fetchMyOrders();
+  await settingsStore.fetchSettings();
 });
+
+const showPaymentInstructions = () => {
+  const instructions = settingsStore.settings?.payment_message || 'Aucune instruction disponible.';
+  Swal.fire({
+    title: 'Instructions de paiement',
+    html: `<div class="text-left text-sm text-gray-600 font-medium whitespace-pre-line">${instructions}</div>`,
+    icon: 'info',
+    confirmButtonColor: '#6a0d5f',
+    confirmButtonText: 'Compris',
+    customClass: { popup: 'rounded-[2rem]' }
+  });
+};
 
 definePageMeta({
   layout: "default",
@@ -357,15 +435,15 @@ definePageMeta({
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.modal-enter-active, .modal-leave-active { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.modal-enter-from, .modal-leave-to { opacity: 0; transform: scale(0.95) translateY(20px); }
 
-.modal-enter-active { transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-.modal-leave-active { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-.modal-enter-from { opacity: 0; transform: scale(0.9) translateY(20px); }
-.modal-leave-to { opacity: 0; transform: scale(0.9) translateY(20px); }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-/* Hide scrollbar for the items list in modal if needed */
 ::-webkit-scrollbar {
   width: 6px;
 }

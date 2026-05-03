@@ -135,8 +135,24 @@ export const useAuthStore = defineStore("auth", {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("user");
 
-      if (token) this.token = token;
-      if (user) this.user = JSON.parse(user);
+      if (token && token !== "undefined" && token !== "null") {
+        this.token = token;
+      } else {
+        this.token = null;
+        localStorage.removeItem("token");
+      }
+
+      if (user && user !== "undefined" && user !== "null") {
+        try {
+          this.user = JSON.parse(user);
+        } catch (e) {
+          this.user = null;
+          localStorage.removeItem("user");
+        }
+      } else {
+        this.user = null;
+        localStorage.removeItem("user");
+      }
     },
   },
 });
