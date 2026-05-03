@@ -364,15 +364,131 @@
         </div>
       </div>
     </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="py-28 bg-gray-50 relative overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-[#6a0d5f]/3 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-400/5 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-20 space-y-4" v-reveal>
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#6a0d5f]/5 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-ping"></span>
+            <span class="text-[#6a0d5f] text-[10px] font-black uppercase tracking-[0.25em]">Simple &amp; Rapide</span>
+          </div>
+          <h2 class="text-2xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
+            Comment <span class="text-[#6a0d5f]">ça marche</span> ?
+          </h2>
+          <p class="text-gray-400 font-medium text-sm max-w-xl mx-auto">Commandez vos livres en quelques étapes simples, depuis chez vous.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <div class="hidden md:block absolute top-16 left-[calc(16.67%+2rem)] right-[calc(16.67%+2rem)] h-px border-t-2 border-dashed border-[#6a0d5f]/15 z-0"></div>
+
+          <div v-reveal class="relative flex flex-col items-center text-center group">
+            <div class="relative mb-8 z-10">
+              <div class="w-32 h-32 rounded-[2.5rem] bg-white shadow-2xl shadow-[#6a0d5f]/5 border border-gray-100 flex items-center justify-center group-hover:bg-[#6a0d5f] group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                <svg class="w-14 h-14 text-[#6a0d5f] group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+              </div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-500 text-white text-xs font-black flex items-center justify-center shadow-lg shadow-orange-500/30 border-2 border-white">01</div>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-3">Choisissez vos livres</h3>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Parcourez notre catalogue et ajoutez vos coups de cœur dans votre panier.</p>
+          </div>
+
+          <div v-reveal class="reveal-delay-100 relative flex flex-col items-center text-center group">
+            <div class="relative mb-8 z-10">
+              <div class="w-32 h-32 rounded-[2.5rem] bg-white shadow-2xl shadow-[#6a0d5f]/5 border border-gray-100 flex items-center justify-center group-hover:bg-[#6a0d5f] group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                <svg class="w-14 h-14 text-[#6a0d5f] group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+              </div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-500 text-white text-xs font-black flex items-center justify-center shadow-lg shadow-orange-500/30 border-2 border-white">02</div>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-3">Passez commande</h3>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Validez votre panier, choisissez livraison ou retrait et effectuez votre virement.</p>
+          </div>
+
+          <div v-reveal class="reveal-delay-200 relative flex flex-col items-center text-center group">
+            <div class="relative mb-8 z-10">
+              <div class="w-32 h-32 rounded-[2.5rem] bg-white shadow-2xl shadow-[#6a0d5f]/5 border border-gray-100 flex items-center justify-center group-hover:bg-[#6a0d5f] group-hover:shadow-[#6a0d5f]/20 transition-all duration-500">
+                <svg class="w-14 h-14 text-[#6a0d5f] group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+              </div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-orange-500 text-white text-xs font-black flex items-center justify-center shadow-lg shadow-orange-500/30 border-2 border-white">03</div>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-3">Recevez vos livres</h3>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Après validation de votre paiement, vos livres vous sont livrés ou disponibles au retrait.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS BANNER -->
+    <section ref="statsSectionRef" class="py-20 bg-[#6a0d5f] relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 -translate-y-1/2 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-400 rounded-full -translate-x-1/3 translate-y-1/2 blur-3xl"></div>
+      </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
+
+          <div class="text-center space-y-3 group py-6 sm:py-0">
+            <p class="text-5xl sm:text-6xl font-black text-white group-hover:text-orange-400 transition-colors duration-300">
+              {{ statsStarted ? displayedStats[0] : '0' }}<span class="text-orange-400">+</span>
+            </p>
+            <div class="w-12 h-1 bg-orange-400/40 rounded-full mx-auto"></div>
+            <p class="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">Références disponibles</p>
+          </div>
+
+          <div class="text-center space-y-3 group py-6 sm:py-0 border-t border-b sm:border-t-0 sm:border-b-0 sm:border-l sm:border-r border-white/10">
+            <p class="text-5xl sm:text-6xl font-black text-white group-hover:text-orange-400 transition-colors duration-300">
+              {{ statsStarted ? displayedStats[1] : '0' }}<span class="text-orange-400">%</span>
+            </p>
+            <div class="w-12 h-1 bg-orange-400/40 rounded-full mx-auto"></div>
+            <p class="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">Paiement sécurisé</p>
+          </div>
+
+          <div class="text-center space-y-3 group py-6 sm:py-0">
+            <p class="text-5xl sm:text-6xl font-black text-white group-hover:text-orange-400 transition-colors duration-300">
+              7j<span class="text-orange-400">/7</span>
+            </p>
+            <div class="w-12 h-1 bg-orange-400/40 rounded-full mx-auto"></div>
+            <p class="text-white/60 text-[10px] font-black uppercase tracking-[0.2em]">Commande en ligne</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
 import HeroSection from "~/components/HeroSection.vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { useLivreStore } from "~~/stores/livre";
 import { useCategorieStore } from "~~/stores/categorie";
 import { useCartStore } from "~~/stores/cart";
+
+// --- Stats counter ---
+const statsSectionRef = ref(null);
+const statsStarted = ref(false);
+const statsTargets = [500, 100];
+const displayedStats = ref([0, 0]);
+
+let statsObserver = null;
+
+function animateCount(index, target, duration = 1800) {
+  const start = performance.now();
+  const step = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    displayedStats.value[index] = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 
 const livreStore = useLivreStore();
 const categorieStore = useCategorieStore();
@@ -388,6 +504,25 @@ onMounted(async () => {
     livreStore.fetchFeaturedLivres(),
     categorieStore.fetchCategories(),
   ]);
+
+  // IntersectionObserver for stats counter
+  if (statsSectionRef.value) {
+    statsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !statsStarted.value) {
+          statsStarted.value = true;
+          statsTargets.forEach((target, i) => animateCount(i, target));
+          statsObserver.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    statsObserver.observe(statsSectionRef.value);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (statsObserver) statsObserver.disconnect();
 });
 
 const livreDuMois = computed(() => {
