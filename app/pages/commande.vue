@@ -40,7 +40,9 @@
                 :class="typeLivraison === 'retrait' ? 'border-[#6a0d5f] bg-[#6a0d5f]/5' : 'border-gray-50 bg-white hover:border-gray-200'">
                 <div class="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
                 <div class="flex-1">
@@ -49,7 +51,8 @@
                 </div>
                 <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center"
                   :class="typeLivraison === 'retrait' ? 'border-[#6a0d5f] bg-[#6a0d5f]' : 'border-gray-200'">
-                  <svg v-if="typeLivraison === 'retrait'" class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg v-if="typeLivraison === 'retrait'" class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
                     <path d="M5 13l4 4L19 7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
@@ -61,17 +64,21 @@
                 <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M3 10h11m0 0l-4-4m4 4l-4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M13 18h7l2-4h-7m-4 4h1a2 2 0 100-4h-1m-7 4h1a2 2 0 100-4H7m3-4V7a2 2 0 012-2h6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M3 10h11m0 0l-4-4m4 4l-4 4" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                    <path d="M13 18h7l2-4h-7m-4 4h1a2 2 0 100-4h-1m-7 4h1a2 2 0 100-4H7m3-4V7a2 2 0 012-2h6"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
                 <div class="flex-1">
                   <p class="font-bold text-gray-900 tracking-wide">Livraison à domicile</p>
-                  <p class="text-[10px] font-bold text-gray-400 tracking-wide">+ {{ formatPrice(deliveryFee) }} de frais</p>
+                  <p class="text-[10px] font-bold text-gray-400 tracking-wide">+ {{ formatPrice(deliveryFee) }} de frais
+                  </p>
                 </div>
                 <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center"
                   :class="typeLivraison === 'livraison' ? 'border-[#6a0d5f] bg-[#6a0d5f]' : 'border-gray-200'">
-                  <svg v-if="typeLivraison === 'livraison'" class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg v-if="typeLivraison === 'livraison'" class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
                     <path d="M5 13l4 4L19 7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
@@ -86,12 +93,14 @@
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
-                  <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide px-2">Adresse complète</label>
+                  <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide px-2">Adresse
+                    complète</label>
                   <input v-model="adresse" type="text" placeholder="Quartier, Rue, Maison..."
                     class="w-full bg-gray-50 border-2 border-transparent focus:border-[#6a0d5f] focus:bg-white rounded-2xl px-6 py-4 text-gray-900 font-bold outline-none transition-all placeholder:text-gray-300" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide px-2">Numéro de contact</label>
+                  <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide px-2">Numéro de
+                    contact</label>
                   <input v-model="phone" type="text" placeholder="+22890000000"
                     class="w-full bg-gray-50 border-2 border-transparent focus:border-[#6a0d5f] focus:bg-white rounded-2xl px-6 py-4 text-gray-900 font-bold outline-none transition-all placeholder:text-gray-300" />
                 </div>
@@ -106,8 +115,7 @@
         <!-- RECAP COMMANDE -->
         <aside class="lg:col-span-4 lg:sticky lg:top-24 animate-fadeInUp" style="animation-delay: 200ms">
           <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-8">
-            <h2
-              class="text-xl font-semibold text-gray-900 uppercase tracking-wide mb-8 flex items-center gap-3">
+            <h2 class="text-xl font-semibold text-gray-900 uppercase tracking-wide mb-8 flex items-center gap-3">
               <svg class="w-7 h-7 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" stroke-linecap="round"
                   stroke-linejoin="round" />
@@ -134,7 +142,7 @@
                 <span class="text-sm font-bold text-gray-400 tracking-wide">Sous-total</span>
                 <span class="font-bold text-gray-800">{{ formatPrice(total) }}</span>
               </div>
-              
+
               <div v-if="typeLivraison === 'livraison'" class="flex justify-between items-center px-2">
                 <span class="text-sm font-bold text-gray-400 tracking-wide">Frais de livraison</span>
                 <span class="font-bold text-blue-600">+ {{ formatPrice(deliveryFee) }}</span>
@@ -209,7 +217,25 @@ const formatPrice = (price) => {
 const fetchSettings = async () => {
   try {
     const data = await $api('/settings');
-    deliveryFee.value = parseInt(data?.delivery_fee || 0);
+    console.log("API Settings Response:", data);
+    
+    // Au cas où data est vide ou erreur silencieuse
+    if (!data) {
+      console.warn("No data returned from /settings");
+      return;
+    }
+
+    // Récupérer la valeur brute (ex: "1 500", "1500", 1500)
+    let rawFee = data?.delivery_fee ?? data?.data?.delivery_fee ?? 0;
+    console.log("Raw delivery_fee:", rawFee);
+
+    // Nettoyer la chaîne si c'est un string avec des espaces (ex: "1 500")
+    if (typeof rawFee === 'string') {
+      rawFee = rawFee.replace(/\s+/g, '');
+    }
+
+    deliveryFee.value = Number(rawFee) || 0;
+    console.log("Parsed deliveryFee:", deliveryFee.value);
   } catch (e) {
     console.error("Erreur settings:", e);
   }

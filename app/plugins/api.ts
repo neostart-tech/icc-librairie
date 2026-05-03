@@ -17,7 +17,13 @@ export default defineNuxtPlugin((nuxtApp) => {
         auth.init();
       }
 
-      if (auth.token) {
+      // S'assurer que le header Accept est toujours présent (évite les erreurs 500 Route login not defined)
+      options.headers = {
+        ...options.headers,
+        Accept: "application/json",
+      };
+
+      if (auth.token && auth.token !== "undefined" && auth.token !== "null") {
         options.headers = {
           ...options.headers,
           Authorization: `Bearer ${auth.token}`,

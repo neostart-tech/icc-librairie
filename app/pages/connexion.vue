@@ -119,7 +119,7 @@
         </div>
 
         <!-- Bouton ICC Covoiturage -->
-        <NuxtLink to="/ConnexionIcc"
+        <NuxtLink :to="{ path: '/ConnexionIcc', query: route.query.redirect ? { redirect: route.query.redirect } : {} }"
           class="w-full flex items-center justify-center gap-3 border border-gray-200 hover:border-[#6a0d5f] hover:bg-[#6a0d5f]/5 text-gray-500 hover:text-[#6a0d5f] py-3.5 rounded-xl font-semibold text-sm transition-all">
           <img src="/logo/logo_librairie(1).png" class="h-5 w-auto grayscale opacity-40" alt="" />
           Connexion avec compte ICC Covoiturage
@@ -140,6 +140,8 @@ import { useAuthStore } from "~~/stores/auth";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from 'sweetalert2';
+
+definePageMeta({ middleware: 'guest' });
 
 const router = useRouter();
 const auth = useAuthStore();

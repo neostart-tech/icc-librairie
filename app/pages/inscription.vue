@@ -158,7 +158,7 @@
             Déjà membre ?
             <NuxtLink to="/connexion" class="text-[#6a0d5f] font-semibold hover:underline ml-1">Se connecter</NuxtLink>
           </p>
-          <NuxtLink to="/ConnexionIcc"
+          <NuxtLink :to="{ path: '/ConnexionIcc', query: route.query.redirect ? { redirect: route.query.redirect } : {} }"
             class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#6a0d5f] transition-colors font-medium">
             <img src="/logo/logo_librairie(1).png" class="h-4 w-auto grayscale opacity-40" alt="" />
             Connexion ICC Covoiturage
@@ -174,6 +174,8 @@ import { ref } from "vue";
 import { useAuthStore } from "~~/stores/auth";
 import { useRoute, useRouter } from "vue-router";
 import Swal from 'sweetalert2';
+
+definePageMeta({ middleware: 'guest' });
 
 const auth = useAuthStore();
 const router = useRouter();

@@ -117,7 +117,7 @@
         </div>
 
         <!-- Retour -->
-        <NuxtLink to="/connexion"
+        <NuxtLink :to="{ path: '/connexion', query: route.query.redirect ? { redirect: route.query.redirect } : {} }"
           class="w-full flex items-center justify-center gap-2 border border-gray-200 hover:border-[#6a0d5f] hover:bg-[#6a0d5f]/5 text-gray-500 hover:text-[#6a0d5f] py-3.5 rounded-xl font-semibold text-sm transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -134,6 +134,8 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "~~/stores/auth";
 import Swal from 'sweetalert2';
+
+definePageMeta({ middleware: 'guest' });
 
 const route = useRoute();
 const router = useRouter();
