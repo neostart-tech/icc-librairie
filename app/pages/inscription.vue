@@ -96,8 +96,15 @@
           <!-- Téléphone -->
           <div class="space-y-1.5 md:col-span-2">
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Téléphone <span class="normal-case font-normal text-gray-300">(optionnel)</span></label>
-            <input v-model="telephone" type="tel" placeholder="+228 XX XX XX XX"
-              class="w-full bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-4 py-3.5 text-gray-900 text-sm outline-none transition-all placeholder:text-gray-300" />
+            <div class="flex gap-2">
+              <select v-model="selectedCountryCode" class="w-1/3 bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-2 py-3.5 text-gray-900 text-sm outline-none transition-all">
+                <option v-for="country in countries" :key="country.code" :value="country.dialCode">
+                  {{ country.flag }} {{ country.dialCode }} ({{ country.name }})
+                </option>
+              </select>
+              <input v-model="phoneInput" type="tel" placeholder="Numéro"
+                class="w-2/3 bg-gray-50 border border-gray-200 focus:border-[#6a0d5f] focus:bg-white rounded-xl px-4 py-3.5 text-gray-900 text-sm outline-none transition-all placeholder:text-gray-300" />
+            </div>
           </div>
 
           <!-- Mot de passe -->
@@ -170,7 +177,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useAuthStore } from "~~/stores/auth";
 import { useRoute, useRouter } from "vue-router";
 import Swal from 'sweetalert2';
@@ -184,11 +191,32 @@ const route = useRoute();
 const name = ref("");
 const firstName = ref("");
 const email = ref("");
-const telephone = ref("");
+const phoneInput = ref("");
+const selectedCountryCode = ref("+228");
+const countries = ref<any[]>([]);
+
 const password = ref("");
 const confirmPassword = ref("");
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
+
+onMounted(async () => {
+  try {
+    const res = await fetch('https://restcountries.com/v3.1/all?fields=name,idd,flag,cca2');
+    const data = await res.json();
+    countries.value = data
+      .filter((c: any) => c.idd && c.idd.root)
+      .flatMap((c: any) => {
+        if (!c.idd.suffixes || c.idd.suffixes.length === 0 || c.idd.suffixes.length > 1) {
+          return [{ name: c.name.common, code: c.cca2, dialCode: c.idd.root, flag: c.flag }];
+        }
+        return [{ name: c.name.common, code: c.cca2, dialCode: c.idd.root + c.idd.suffixes[0], flag: c.flag }];
+      })
+      .sort((a: any, b: any) => a.name.localeCompare(b.name));
+  } catch (err) {
+    console.error('Erreur chargement pays', err);
+  }
+});
 
 const features = [
   { icon: 'i-lucide-book-open', label: 'Catalogue de livres chrétiens' },
@@ -209,11 +237,13 @@ const handleRegister = async () => {
   }
 
   try {
+    const finalPhone = phoneInput.value ? `${selectedCountryCode.value}${phoneInput.value.replace(/^0+/, '')}` : null;
+
     await auth.register({
       nom: name.value,
       prenom: firstName.value,
       email: email.value,
-      telephone: telephone.value || null,
+      telephone: finalPhone,
       password: password.value,
     });
 
