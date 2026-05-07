@@ -86,6 +86,20 @@
               </div>
             </div>
 
+            <!-- Stock Status -->
+            <div class="animate-fade-in-up flex items-center gap-3" style="animation-delay: 80ms">
+              <div v-if="book.stockAvailable > 0"
+                class="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-xs font-bold text-green-700 uppercase tracking-wide">En stock</span>
+              </div>
+              <div v-else
+                class="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                <span class="text-xs font-bold text-red-700 uppercase tracking-wide">En rupture de stock</span>
+              </div>
+            </div>
+
             <!-- Price & Actions -->
             <div
               class="p-6 rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 animate-fade-in-up"
