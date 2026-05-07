@@ -54,13 +54,13 @@
         >
           <div
             v-if="notificationsOpen"
-            class="absolute right-[-80px] mt-3 w-[90vw] sm:w-96 max-h-[70vh] bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+            class="absolute right-[-80px] mt-3 w-[90vw] sm:w-96 max-h-[70vh] bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden"
           >
             <!-- Header -->
             <div
-              class="px-4 py-3 flex items-center justify-between border-b border-gray-200 dark:border-gray-700"
+              class="px-4 py-3 flex items-center justify-between border-b border-gray-200"
             >
-              <h3 class="font-semibold text-gray-800 dark:text-white">
+              <h3 class="font-semibold text-gray-800">
                 Notifications
               </h3>
 
@@ -75,14 +75,14 @@
 
             <!-- Liste -->
             <ul
-              class="overflow-y-auto max-h-[60vh] divide-y divide-gray-200 dark:divide-gray-700"
+              class="overflow-y-auto max-h-[60vh] divide-y divide-gray-200"
             >
               <li
                 v-for="notif in notificationStore.notifications"
                 :key="notif.id"
                 class="px-4 py-3 transition flex gap-3"
                 :class="{
-                  'bg-[#6a0d5f]/5 dark:bg-[#6a0d5f]/20': !notif.read_at,
+                  'bg-[#6a0d5f]/5': !notif.read_at,
                 }"
               >
                 <div
@@ -90,12 +90,12 @@
                   @click="handleNotificationClick(notif)"
                 >
                   <p
-                    class="text-sm font-medium text-gray-800 dark:text-gray-100"
+                    class="text-sm font-medium text-gray-800"
                   >
                     {{ notif.data.title ?? "Notification" }}
                   </p>
 
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p class="text-xs text-gray-500 mt-1">
                     {{ notif.data.message }}
                   </p>
 

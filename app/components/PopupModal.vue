@@ -16,7 +16,7 @@
         ></div>
 
         <!-- Modal Content -->
-        <div class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-[0_35px_60px_-15px_rgba(61,2,53,0.5)] group animate-float">
+        <div class="relative w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-[0_35px_60px_-15px_rgba(61,2,53,0.5)] group animate-float">
           <!-- Close Button -->
           <button 
             @click="close"
@@ -28,7 +28,7 @@
           </button>
 
           <!-- Image Container -->
-          <div class="relative overflow-hidden aspect-square flex items-center justify-center bg-gray-50 dark:bg-gray-800/50 p-6">
+          <div class="relative overflow-hidden aspect-square flex items-center justify-center bg-gray-50 p-6">
             <component 
               :is="popup?.link ? 'a' : 'div'"
               :href="popup?.link"
