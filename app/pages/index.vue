@@ -16,11 +16,12 @@
 
           <div class="relative flex items-center overflow-hidden w-full">
             <!-- Categories Marquee Wrapper -->
-            <div class="w-full py-12 -my-12">
-              <div class="flex w-max animate-marquee hover:[animation-play-state:paused]">
+            <div ref="marqueeContainer" 
+              class="w-full py-12 -my-12 overflow-x-auto scrollbar-hide flex cursor-grab active:cursor-grabbing">
+              <div class="flex w-max">
                 
                 <!-- Set 1 -->
-                <div class="flex gap-6 mt-5 md:gap-8 px-3 md:px-4">
+                <div ref="marqueeSet1" class="flex gap-6 mt-5 md:gap-8 px-3 md:px-4">
                   <div v-for="(cat, index) in topCategories" :key="'orig-'+cat.id"
                     class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-80 flex-shrink-0">
 
@@ -60,7 +61,7 @@
                 </div>
 
                 <!-- Set 2 (Duplicate for infinite marquee) -->
-                <div class="flex gap-6 md:gap-8 px-3 md:px-4" aria-hidden="true">
+                <div class="flex gap-6 mt-5 md:gap-8 px-3 md:px-4" aria-hidden="true">
                   <div v-for="(cat, index) in topCategories" :key="'dup-'+cat.id"
                     class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-80 flex-shrink-0">
 
@@ -147,7 +148,10 @@
               <div class="space-y-2 px-2">
                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ book.categorie?.libelle || 'Inspirant' }}</span>
                 <h3 class="font-bold text-gray-900 text-sm line-clamp-1 group-hover:text-[#6a0d5f] transition-colors">{{ book.titre }}</h3>
-                <p class="text-lg font-bold text-[#6a0d5f]">{{ formatPrice(book.prix_promo || book.prix) }}</p>
+                <p class="text-lg font-bold text-[#6a0d5f]">
+                  <span v-if="book.sur_commande">Sur commande</span>
+                  <span v-else>{{ formatPrice(book.prix_promo || book.prix) }}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -167,8 +171,10 @@
     <!-- LIVRE DU MOIS & LIVRE DUO SECTION -->
     <section v-if="livreDuMois || livreDuo" class="py-24 bg-[#6a0d5f] relative overflow-hidden">
       <!-- Background subtle glow -->
-      <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[120px] rounded-full translate-x-1/2"></div>
-      <div class="absolute bottom-0 left-0 w-1/2 h-full bg-orange-500/5 blur-[120px] rounded-full -translate-x-1/2"></div>
+      <img src="/images/a-propos/img5.jpg" alt="Background"
+        class="absolute inset-0 w-full h-full object-cover object-center scale-105" />
+      <!-- Overlay dégradé violet -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/80 via-[#6a0d5f]/60 to-[#3a0532]/90"></div>
       
       <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="text-center mb-20 space-y-4 reveal-up" v-reveal.repeat>
@@ -182,7 +188,7 @@
           
           <!-- LIVRE DU MOIS (MAJOR) -->
           <div v-if="livreDuMois" class="lg:col-span-7 xl:col-span-8 relative group reveal-right" v-reveal.repeat>
-             <div class="h-full flex flex-col md:flex-row gap-10 items-center bg-white/10 backdrop-blur-2xl p-10 md:p-14 rounded-[3rem] border border-white/20 shadow-2xl relative overflow-hidden group">
+             <div class="h-full flex flex-col md:flex-row gap-10 items-center bg-[#6a0d5f] p-10 md:p-14 rounded-[3rem] border border-white/20 shadow-2xl relative overflow-hidden group">
                 <!-- Decorative background for Livre du mois -->
                 <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-orange-500/10 blur-[80px] rounded-full"></div>
                 
@@ -208,15 +214,23 @@
                    </p>
                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4">
                       <div class="space-y-1">
-                        <p class="text-3xl font-black text-white">{{ formatPrice(livreDuMois.prix_promo || livreDuMois.prix) }}</p>
-                        <p v-if="livreDuMois.prix_promo" class="text-white/40 line-through text-sm">{{ formatPrice(livreDuMois.prix) }}</p>
+                        <p class="text-3xl font-black text-white">
+                          <span v-if="livreDuMois.sur_commande">Sur commande</span>
+                          <span v-else>{{ formatPrice(livreDuMois.prix_promo || livreDuMois.prix) }}</span>
+                        </p>
+                        <p v-if="!livreDuMois.sur_commande && livreDuMois.prix_promo" class="text-white/40 line-through text-sm">{{ formatPrice(livreDuMois.prix) }}</p>
                       </div>
                       <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <button @click="addToCart(livreDuMois)" class="w-full sm:w-auto px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-orange-500 transition-all shadow-xl shadow-orange-500/20 flex items-center justify-center gap-3">
+                        <button
+                          @click="cartStore.getQuantity(livreDuMois.id) > 0 ? navigateTo('/panier') : addToCart(livreDuMois)"
+                          class="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3"
+                          :class="cartStore.getQuantity(livreDuMois.id) > 0
+                            ? 'bg-green-500 text-white shadow-green-500/20 hover:bg-green-600'
+                            : 'bg-orange-500 text-white shadow-orange-500/20 hover:bg-white hover:text-orange-500'">
                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                            </svg>
-                           Ajouter au panier
+                           {{ cartStore.getQuantity(livreDuMois.id) > 0 ? 'Voir le panier' : 'Ajouter au panier' }}
                         </button>
                         <NuxtLink :to="`/livres/${livreDuMois.id}`" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-2xl font-black text-xs uppercase tracking-widest transition-all text-center flex items-center justify-center">
                           Détails
@@ -229,7 +243,7 @@
 
           <!-- LIVRE DUO (SECONDARY) -->
           <div v-if="livreDuo" class="lg:col-span-5 xl:col-span-4 relative group reveal-left" v-reveal.repeat>
-             <div class="h-full flex flex-col items-center justify-center bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 shadow-2xl text-center group">
+             <div class="h-full flex flex-col items-center justify-center bg-[#6a0d5f] p-10 rounded-[3rem] border border-white/10 shadow-2xl text-center group">
                 <div class="relative mb-10 w-40 md:w-48 group/img">
                    <div class="absolute -inset-4 bg-blue-500/20 blur-2xl rounded-full animate-pulse transition-all group-hover/img:bg-blue-500/30"></div>
                    <NuxtLink :to="`/livres/${livreDuo.id}`" class="block">
@@ -250,13 +264,21 @@
                       {{ livreDuo.description || "Le complément idéal pour approfondir votre lecture et maximiser votre impact." }}
                    </p>
                    <div class="space-y-4 pt-4">
-                      <p class="text-2xl font-black text-white">{{ formatPrice(livreDuo.prix_promo || livreDuo.prix) }}</p>
+                      <p class="text-2xl font-black text-white">
+                        <span v-if="livreDuo.sur_commande">Sur commande</span>
+                        <span v-else>{{ formatPrice(livreDuo.prix_promo || livreDuo.prix) }}</span>
+                      </p>
                       <div class="flex flex-col gap-3">
-                        <button @click="addToCart(livreDuo)" class="w-full px-6 py-4 bg-white text-[#6a0d5f] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all shadow-lg flex items-center justify-center gap-2">
+                        <button
+                          @click="cartStore.getQuantity(livreDuo.id) > 0 ? navigateTo('/panier') : addToCart(livreDuo)"
+                          class="w-full px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2"
+                          :class="cartStore.getQuantity(livreDuo.id) > 0
+                            ? 'bg-green-500 text-white hover:bg-green-600'
+                            : 'bg-white text-[#6a0d5f] hover:bg-blue-500 hover:text-white'">
                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                            </svg>
-                           Ajouter au panier
+                           {{ cartStore.getQuantity(livreDuo.id) > 0 ? 'Voir le panier' : 'Ajouter au panier' }}
                         </button>
                         <NuxtLink :to="`/livres/${livreDuo.id}`" class="w-full px-6 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all text-center flex items-center justify-center">
                           Détails
@@ -281,7 +303,7 @@
                <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-ping"></span>
                <span class="text-[#6a0d5f] text-[10px] font-black uppercase tracking-[0.2em]">Incontournables</span>
             </div>
-            <h2 class="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
+            <h2 class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tight">
               Sélection de <span class="text-[#6a0d5f]">l'Année</span>
             </h2>
             <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Les ouvrages qui ont marqué l'année {{ new Date().getFullYear() }}</p>
@@ -298,18 +320,21 @@
             </svg>
           </button>
 
-          <div ref="anneeContainer" class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-8">
+          <div ref="anneeContainer" class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-8">
             <div v-for="(book, index) in selectionAnnee" :key="book.id"
               v-reveal.repeat :class="`reveal-delay-${index * 100}`"
               @click="navigateTo(`/livres/${book.id}`)"
-              class="cursor-pointer w-56 md:w-60 flex-shrink-0 snap-start group/card">
+              class="cursor-pointer w-40 md:w-50 flex-shrink-0 snap-start group/card">
               
               <div class="relative aspect-[3/4.2] mb-5 overflow-hidden rounded-[2rem] bg-gray-100 shadow-xl group-hover/card:shadow-2xl transition-all duration-700">
                  <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-1000 group-hover/card:scale-110" />
                  <div class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/80 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
                     <div class="absolute bottom-6 left-6 right-6 flex justify-between items-center">
                        <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-xl">Voir</span>
-                       <button @click.stop="addToCart(book)" class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center shadow-xl">
+                       <button
+                         @click.stop="cartStore.getQuantity(book.id) > 0 ? navigateTo('/panier') : addToCart(book)"
+                         class="w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-xl transition-colors"
+                         :class="cartStore.getQuantity(book.id) > 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-orange-500 hover:bg-orange-600'">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
                           </svg>
@@ -326,7 +351,10 @@
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate max-w-[150px]">
                       {{ book.auteurRel?.nom || book.auteur }}
                     </p>
-                    <p class="text-sm font-black text-[#6a0d5f]">{{ formatPrice(book.prix_promo || book.prix) }}</p>
+                    <p class="text-sm font-black text-[#6a0d5f]">
+                      <span v-if="book.sur_commande">Sur commande</span>
+                      <span v-else>{{ formatPrice(book.prix_promo || book.prix) }}</span>
+                    </p>
                  </div>
               </div>
             </div>
@@ -474,6 +502,37 @@ const statsSectionRef = ref(null);
 const statsStarted = ref(false);
 const statsTargets = [500, 100];
 const displayedStats = ref([0, 0]);
+const marqueeContainer = ref(null);
+const marqueeSet1 = ref(null);
+
+const startMarquee = () => {
+  if (!marqueeContainer.value || !marqueeSet1.value) return;
+  
+  const container = marqueeContainer.value;
+  const set1 = marqueeSet1.value;
+
+  const step = () => {
+    if (container) {
+      container.scrollLeft += 1;
+      if (container.scrollLeft >= set1.offsetWidth) {
+        container.scrollLeft = 0;
+      }
+    }
+    requestAnimationFrame(step);
+  };
+
+  // Add scroll listener for infinite loop during manual scroll
+  container.addEventListener('scroll', () => {
+    if (container.scrollLeft >= set1.offsetWidth) {
+      container.scrollLeft -= set1.offsetWidth;
+    } else if (container.scrollLeft <= 0) {
+      // Optional: handle back scroll loop if needed
+      // container.scrollLeft = set1.offsetWidth;
+    }
+  }, { passive: true });
+
+  requestAnimationFrame(step);
+};
 
 let statsObserver = null;
 
@@ -519,6 +578,9 @@ onMounted(async () => {
     );
     statsObserver.observe(statsSectionRef.value);
   }
+
+  // Start marquee
+  startMarquee();
 });
 
 onBeforeUnmount(() => {
@@ -603,32 +665,26 @@ const recentBooks = computed(() => {
 });
 
 const topCategories = computed(() => {
-  const cats = [...categorieStore.categories]
+  return categorieStore.categories
+    .map((cat) => {
+      const catLivres = livreStore.livres.filter(l => l.categorie_id === cat.id);
+      const lastBook = catLivres[0];
+
+      return {
+        ...cat,
+        bookCount: catLivres.length,
+        lastBookImage: lastBook ? livreStore.getCoverImage(lastBook) : "/images/livre.jpg"
+      };
+    })
+    .filter(cat => cat.bookCount > 0)
     .sort((a, b) => b.id - a.id)
     .slice(0, 5);
-
-  return cats.map((cat) => {
-    const catLivres = livreStore.livres.filter(l => l.categorie_id === cat.id);
-    const lastBook = catLivres[0];
-
-    return {
-      ...cat,
-      bookCount: catLivres.length,
-      lastBookImage: lastBook ? livreStore.getCoverImage(lastBook) : "/images/livre.jpg"
-    };
-  });
 });
 </script>
 
 <style scoped>
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
 
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
+/* Scroll Reveal Animations */
 
 @keyframes fadeInUp {
   from {

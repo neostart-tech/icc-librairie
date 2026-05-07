@@ -177,8 +177,8 @@ useHead({
 })
 
 const phones = [
-  { number: '+228 79 76 27 33', raw: '+22879762733', label: 'Principal' },
-  { number: '+228 92 09 02 04', raw: '+22892090204', label: 'Secondaire' },
+  { number: '+228 92 09 02 04', raw: '+22892090204', label: 'Principal' },
+  { number: '+228 79 76 27 33', raw: '+22879762733', label: 'Secondaire' },
   { number: '+228 90 00 94 62', raw: '+22890009462', label: 'Secondaire' },
 ]
 

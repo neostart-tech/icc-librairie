@@ -14,6 +14,11 @@ export default defineNuxtConfig({
     "pinia-plugin-persistedstate/nuxt",
   ],
 
+  colorMode: {
+    preference: "light",
+    fallback: "light",
+  },
+
   ssr: false,
 
   devtools: {
@@ -49,6 +54,7 @@ export default defineNuxtConfig({
           content: "La référence des livres",
         },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "color-scheme", content: "light" },
       ],
       link: [
         { rel: "icon", type: "image/png", href: "/logo/logo_librairie(1).png" },

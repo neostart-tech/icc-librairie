@@ -30,14 +30,14 @@
           style="clip-path: polygon(0 0, 100% 0, 100% 100%, 45px 100%);">
           <!-- Left spacing and clip-path create a slanted edge parallel to the white curve with a violet gap -->
           <div class="flex items-center gap-3 xl:gap-4 font-medium tracking-wide whitespace-nowrap">
-            <a href="tel:+22879762733" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
+            <a href="tel:+22892090204" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path
                   d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                 </path>
               </svg>
-              <span>+228 79 76 27 33</span>
+              <span>+228 92 09 02 04</span>
             </a>
             <div class="w-px h-5 bg-white/20"></div>
             <a href="mailto:librairieicclome05gmail.com" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
@@ -132,7 +132,7 @@
 
                   <!-- Dynamic Categories -->
                   <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
-                    <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
+                    <NuxtLink v-for="cat in sortedCategories" :key="cat.id"
                       :to="`/catalogue?category=${cat.libelle}`"
                       class="flex uppercase items-center px-5 py-2.5 text-gray-600 hover:text-[#6a0d5f] hover:bg-gray-50 transition-all text-sm font-medium">
                       {{ cat.libelle }}
@@ -216,37 +216,52 @@
       </div>
     </header>
 
-    <!-- Menu mobile plein écran (s'affiche sous le header) -->
-    <transition enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 -translate-y-5 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
-      leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100"
-      leave-to-class="opacity-0 -translate-y-5 scale-95">
+    <!-- Menu mobile (Drawer) -->
+    <transition 
+      enter-active-class="transition duration-500 ease-in-out transform"
+      enter-from-class="translate-x-full" 
+      enter-to-class="translate-x-0"
+      leave-active-class="transition duration-400 ease-in-out transform" 
+      leave-from-class="translate-x-0" 
+      leave-to-class="translate-x-full">
       <div v-if="isMenuOpen"
-        class="md:hidden fixed top-[80px] lg:top-[135px] left-0 right-0 bg-gradient-to-b from-[#6a0d5f] to-[#4a0942] shadow-2xl z-40 border-t border-white/10 rounded-b-3xl">
-        <div class="px-6 py-8 space-y-6">
+        class="lg:hidden fixed inset-y-0 right-0 w-[85%] sm:w-[400px] bg-gradient-to-br from-[#6a0d5f] to-[#3a0532] shadow-[0_0_50px_rgba(0,0,0,0.5)] z-[100] flex flex-col border-l border-white/10">
+        
+        <!-- Drawer Header -->
+        <div class="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 backdrop-blur-md">
+           <NuxtLink to="/" @click="isMenuOpen = false">
+             <img src="/logo/logo_librairie(1).png" alt="ICC" class="h-12 w-auto bg-white p-1.5 rounded-xl shadow-lg" />
+           </NuxtLink>
+           <button @click="isMenuOpen = false" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-all">
+             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+           </button>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar px-6 py-8">
           <nav class="flex flex-col gap-3">
             <NuxtLink to="/"
-              class="animate-stagger-1 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
+              class="flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/5 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                   </path>
                 </svg>
                 Accueil
               </div>
-              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <svg class="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
               </svg>
             </NuxtLink>
 
             <div class="flex flex-col gap-1">
               <div
-                class="animate-stagger-1 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm cursor-pointer"
+                class="flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/5 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all cursor-pointer"
                 @click="isCatalogueExtended = !isCatalogueExtended">
                 <div class="flex items-center gap-3">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                       d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
                     </path>
@@ -254,7 +269,7 @@
                   Catalogue
                 </div>
                 <div class="p-1">
-                  <svg class="w-6 h-6 transition-transform duration-300" :class="{ 'rotate-180': isCatalogueExtended }"
+                  <svg class="w-5 h-5 transition-transform duration-300 opacity-50" :class="{ 'rotate-180': isCatalogueExtended }"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
@@ -263,41 +278,43 @@
 
               <!-- Extended Categories Mobile -->
               <div v-show="isCatalogueExtended"
-                class="flex flex-col gap-1 pl-6 overflow-hidden transition-all duration-300">
+                class="flex flex-col gap-1 pl-4 mt-1 overflow-hidden transition-all duration-300">
                 <NuxtLink to="/catalogue"
-                  class="flex items-center uppercase px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
+                  class="flex items-center uppercase px-5 py-3 hover:bg-white/5 rounded-xl text-white/60 hover:text-white text-[14px] font-medium transition-colors"
                   @click="isMenuOpen = false">
                   Tous les livres
                 </NuxtLink>
-                <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
+                <NuxtLink v-for="cat in sortedCategories" :key="cat.id"
                   :to="`/catalogue?category=${cat.libelle}`"
-                  class="flex items-center uppercase px-5 py-3 bg-white/5 rounded-xl text-white/80 text-[15px] font-medium"
+                  class="flex items-center uppercase px-5 py-3 hover:bg-white/5 rounded-xl text-white/60 hover:text-white text-[14px] font-medium transition-colors"
                   @click="isMenuOpen = false">
                   {{ cat.libelle }}
                 </NuxtLink>
               </div>
             </div>
 
+            <div class="h-px bg-white/5 my-2 w-full"></div>
+
             <NuxtLink v-if="isLoggedIn" to="/dashboard/commandes"
-              class="animate-stagger-2 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
+              class="flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/5 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
                   </path>
                 </svg>
                 Mes commandes
               </div>
-              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <svg class="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
               </svg>
             </NuxtLink>
 
             <NuxtLink v-if="isLoggedIn" to="/dashboard"
-              class="animate-stagger-3 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
+              class="flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/5 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <rect x="3" y="3" width="7" height="7" rx="2" />
                   <rect x="14" y="3" width="7" height="7" rx="2" />
                   <rect x="14" y="14" width="7" height="7" rx="2" />
@@ -305,62 +322,61 @@
                 </svg>
                 Mon compte
               </div>
-              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <svg class="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
               </svg>
             </NuxtLink>
 
-            <!-- À propos et Contact : visibles uniquement si non connecté -->
             <NuxtLink v-if="!isLoggedIn" to="/a-propos"
-              class="animate-stagger-2 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
+              class="flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/5 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 À propos
               </div>
-              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <svg class="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
               </svg>
             </NuxtLink>
 
             <NuxtLink v-if="!isLoggedIn" to="/contact"
-              class="animate-stagger-3 flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all backdrop-blur-sm"
+              class="flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/5 px-5 py-4 rounded-2xl text-white font-bold text-[17px] transition-all"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
                 Contact
               </div>
-              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <svg class="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
               </svg>
             </NuxtLink>
 
-            <div class="h-px bg-white/20 my-2 w-full"></div>
+            <div class="h-px bg-white/5 my-4 w-full"></div>
 
             <NuxtLink v-if="!isLoggedIn" to="/connexion"
-              class="animate-stagger-4 bg-white text-[#6a0d5f] px-5 py-4 rounded-2xl font-bold text-[17px] flex items-center justify-between hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              class="bg-white text-[#6a0d5f] px-5 py-5 rounded-2xl font-bold text-[18px] flex items-center justify-between hover:bg-gray-100 transition-all shadow-xl shadow-[#000]/20 transform active:scale-95"
               @click="isMenuOpen = false">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
                 Connexion
               </div>
-              <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <svg class="w-6 h-6 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
               </svg>
             </NuxtLink>
 
             <button v-else @click="handleLogout"
-              class="animate-stagger-4 w-full bg-red-500/80 border border-red-400/30 text-white shadow-sm flex items-center justify-between hover:shadow-md px-5 py-4 rounded-2xl font-medium text-[17px] hover:bg-red-500 transition-all transform hover:-translate-y-1 backdrop-blur-sm">
+              class="w-full bg-red-500 text-white shadow-lg flex items-center justify-between px-5 py-5 rounded-2xl font-bold text-[18px] hover:bg-red-600 transition-all active:scale-95">
               <div class="flex items-center gap-3">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
                 </svg>
@@ -368,6 +384,20 @@
               </div>
             </button>
           </nav>
+          
+          <!-- Bottom Info -->
+          <div class="mt-8 pt-8 border-t border-white/5 space-y-4">
+             <div class="flex flex-col gap-2 text-white/40 text-sm font-medium">
+                <div class="flex items-center gap-3">
+                   <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                   +228 92 09 02 04
+                </div>
+                <div class="flex items-center gap-3">
+                   <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                   librairieicclome05@gmail.com
+                </div>
+             </div>
+          </div>
         </div>
       </div>
     </transition>
@@ -376,7 +406,7 @@
     <transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0"
       enter-to-class="opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100"
       leave-to-class="opacity-0">
-      <div v-if="isMenuOpen" class="fixed inset-0 z-30 bg-black/50 md:hidden backdrop-blur-sm"
+      <div v-if="isMenuOpen" class="fixed inset-0 z-[90] bg-black/60 lg:hidden backdrop-blur-md"
         @click="isMenuOpen = false">
       </div>
     </transition>
@@ -434,6 +464,12 @@ onBeforeUnmount(() => {
 
 // Computed réactif pour savoir si l’utilisateur est connecté
 const isLoggedIn = computed(() => auth.isLogged);
+
+const sortedCategories = computed(() =>
+  [...categorieStore.categories].sort((a, b) =>
+    a.libelle.localeCompare(b.libelle, 'fr', { sensitivity: 'base' })
+  )
+);
 const handleLogout = () => {
   Swal.fire({
     title: 'Déconnexion ?',

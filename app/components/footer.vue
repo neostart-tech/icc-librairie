@@ -118,8 +118,8 @@
                 </svg>
               </div>
               <div class="flex flex-col font-medium text-[15px]">
-                <a href="tel:+22879762733" class="hover:text-white transition-colors duration-300 block">+228 79 76 27 33</a>
                 <a href="tel:+22892090204" class="hover:text-white transition-colors duration-300 block">+228 92 09 02 04</a>
+                <a href="tel:+22879762733" class="hover:text-white transition-colors duration-300 block">+228 79 76 27 33</a>
                 <a href="tel:+22890009462" class="hover:text-white transition-colors duration-300 block mt-0.5">+228 90 00 94 62</a>
               </div>
             </li>

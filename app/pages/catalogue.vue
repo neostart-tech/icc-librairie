@@ -163,10 +163,15 @@
 
             <div class="flex items-center justify-between w-full relative z-10 pt-6 border-t border-gray-100 mt-auto">
                <div class="flex flex-col items-start">
-                 <span v-if="enVogue.isPromo" class="text-[10px] text-gray-400 line-through font-bold">{{ formatPrice(enVogue.oldPrice) }}</span>
-                 <span class="text-base font-black text-[#6a0d5f]">{{ formatPrice(enVogue.price) }} FCFA</span>
+                 <template v-if="enVogue.surCommande">
+                   <span class="text-base font-black text-amber-500">Sur commande</span>
+                 </template>
+                 <template v-else>
+                   <span v-if="enVogue.isPromo" class="text-[10px] text-gray-400 line-through font-bold">{{ formatPrice(enVogue.oldPrice) }}</span>
+                   <span class="text-base font-black text-[#6a0d5f]">{{ formatPrice(enVogue.price) }} FCFA</span>
+                 </template>
                </div>
-               <button @click.stop.prevent="addToCart(enVogue)" :disabled="!enVogue.stockAvailable" class="w-12 h-12 bg-[#6a0d5f] text-white rounded-2xl flex items-center justify-center shadow-lg shadow-[#6a0d5f]/20 hover:scale-110 hover:bg-[#5a0b50] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all">
+               <button @click.stop.prevent="addToCart(enVogue)" :disabled="enVogue.surCommande || !enVogue.stockAvailable" class="w-12 h-12 bg-[#6a0d5f] text-white rounded-2xl flex items-center justify-center shadow-lg shadow-[#6a0d5f]/20 hover:scale-110 hover:bg-[#5a0b50] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
@@ -263,21 +268,45 @@
 
                   <div class="mt-auto pt-4 border-t border-gray-50 space-y-4">
                     <div class="flex flex-col">
-                      <span v-if="book.isPromo" class="text-[10px] text-gray-300 line-through font-bold">
-                        {{ formatPrice(book.oldPrice) }} FCFA
-                      </span>
-                      <span class="text-base lg:text-lg font-bold text-[#6a0d5f]">
-                        {{ formatPrice(book.price) }} <span class="text-[10px] tracking-wide opacity-50">FCFA</span>
-                      </span>
+                      <template v-if="book.surCommande">
+                        <span class="text-base lg:text-lg font-bold text-amber-500">Sur commande</span>
+                      </template>
+                      <template v-else>
+                        <span v-if="book.isPromo" class="text-[10px] text-gray-300 line-through font-bold">
+                          {{ formatPrice(book.oldPrice) }} FCFA
+                        </span>
+                        <span class="text-base lg:text-lg font-bold text-[#6a0d5f]">
+                          {{ formatPrice(book.price) }} <span class="text-[10px] tracking-wide opacity-50">FCFA</span>
+                        </span>
+                      </template>
                     </div>
 
-                    <button @click.stop.prevent="addToCart(book)" :disabled="!book.stockAvailable"
-                      class="w-full flex items-center justify-center gap-2 bg-[#6a0d5f] text-white py-3.5 rounded-2xl font-bold text-[13px] uppercase tracking-wide transition-all duration-300 relative z-20 shadow-lg shadow-[#6a0d5f]/20 hover:shadow-xl hover:bg-[#5a0b50] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed">
+                    <!-- Sur commande : lien vers la fiche du livre -->
+                    <NuxtLink
+                      v-if="book.surCommande"
+                      :to="`/livres/${book.id}`"
+                      @click.stop
+                      class="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-[13px] uppercase tracking-wide transition-all duration-300 relative z-20 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 bg-amber-500 text-white hover:bg-amber-600">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Commander
+                    </NuxtLink>
+
+                    <!-- Normal -->
+                    <button
+                      v-else
+                      @click.stop.prevent="cartStore.getQuantity(book.id) > 0 ? navigateTo('/panier') : addToCart(book)"
+                      :disabled="!book.stockAvailable && cartStore.getQuantity(book.id) === 0"
+                      class="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-[13px] uppercase tracking-wide transition-all duration-300 relative z-20 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
+                      :class="cartStore.getQuantity(book.id) > 0
+                        ? 'bg-green-600 text-white shadow-green-200 hover:bg-green-700'
+                        : 'bg-[#6a0d5f] text-white shadow-[#6a0d5f]/20 hover:bg-[#5a0b50]'">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
-                      {{ book.stockAvailable ? 'Ajouter' : 'Rupture' }}
+                      {{ cartStore.getQuantity(book.id) > 0 ? 'Voir le panier' : (book.stockAvailable ? 'Ajouter' : 'Rupture') }}
                     </button>
                   </div>
                 </div>
@@ -507,6 +536,7 @@ const enVogue = computed(() => {
     title: book.titre,
     authorName: book.auteurRel?.nom || book.auteur || "--",
     description: book.description,
+    surCommande: !!book.sur_commande,
     price: book.prix_promo ?? book.prix,
     oldPrice: book.prix_promo ? book.prix : null,
     isPromo: !!book.prix_promo,
@@ -521,6 +551,7 @@ const books = computed(() =>
     title: livre.titre,
     authorName: livre.auteurRel?.nom || livre.auteur || "--",
     author: livre.auteur,
+    surCommande: !!livre.sur_commande,
     price: livre.prix_promo ?? livre.prix,
     oldPrice: livre.prix_promo ? livre.prix : null,
     isPromo: !!livre.prix_promo,
@@ -542,7 +573,7 @@ const filteredBooks = computed(() => {
     );
   }
 
-  result = result.filter((b) => b.price <= filters.value.maxPrice);
+  result = result.filter((b) => b.surCommande || b.price <= filters.value.maxPrice);
 
   if (filters.value.onlyPromo) {
     result = result.filter((b) => b.isPromo);

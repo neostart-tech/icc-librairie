@@ -86,20 +86,86 @@
               </div>
             </div>
 
+            <!-- Stock Status -->
+            <div class="animate-fade-in-up flex items-center gap-3 flex-wrap" style="animation-delay: 80ms">
+
+              <!-- Sur commande -->
+              <template v-if="book.surCommande">
+                <div class="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-full">
+                  <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                  <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">Sur commande</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+                  <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Délai communiqué après réception de votre demande
+                </div>
+              </template>
+
+              <!-- En stock -->
+              <template v-else-if="book.stockAvailable > 0">
+                <div class="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full">
+                  <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  <span class="text-xs font-bold text-green-700 uppercase tracking-wide">En stock</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+                  <svg class="w-3.5 h-3.5 shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Disponible · Expédition immédiate
+                </div>
+              </template>
+
+              <!-- Rupture -->
+              <template v-else>
+                <div class="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-full">
+                  <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                  <span class="text-xs font-bold text-red-700 uppercase tracking-wide">En rupture de stock</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+                  <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  Retour en stock prochainement
+                </div>
+              </template>
+            </div>
+
             <!-- Price & Actions -->
             <div
               class="p-6 rounded-2xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 animate-fade-in-up"
               style="animation-delay: 100ms">
-              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+              <!-- Sur commande -->
+              <div v-if="book.surCommande" class="flex flex-col gap-4">
+                <div class="space-y-1">
+                  <p class="text-xs text-gray-500 font-medium">Prix de vente</p>
+                  <p class="text-2xl font-bold text-amber-500">Sur commande</p>
+                  <p class="text-xs text-gray-400">Le prix sera communiqué après réception de votre demande.</p>
+                </div>
+                <button
+                  @click="openDevisModal"
+                  class="group w-full py-3.5 rounded-xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 shadow-lg bg-amber-500 text-white hover:bg-amber-600 transform hover:-translate-y-1 active:scale-95 overflow-hidden relative">
+                  <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span>Demander un devis</span>
+                </button>
+              </div>
+
+              <!-- Normal -->
+              <div v-else class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="space-y-1">
                   <p class="text-xs text-gray-500 font-medium">Prix de vente</p>
                   <div class="flex items-baseline space-x-2">
                     <span class="text-3xl font-bold text-[#6a0d5f]">
-                      {{ book.price.toLocaleString() }}
+                      {{ book.price?.toLocaleString() }}
                       <span class="text-lg">FCFA</span>
                     </span>
                     <span v-if="book.isPromo" class="text-lg text-gray-300 line-through">
-                      {{ book.oldPrice.toLocaleString() }}
+                      {{ book.oldPrice?.toLocaleString() }}
                     </span>
                   </div>
                   <p v-if="book.isPromo" class="text-green-600 text-xs font-bold flex items-center mt-1">
@@ -113,39 +179,36 @@
                 </div>
 
                 <div class="flex-grow max-w-md">
-                  <button @click.stop.prevent="addToCart(book)" :disabled="cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
-                    "
+                  <button
+                    @click.stop.prevent="cartStore.getQuantity(book.id) > 0 ? navigateTo('/panier') : addToCart(book)"
+                    :disabled="!book.stockAvailable && cartStore.getQuantity(book.id) === 0"
                     class="group w-full py-3.5 rounded-xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-1 active:scale-95 overflow-hidden relative"
                     :class="[
-                      !book.stockAvailable
+                      !book.stockAvailable && cartStore.getQuantity(book.id) === 0
                         ? 'bg-gray-100 text-gray-400'
                         : cartStore.getQuantity(book.id) > 0
-                          ? 'bg-green-500 text-white shadow-green-200'
+                          ? 'bg-green-500 text-white shadow-green-200 hover:bg-green-600'
                           : 'bg-[#6a0d5f] text-white shadow-[#6a0d5f]/30 hover:shadow-[#6a0d5f]/50',
                     ]">
-                    <!-- Animated Shine Effect -->
-                    <div
-                      class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000">
-                    </div>
+                    <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
 
-                    <svg v-if="
-                      book.stockAvailable &&
-                      cartStore.getQuantity(book.id) === 0
-                    " class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <svg v-if="book.stockAvailable && cartStore.getQuantity(book.id) === 0"
+                      class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                       <path stroke-linecap="round" stroke-linejoin="round"
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    <svg v-else-if="cartStore.getQuantity(book.id) > 0" class="w-5 h-5" fill="none"
-                      stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    <svg v-else-if="cartStore.getQuantity(book.id) > 0"
+                      class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
 
                     <span>
                       {{
-                        !book.stockAvailable
+                        !book.stockAvailable && cartStore.getQuantity(book.id) === 0
                           ? "Épuisé"
                           : cartStore.getQuantity(book.id) > 0
-                            ? "Dans le panier"
+                            ? "Voir le panier"
                             : "Ajouter au panier"
                       }}
                     </span>
@@ -258,6 +321,109 @@
         </div>
       </div>
     </div>
+    <!-- Devis Modal -->
+    <Teleport to="body">
+      <transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="showDevisModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showDevisModal = false"></div>
+          <div class="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="p-6 bg-gradient-to-br from-amber-50 to-white border-b border-amber-100 flex items-start justify-between shrink-0">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900">Demande de devis</h3>
+                <p class="text-sm text-amber-600 font-medium mt-1 line-clamp-1">{{ book.title }}</p>
+              </div>
+              <button @click="showDevisModal = false" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500 transition-colors shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+
+            <!-- Success state -->
+            <div v-if="devisSuccess" class="p-10 text-center space-y-4">
+              <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900">Demande envoyée !</h4>
+              <p class="text-sm text-gray-500">Nous avons bien reçu votre demande. Notre équipe vous contactera très prochainement.</p>
+              <button @click="showDevisModal = false" class="mt-4 px-8 py-3 bg-[#6a0d5f] text-white rounded-xl font-bold text-sm">Fermer</button>
+            </div>
+
+            <!-- Form -->
+            <form v-else @submit.prevent="submitDevis" class="p-6 space-y-4 overflow-y-auto">
+              <div v-if="authStore.isLogged" class="flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded-xl">
+                <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+                <p class="text-xs font-bold text-green-700">Formulaire pré-rempli avec vos informations</p>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="sm:col-span-2 space-y-1">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Nom complet *</label>
+                  <input
+                    v-model="devisForm.nom_complet"
+                    type="text"
+                    required
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none text-sm font-medium text-gray-700"
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Téléphone *</label>
+                  <input
+                    v-model="devisForm.telephone"
+                    type="tel"
+                    required
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none text-sm font-medium text-gray-700"
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Email (optionnel)</label>
+                  <input
+                    v-model="devisForm.email"
+                    type="email"
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none text-sm font-medium text-gray-700"
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Nombre d'exemplaires *</label>
+                  <input
+                    v-model.number="devisForm.nombre_exemplaires"
+                    type="number"
+                    required
+                    min="1"
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none text-sm font-medium text-gray-700"
+                  />
+                </div>
+                <div class="sm:col-span-2 space-y-1">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Message (optionnel)</label>
+                  <textarea
+                    v-model="devisForm.message"
+                    rows="3"
+                    placeholder="Informations complémentaires..."
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 outline-none text-sm font-medium text-gray-700 resize-none"
+                  ></textarea>
+                </div>
+              </div>
+              <button
+                type="submit"
+                :disabled="devisSubmitting"
+                class="w-full py-3.5 bg-amber-500 text-white rounded-xl font-bold text-sm hover:bg-amber-600 transition-colors disabled:opacity-60 mt-2">
+                {{ devisSubmitting ? 'Envoi en cours...' : 'Envoyer la demande' }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </transition>
+    </Teleport>
+
     <!-- Author Modal -->
     <Teleport to="body">
       <div v-if="showAuthorModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
@@ -323,8 +489,59 @@ import { useRoute } from "#app";
 import { useLivreStore } from "~~/stores/livre";
 import { useAuteurStore } from "~~/stores/auteur";
 import { useCartStore } from "~~/stores/cart";
+import { useAuthStore } from "~~/stores/auth";
 
 const cartStore = useCartStore();
+const authStore = useAuthStore();
+const { $api } = useNuxtApp();
+
+// --- Devis modal ---
+const showDevisModal = ref(false);
+const devisSubmitting = ref(false);
+const devisSuccess = ref(false);
+
+const devisForm = ref({
+  nom_complet: "",
+  telephone: "",
+  email: "",
+  nombre_exemplaires: 1,
+  message: "",
+});
+
+const openDevisModal = () => {
+  devisSuccess.value = false;
+  const u = authStore.user;
+  devisForm.value = {
+    nom_complet: u ? `${u.prenom || ""} ${u.nom || ""}`.trim() : "",
+    telephone: u?.telephone || "",
+    email: u?.email || "",
+    nombre_exemplaires: 1,
+    message: "",
+  };
+  showDevisModal.value = true;
+};
+
+const submitDevis = async () => {
+  devisSubmitting.value = true;
+  try {
+    await $api("/devis", {
+      method: "POST",
+      body: {
+        livre_id: book.value.id,
+        nom_complet: devisForm.value.nom_complet,
+        telephone: devisForm.value.telephone,
+        email: devisForm.value.email || undefined,
+        nombre_exemplaires: devisForm.value.nombre_exemplaires,
+        message: devisForm.value.message || undefined,
+      },
+    });
+    devisSuccess.value = true;
+  } catch {
+    // keep modal open for retry
+  } finally {
+    devisSubmitting.value = false;
+  }
+};
 
 const addToCart = (book) => {
   cartStore.add({
@@ -417,6 +634,7 @@ const book = computed(() => {
     title: b.titre,
     authorName: b.auteurRel?.nom || b.auteur || "Auteur Inconnu",
     author: b.auteur,
+    surCommande: !!b.sur_commande,
     price: b.prix_promo ?? b.prix,
     oldPrice: b.prix_promo ? b.prix : null,
     isPromo: !!b.prix_promo,
