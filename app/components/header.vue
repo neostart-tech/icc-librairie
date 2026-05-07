@@ -132,7 +132,7 @@
 
                   <!-- Dynamic Categories -->
                   <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
-                    <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
+                    <NuxtLink v-for="cat in sortedCategories" :key="cat.id"
                       :to="`/catalogue?category=${cat.libelle}`"
                       class="flex uppercase items-center px-5 py-2.5 text-gray-600 hover:text-[#6a0d5f] hover:bg-gray-50 transition-all text-sm font-medium">
                       {{ cat.libelle }}
@@ -284,7 +284,7 @@
                   @click="isMenuOpen = false">
                   Tous les livres
                 </NuxtLink>
-                <NuxtLink v-for="cat in categorieStore.categories" :key="cat.id"
+                <NuxtLink v-for="cat in sortedCategories" :key="cat.id"
                   :to="`/catalogue?category=${cat.libelle}`"
                   class="flex items-center uppercase px-5 py-3 hover:bg-white/5 rounded-xl text-white/60 hover:text-white text-[14px] font-medium transition-colors"
                   @click="isMenuOpen = false">
@@ -464,6 +464,12 @@ onBeforeUnmount(() => {
 
 // Computed réactif pour savoir si l’utilisateur est connecté
 const isLoggedIn = computed(() => auth.isLogged);
+
+const sortedCategories = computed(() =>
+  [...categorieStore.categories].sort((a, b) =>
+    a.libelle.localeCompare(b.libelle, 'fr', { sensitivity: 'base' })
+  )
+);
 const handleLogout = () => {
   Swal.fire({
     title: 'Déconnexion ?',

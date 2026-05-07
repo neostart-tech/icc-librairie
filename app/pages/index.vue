@@ -284,7 +284,7 @@
                <span class="w-2 h-2 rounded-full bg-[#6a0d5f] animate-ping"></span>
                <span class="text-[#6a0d5f] text-[10px] font-black uppercase tracking-[0.2em]">Incontournables</span>
             </div>
-            <h2 class="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
+            <h2 class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tight">
               Sélection de <span class="text-[#6a0d5f]">l'Année</span>
             </h2>
             <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Les ouvrages qui ont marqué l'année {{ new Date().getFullYear() }}</p>
@@ -301,11 +301,11 @@
             </svg>
           </button>
 
-          <div ref="anneeContainer" class="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-8">
+          <div ref="anneeContainer" class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-8">
             <div v-for="(book, index) in selectionAnnee" :key="book.id"
               v-reveal.repeat :class="`reveal-delay-${index * 100}`"
               @click="navigateTo(`/livres/${book.id}`)"
-              class="cursor-pointer w-56 md:w-60 flex-shrink-0 snap-start group/card">
+              class="cursor-pointer w-40 md:w-50 flex-shrink-0 snap-start group/card">
               
               <div class="relative aspect-[3/4.2] mb-5 overflow-hidden rounded-[2rem] bg-gray-100 shadow-xl group-hover/card:shadow-2xl transition-all duration-700">
                  <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-1000 group-hover/card:scale-110" />
@@ -640,20 +640,20 @@ const recentBooks = computed(() => {
 });
 
 const topCategories = computed(() => {
-  const cats = [...categorieStore.categories]
+  return categorieStore.categories
+    .map((cat) => {
+      const catLivres = livreStore.livres.filter(l => l.categorie_id === cat.id);
+      const lastBook = catLivres[0];
+
+      return {
+        ...cat,
+        bookCount: catLivres.length,
+        lastBookImage: lastBook ? livreStore.getCoverImage(lastBook) : "/images/livre.jpg"
+      };
+    })
+    .filter(cat => cat.bookCount > 0)
     .sort((a, b) => b.id - a.id)
     .slice(0, 5);
-
-  return cats.map((cat) => {
-    const catLivres = livreStore.livres.filter(l => l.categorie_id === cat.id);
-    const lastBook = catLivres[0];
-
-    return {
-      ...cat,
-      bookCount: catLivres.length,
-      lastBookImage: lastBook ? livreStore.getCoverImage(lastBook) : "/images/livre.jpg"
-    };
-  });
 });
 </script>
 
