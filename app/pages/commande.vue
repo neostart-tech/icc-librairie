@@ -6,12 +6,12 @@
     ]" />
 
     <!-- Page Header -->
-    <div class="bg-[#6a0d5f] pt-10 pb-20 px-4 mb-[-2rem]">
+    <div class="bg-[#6a0d5f] pt-8 pb-16 px-4 mb-[-1rem]">
       <div class="max-w-7xl mx-auto text-center">
-        <h1 class="text-xl md:text-3xl font-bold text-white mb-4 uppercase tracking-wide">
+        <h1 class="text-xl md:text-2xl font-bold text-white mb-3 uppercase tracking-wide">
           Finaliser la <span class="text-orange-400">commande</span>
         </h1>
-        <p class="text-white/80 text-sm md:text-base max-w-2xl mx-auto font-medium">
+        <p class="text-white/80 text-xs md:text-sm max-w-2xl mx-auto font-medium">
           Choisissez votre mode de livraison et validez votre commande.
         </p>
       </div>
@@ -20,10 +20,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mt-16">
         <!-- FORMULAIRE DE COMMANDE -->
-        <section class="lg:col-span-8 space-y-8">
+        <section class="lg:col-span-8 space-y-6">
           <div
-            class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/5 p-8 md:p-12 border border-gray-100 animate-fadeInUp">
-            <div class="flex items-center gap-4 mb-10">
+            class="bg-white rounded-3xl shadow-2xl shadow-[#6a0d5f]/5 p-5 md:p-10 border border-gray-100 animate-fadeInUp">
+            <div class="flex items-center gap-4 mb-8">
               <div class="w-12 h-12 bg-[#6a0d5f]/10 rounded-2xl flex items-center justify-center text-[#6a0d5f]">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
@@ -36,10 +36,10 @@
             <!-- Delivery Selection Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div @click="typeLivraison = 'retrait'"
-                class="group relative flex items-center gap-4 p-6 rounded-3xl border-2 transition-all duration-300 cursor-pointer"
+                class="group relative flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer"
                 :class="typeLivraison === 'retrait' ? 'border-[#6a0d5f] bg-[#6a0d5f]/5' : 'border-gray-50 bg-white hover:border-gray-200'">
-                <div class="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -59,10 +59,10 @@
               </div>
 
               <div @click="typeLivraison = 'livraison'"
-                class="group relative flex items-center gap-4 p-6 rounded-3xl border-2 transition-all duration-300 cursor-pointer"
+                class="group relative flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer"
                 :class="typeLivraison === 'livraison' ? 'border-[#6a0d5f] bg-[#6a0d5f]/5' : 'border-gray-50 bg-white hover:border-gray-200'">
-                <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     <path d="M3 10h11m0 0l-4-4m4 4l-4 4" stroke-width="2" stroke-linecap="round"
                       stroke-linejoin="round" />
@@ -114,8 +114,8 @@
 
         <!-- RECAP COMMANDE -->
         <aside class="lg:col-span-4 lg:sticky lg:top-24 animate-fadeInUp" style="animation-delay: 200ms">
-          <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-8">
-            <h2 class="text-xl font-semibold text-gray-900 uppercase tracking-wide mb-8 flex items-center gap-3">
+          <div class="bg-white rounded-3xl shadow-2xl shadow-[#6a0d5f]/10 border border-gray-100 p-5 md:p-6">
+            <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-6 flex items-center gap-3">
               <svg class="w-7 h-7 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" stroke-linecap="round"
                   stroke-linejoin="round" />
@@ -126,8 +126,8 @@
             <!-- Items Brief -->
             <div class="space-y-4 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar mb-8">
               <div v-for="item in cart" :key="item.id"
-                class="flex items-center gap-4 py-2 border-b border-gray-50/50 last:border-0 hover:bg-gray-50/50 rounded-xl px-2 transition-colors">
-                <img :src="item.image" class="w-10 h-14 object-contain" alt="" />
+                class="flex items-center gap-4 py-2 border-b border-gray-50/50 last:border-0 hover:bg-gray-50/50 rounded-xl px-1 transition-colors">
+                <img :src="item.image" class="w-8 h-12 object-contain" alt="" />
                 <div class="flex-1 min-w-0">
                   <p class="text-xs font-bold text-gray-900 truncate">{{ item.title }}</p>
                   <p class="text-[10px] font-bold text-[#6a0d5f]">
@@ -149,15 +149,15 @@
               </div>
 
               <div
-                class="mt-8 mb-10 p-6 bg-[#6a0d5f]/5 rounded-[2rem] border border-[#6a0d5f]/10 text-center flex flex-col items-center">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Total à payer</span>
-                <span class="text-3xl font-bold text-[#6a0d5f] tracking-wide">
+                class="mt-6 mb-8 p-4 bg-[#6a0d5f]/5 rounded-[1.5rem] border border-[#6a0d5f]/10 text-center flex flex-col items-center">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">Total à payer</span>
+                <span class="text-xl md:text-2xl font-black text-[#6a0d5f]">
                   {{ formatPrice(grandTotal) }}
                 </span>
               </div>
 
               <button @click="submitCommande" :disabled="!canSubmit || commandeStore.loading"
-                class="w-full flex items-center justify-center gap-4 bg-[#6a0d5f] text-white py-6 rounded-2xl font-bold text-sm uppercase tracking-wide shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:grayscale disabled:scale-100">
+                class="w-full flex items-center justify-center gap-4 bg-[#6a0d5f] text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wide shadow-2xl shadow-[#6a0d5f]/30 hover:bg-[#851178] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:grayscale disabled:scale-100">
                 <span v-if="commandeStore.loading">Traitement...</span>
                 <template v-else>
                   Confirmer la commande

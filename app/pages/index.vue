@@ -16,11 +16,12 @@
 
           <div class="relative flex items-center overflow-hidden w-full">
             <!-- Categories Marquee Wrapper -->
-            <div class="w-full py-12 -my-12">
-              <div class="flex w-max animate-marquee hover:[animation-play-state:paused]">
+            <div ref="marqueeContainer" 
+              class="w-full py-12 -my-12 overflow-x-auto scrollbar-hide flex cursor-grab active:cursor-grabbing">
+              <div class="flex w-max">
                 
                 <!-- Set 1 -->
-                <div class="flex gap-6 mt-5 md:gap-8 px-3 md:px-4">
+                <div ref="marqueeSet1" class="flex gap-6 mt-5 md:gap-8 px-3 md:px-4">
                   <div v-for="(cat, index) in topCategories" :key="'orig-'+cat.id"
                     class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-80 flex-shrink-0">
 
@@ -60,7 +61,7 @@
                 </div>
 
                 <!-- Set 2 (Duplicate for infinite marquee) -->
-                <div class="flex gap-6 md:gap-8 px-3 md:px-4" aria-hidden="true">
+                <div class="flex gap-6 mt-5 md:gap-8 px-3 md:px-4" aria-hidden="true">
                   <div v-for="(cat, index) in topCategories" :key="'dup-'+cat.id"
                     class="group flex flex-col items-center text-center w-64 md:w-72 lg:w-80 flex-shrink-0">
 
@@ -167,8 +168,10 @@
     <!-- LIVRE DU MOIS & LIVRE DUO SECTION -->
     <section v-if="livreDuMois || livreDuo" class="py-24 bg-[#6a0d5f] relative overflow-hidden">
       <!-- Background subtle glow -->
-      <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[120px] rounded-full translate-x-1/2"></div>
-      <div class="absolute bottom-0 left-0 w-1/2 h-full bg-orange-500/5 blur-[120px] rounded-full -translate-x-1/2"></div>
+      <img src="/images/a-propos/img5.jpg" alt="Background"
+        class="absolute inset-0 w-full h-full object-cover object-center scale-105" />
+      <!-- Overlay dégradé violet -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#6a0d5f]/80 via-[#6a0d5f]/60 to-[#3a0532]/90"></div>
       
       <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="text-center mb-20 space-y-4 reveal-up" v-reveal.repeat>
@@ -182,7 +185,7 @@
           
           <!-- LIVRE DU MOIS (MAJOR) -->
           <div v-if="livreDuMois" class="lg:col-span-7 xl:col-span-8 relative group reveal-right" v-reveal.repeat>
-             <div class="h-full flex flex-col md:flex-row gap-10 items-center bg-white/10 backdrop-blur-2xl p-10 md:p-14 rounded-[3rem] border border-white/20 shadow-2xl relative overflow-hidden group">
+             <div class="h-full flex flex-col md:flex-row gap-10 items-center bg-[#6a0d5f] p-10 md:p-14 rounded-[3rem] border border-white/20 shadow-2xl relative overflow-hidden group">
                 <!-- Decorative background for Livre du mois -->
                 <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-orange-500/10 blur-[80px] rounded-full"></div>
                 
@@ -229,7 +232,7 @@
 
           <!-- LIVRE DUO (SECONDARY) -->
           <div v-if="livreDuo" class="lg:col-span-5 xl:col-span-4 relative group reveal-left" v-reveal.repeat>
-             <div class="h-full flex flex-col items-center justify-center bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 shadow-2xl text-center group">
+             <div class="h-full flex flex-col items-center justify-center bg-[#6a0d5f] p-10 rounded-[3rem] border border-white/10 shadow-2xl text-center group">
                 <div class="relative mb-10 w-40 md:w-48 group/img">
                    <div class="absolute -inset-4 bg-blue-500/20 blur-2xl rounded-full animate-pulse transition-all group-hover/img:bg-blue-500/30"></div>
                    <NuxtLink :to="`/livres/${livreDuo.id}`" class="block">
@@ -474,6 +477,37 @@ const statsSectionRef = ref(null);
 const statsStarted = ref(false);
 const statsTargets = [500, 100];
 const displayedStats = ref([0, 0]);
+const marqueeContainer = ref(null);
+const marqueeSet1 = ref(null);
+
+const startMarquee = () => {
+  if (!marqueeContainer.value || !marqueeSet1.value) return;
+  
+  const container = marqueeContainer.value;
+  const set1 = marqueeSet1.value;
+
+  const step = () => {
+    if (container) {
+      container.scrollLeft += 1;
+      if (container.scrollLeft >= set1.offsetWidth) {
+        container.scrollLeft = 0;
+      }
+    }
+    requestAnimationFrame(step);
+  };
+
+  // Add scroll listener for infinite loop during manual scroll
+  container.addEventListener('scroll', () => {
+    if (container.scrollLeft >= set1.offsetWidth) {
+      container.scrollLeft -= set1.offsetWidth;
+    } else if (container.scrollLeft <= 0) {
+      // Optional: handle back scroll loop if needed
+      // container.scrollLeft = set1.offsetWidth;
+    }
+  }, { passive: true });
+
+  requestAnimationFrame(step);
+};
 
 let statsObserver = null;
 
@@ -519,6 +553,9 @@ onMounted(async () => {
     );
     statsObserver.observe(statsSectionRef.value);
   }
+
+  // Start marquee
+  startMarquee();
 });
 
 onBeforeUnmount(() => {
@@ -621,14 +658,8 @@ const topCategories = computed(() => {
 </script>
 
 <style scoped>
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
 
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
+/* Scroll Reveal Animations */
 
 @keyframes fadeInUp {
   from {

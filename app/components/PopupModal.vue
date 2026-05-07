@@ -16,19 +16,19 @@
         ></div>
 
         <!-- Modal Content -->
-        <div class="relative w-full max-w-lg bg-white dark:bg-gray-900 rounded-[2.5rem] overflow-hidden shadow-[0_35px_60px_-15px_rgba(61,2,53,0.5)] group animate-float">
+        <div class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-[0_35px_60px_-15px_rgba(61,2,53,0.5)] group animate-float">
           <!-- Close Button -->
           <button 
             @click="close"
-            class="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
+            class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
           <!-- Image Container -->
-          <div class="relative overflow-hidden aspect-square flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+          <div class="relative overflow-hidden aspect-square flex items-center justify-center bg-gray-50 dark:bg-gray-800/50 p-6">
             <component 
               :is="popup?.link ? 'a' : 'div'"
               :href="popup?.link"
@@ -39,15 +39,15 @@
               <img 
                 :src="popup?.image_url" 
                 alt="Promotion"
-                class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110"
+                class="w-full h-full object-contain transition-transform duration-[2000ms] group-hover:scale-110"
               />
               
               <!-- Soft inner shadow -->
               <div class="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] pointer-events-none"></div>
 
               <!-- Hover Overlay -->
-              <div v-if="popup?.link" class="absolute inset-0 bg-gradient-to-t from-[#3d0235]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-10">
-                <span class="text-white font-black text-xs uppercase tracking-[0.3em] translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+              <div v-if="popup?.link" class="absolute inset-0 bg-gradient-to-t from-[#3d0235]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                <span class="text-white font-black text-[10px] uppercase tracking-[0.3em] translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   Découvrir →
                 </span>
               </div>

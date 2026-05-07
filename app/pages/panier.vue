@@ -64,57 +64,56 @@
 
           <!-- Items List -->
           <div v-for="(item, index) in cart" :key="item.id"
-            class="group bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row gap-5 transition-all duration-500 hover:shadow-2xl hover:shadow-[#6a0d5f]/5 animate-fadeInUp"
+            class="group bg-white rounded-xl shadow-sm border border-gray-100 p-3 md:p-5 flex gap-4 md:gap-8 transition-all duration-500 hover:shadow-xl hover:shadow-[#6a0d5f]/5 animate-fadeInUp"
             :style="{ animationDelay: `${index * 100}ms` }">
 
             <!-- Book Image -->
             <div
-              class="relative w-full md:w-20 aspect-[3/4] rounded-xl bg-gray-50 flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform duration-500 shadow-md">
-              <img :src="item.image" :alt="item.title" class="w-full h-full object-contain p-2" />
+              class="relative w-16 md:w-24 aspect-[3/4.2] rounded-lg bg-gray-50 flex-shrink-0 overflow-hidden shadow-sm group-hover:scale-105 transition-transform duration-500">
+              <img :src="item.image" :alt="item.title" class="w-full h-full object-contain p-1.5" />
             </div>
 
-            <div class="flex-1 flex flex-col justify-between py-2">
-              <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                <div>
+            <div class="flex-1 flex flex-col justify-between py-1">
+              <div class="flex items-start justify-between gap-3">
+                <div class="space-y-0.5">
                   <h3
-                    class="text-gray-900 text-base md:text-lg leading-tight group-hover:text-[#6a0d5f] transition-colors">
+                    class="text-gray-900 text-[14px] md:text-lg font-bold leading-tight group-hover:text-[#6a0d5f] transition-colors line-clamp-2">
                     {{ item.title }}
                   </h3>
-                  <p v-if="item.author" class="text-gray-400 text-xs tracking-widest mt-1">
+                  <p v-if="item.author" class="text-gray-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">
                     {{ item.author }}
                   </p>
                 </div>
 
                 <button @click="removeItem(item.id)"
-                  class="w-10 h-10 rounded-full bg-gray-50 text-gray-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all duration-300 md:self-start">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-50 text-gray-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all duration-300 flex-shrink-0">
+                  <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M6 18L18 6M6 6l12 12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </button>
               </div>
 
-              <div class="flex flex-wrap items-center justify-between gap-4 mt-4 md:mt-0">
+              <div class="flex items-center justify-between gap-4 mt-2">
                 <!-- Quantity Controls -->
-                <div class="flex items-center gap-1 p-1 bg-gray-50 rounded-2xl border border-gray-100">
+                <div class="flex items-center gap-0.5 p-0.5 bg-gray-50 rounded-xl border border-gray-100">
                   <button @click="decreaseQty(item)" :disabled="item.quantity <= 1"
-                    class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] hover:shadow-sm disabled:opacity-30 transition-all">
+                    class="w-7 h-7 md:w-9 md:h-9 rounded-lg flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] disabled:opacity-20 transition-all text-xs">
                     ー
                   </button>
-                  <span class="w-12 text-center font-bold text-gray-900">{{ item.quantity }}</span>
+                  <span class="w-8 md:w-10 text-center font-bold text-gray-900 text-xs md:text-sm">{{ item.quantity }}</span>
                   <button @click="increaseQty(item)" :disabled="item.quantity >= item.stockAvailable"
-                    class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] hover:shadow-sm disabled:opacity-30 transition-all">
+                    class="w-7 h-7 md:w-9 md:h-9 rounded-lg flex items-center justify-center font-bold text-gray-500 hover:bg-white hover:text-[#6a0d5f] disabled:opacity-20 transition-all text-xs">
                     ＋
                   </button>
                 </div>
 
                 <!-- Prices -->
                 <div class="flex flex-col items-end">
-                  <span class="text-xs font-bold text-gray-300 tracking-widest mb-1">Total Article</span>
-                  <span class="text-sm font-semibold text-[#6a0d5f] tracking-wide">
+                  <span class="text-[14px] md:text-lg font-black text-[#6a0d5f] tracking-tight">
                     {{ formatPrice(item.price * item.quantity) }}
                   </span>
-                  <span v-if="item.quantity > 1" class="text-[10px] font-bold text-gray-400">
-                    {{ formatPrice(item.price) }} / unité
+                  <span v-if="item.quantity > 1" class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">
+                    {{ formatPrice(item.price) }} / u
                   </span>
                 </div>
               </div>
@@ -147,9 +146,9 @@
             </div>
 
             <div
-              class="mt-4 mb-5 p-4 bg-[#6a0d5f]/5 rounded-xl border border-[#6a0d5f]/10 text-center flex flex-col items-center">
-               <span class="text-xs font-bold text-gray-400 uppercase tracking-[0.3em] mb-2">Total à payer</span>
-              <span class="text-3xl font-bold text-[#6a0d5f] tracking-wide">
+              class="mt-4 mb-5 p-3 bg-[#6a0d5f]/5 rounded-xl border border-[#6a0d5f]/10 text-center flex flex-col items-center">
+               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">Total à payer</span>
+              <span class="text-xl md:text-2xl font-black text-[#6a0d5f]">
                 {{ formatPrice(subtotal) }}
               </span>
             </div>
