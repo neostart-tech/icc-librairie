@@ -271,13 +271,18 @@
                       </span>
                     </div>
 
-                    <button @click.stop.prevent="addToCart(book)" :disabled="!book.stockAvailable"
-                      class="w-full flex items-center justify-center gap-2 bg-[#6a0d5f] text-white py-3.5 rounded-2xl font-bold text-[13px] uppercase tracking-wide transition-all duration-300 relative z-20 shadow-lg shadow-[#6a0d5f]/20 hover:shadow-xl hover:bg-[#5a0b50] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed">
+                    <button
+                      @click.stop.prevent="cartStore.getQuantity(book.id) > 0 ? navigateTo('/panier') : addToCart(book)"
+                      :disabled="!book.stockAvailable && cartStore.getQuantity(book.id) === 0"
+                      class="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-[13px] uppercase tracking-wide transition-all duration-300 relative z-20 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
+                      :class="cartStore.getQuantity(book.id) > 0
+                        ? 'bg-green-600 text-white shadow-green-200 hover:bg-green-700'
+                        : 'bg-[#6a0d5f] text-white shadow-[#6a0d5f]/20 hover:bg-[#5a0b50]'">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
-                      {{ book.stockAvailable ? 'Ajouter' : 'Rupture' }}
+                      {{ cartStore.getQuantity(book.id) > 0 ? 'Voir le panier' : (book.stockAvailable ? 'Ajouter' : 'Rupture') }}
                     </button>
                   </div>
                 </div>

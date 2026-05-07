@@ -215,11 +215,16 @@
                         <p v-if="livreDuMois.prix_promo" class="text-white/40 line-through text-sm">{{ formatPrice(livreDuMois.prix) }}</p>
                       </div>
                       <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <button @click="addToCart(livreDuMois)" class="w-full sm:w-auto px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-orange-500 transition-all shadow-xl shadow-orange-500/20 flex items-center justify-center gap-3">
+                        <button
+                          @click="cartStore.getQuantity(livreDuMois.id) > 0 ? navigateTo('/panier') : addToCart(livreDuMois)"
+                          class="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3"
+                          :class="cartStore.getQuantity(livreDuMois.id) > 0
+                            ? 'bg-green-500 text-white shadow-green-500/20 hover:bg-green-600'
+                            : 'bg-orange-500 text-white shadow-orange-500/20 hover:bg-white hover:text-orange-500'">
                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                            </svg>
-                           Ajouter au panier
+                           {{ cartStore.getQuantity(livreDuMois.id) > 0 ? 'Voir le panier' : 'Ajouter au panier' }}
                         </button>
                         <NuxtLink :to="`/livres/${livreDuMois.id}`" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-2xl font-black text-xs uppercase tracking-widest transition-all text-center flex items-center justify-center">
                           Détails
@@ -255,11 +260,16 @@
                    <div class="space-y-4 pt-4">
                       <p class="text-2xl font-black text-white">{{ formatPrice(livreDuo.prix_promo || livreDuo.prix) }}</p>
                       <div class="flex flex-col gap-3">
-                        <button @click="addToCart(livreDuo)" class="w-full px-6 py-4 bg-white text-[#6a0d5f] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all shadow-lg flex items-center justify-center gap-2">
+                        <button
+                          @click="cartStore.getQuantity(livreDuo.id) > 0 ? navigateTo('/panier') : addToCart(livreDuo)"
+                          class="w-full px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2"
+                          :class="cartStore.getQuantity(livreDuo.id) > 0
+                            ? 'bg-green-500 text-white hover:bg-green-600'
+                            : 'bg-white text-[#6a0d5f] hover:bg-blue-500 hover:text-white'">
                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                            </svg>
-                           Ajouter au panier
+                           {{ cartStore.getQuantity(livreDuo.id) > 0 ? 'Voir le panier' : 'Ajouter au panier' }}
                         </button>
                         <NuxtLink :to="`/livres/${livreDuo.id}`" class="w-full px-6 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all text-center flex items-center justify-center">
                           Détails
@@ -312,7 +322,10 @@
                  <div class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/80 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
                     <div class="absolute bottom-6 left-6 right-6 flex justify-between items-center">
                        <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-xl">Voir</span>
-                       <button @click.stop="addToCart(book)" class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center shadow-xl">
+                       <button
+                         @click.stop="cartStore.getQuantity(book.id) > 0 ? navigateTo('/panier') : addToCart(book)"
+                         class="w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-xl transition-colors"
+                         :class="cartStore.getQuantity(book.id) > 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-orange-500 hover:bg-orange-600'">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-width="2.5" />
                           </svg>

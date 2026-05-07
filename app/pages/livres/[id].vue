@@ -113,39 +113,36 @@
                 </div>
 
                 <div class="flex-grow max-w-md">
-                  <button @click.stop.prevent="addToCart(book)" :disabled="cartStore.getQuantity(book.id) > 0 || !book.stockAvailable
-                    "
+                  <button
+                    @click.stop.prevent="cartStore.getQuantity(book.id) > 0 ? navigateTo('/panier') : addToCart(book)"
+                    :disabled="!book.stockAvailable && cartStore.getQuantity(book.id) === 0"
                     class="group w-full py-3.5 rounded-xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-1 active:scale-95 overflow-hidden relative"
                     :class="[
-                      !book.stockAvailable
+                      !book.stockAvailable && cartStore.getQuantity(book.id) === 0
                         ? 'bg-gray-100 text-gray-400'
                         : cartStore.getQuantity(book.id) > 0
-                          ? 'bg-green-500 text-white shadow-green-200'
+                          ? 'bg-green-500 text-white shadow-green-200 hover:bg-green-600'
                           : 'bg-[#6a0d5f] text-white shadow-[#6a0d5f]/30 hover:shadow-[#6a0d5f]/50',
                     ]">
-                    <!-- Animated Shine Effect -->
-                    <div
-                      class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000">
-                    </div>
+                    <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
 
-                    <svg v-if="
-                      book.stockAvailable &&
-                      cartStore.getQuantity(book.id) === 0
-                    " class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <svg v-if="book.stockAvailable && cartStore.getQuantity(book.id) === 0"
+                      class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                       <path stroke-linecap="round" stroke-linejoin="round"
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    <svg v-else-if="cartStore.getQuantity(book.id) > 0" class="w-5 h-5" fill="none"
-                      stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    <svg v-else-if="cartStore.getQuantity(book.id) > 0"
+                      class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
 
                     <span>
                       {{
-                        !book.stockAvailable
+                        !book.stockAvailable && cartStore.getQuantity(book.id) === 0
                           ? "Épuisé"
                           : cartStore.getQuantity(book.id) > 0
-                            ? "Dans le panier"
+                            ? "Voir le panier"
                             : "Ajouter au panier"
                       }}
                     </span>
