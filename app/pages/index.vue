@@ -148,7 +148,10 @@
               <div class="space-y-2 px-2">
                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ book.categorie?.libelle || 'Inspirant' }}</span>
                 <h3 class="font-bold text-gray-900 text-sm line-clamp-1 group-hover:text-[#6a0d5f] transition-colors">{{ book.titre }}</h3>
-                <p class="text-lg font-bold text-[#6a0d5f]">{{ formatPrice(book.prix_promo || book.prix) }}</p>
+                <p class="text-lg font-bold text-[#6a0d5f]">
+                  <span v-if="book.sur_commande">Sur commande</span>
+                  <span v-else>{{ formatPrice(book.prix_promo || book.prix) }}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -211,8 +214,11 @@
                    </p>
                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-6 pt-4">
                       <div class="space-y-1">
-                        <p class="text-3xl font-black text-white">{{ formatPrice(livreDuMois.prix_promo || livreDuMois.prix) }}</p>
-                        <p v-if="livreDuMois.prix_promo" class="text-white/40 line-through text-sm">{{ formatPrice(livreDuMois.prix) }}</p>
+                        <p class="text-3xl font-black text-white">
+                          <span v-if="livreDuMois.sur_commande">Sur commande</span>
+                          <span v-else>{{ formatPrice(livreDuMois.prix_promo || livreDuMois.prix) }}</span>
+                        </p>
+                        <p v-if="!livreDuMois.sur_commande && livreDuMois.prix_promo" class="text-white/40 line-through text-sm">{{ formatPrice(livreDuMois.prix) }}</p>
                       </div>
                       <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                         <button
@@ -258,7 +264,10 @@
                       {{ livreDuo.description || "Le complément idéal pour approfondir votre lecture et maximiser votre impact." }}
                    </p>
                    <div class="space-y-4 pt-4">
-                      <p class="text-2xl font-black text-white">{{ formatPrice(livreDuo.prix_promo || livreDuo.prix) }}</p>
+                      <p class="text-2xl font-black text-white">
+                        <span v-if="livreDuo.sur_commande">Sur commande</span>
+                        <span v-else>{{ formatPrice(livreDuo.prix_promo || livreDuo.prix) }}</span>
+                      </p>
                       <div class="flex flex-col gap-3">
                         <button
                           @click="cartStore.getQuantity(livreDuo.id) > 0 ? navigateTo('/panier') : addToCart(livreDuo)"
@@ -342,7 +351,10 @@
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate max-w-[150px]">
                       {{ book.auteurRel?.nom || book.auteur }}
                     </p>
-                    <p class="text-sm font-black text-[#6a0d5f]">{{ formatPrice(book.prix_promo || book.prix) }}</p>
+                    <p class="text-sm font-black text-[#6a0d5f]">
+                      <span v-if="book.sur_commande">Sur commande</span>
+                      <span v-else>{{ formatPrice(book.prix_promo || book.prix) }}</span>
+                    </p>
                  </div>
               </div>
             </div>
