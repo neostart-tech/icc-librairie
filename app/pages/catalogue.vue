@@ -512,21 +512,31 @@ onMounted(async () => {
     auteurStore.fetchAuteurs(),
   ]);
 
-  // Sync category from URL if present
+  // Sync category or author from URL if present
   if (route.query.category) {
     filters.value.categories = [route.query.category];
   }
+  if (route.query.author) {
+    filters.value.authors = [route.query.author];
+  }
 });
 
-// Watch route category changes
-watch(() => route.query.category, (newCat) => {
-  if (newCat) {
-    filters.value.categories = [newCat];
+// Watch route changes for category and author
+watch(() => route.query, (newQuery) => {
+  if (newQuery.category) {
+    filters.value.categories = [newQuery.category];
   } else {
     filters.value.categories = [];
   }
+  
+  if (newQuery.author) {
+    filters.value.authors = [newQuery.author];
+  } else {
+    filters.value.authors = [];
+  }
+  
   currentPage.value = 1;
-});
+}, { deep: true });
 
 const enVogue = computed(() => {
   const book = livreStore.livreDuMois;
