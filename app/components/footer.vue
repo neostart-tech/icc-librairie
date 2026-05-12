@@ -118,25 +118,24 @@
                 </svg>
               </div>
               <div class="flex flex-col font-medium text-[15px]">
-                <a href="tel:+22892090204" class="hover:text-white transition-colors duration-300 block">+228 92 09 02 04</a>
-                <a href="tel:+22879762733" class="hover:text-white transition-colors duration-300 block">+228 79 76 27 33</a>
-                <a href="tel:+22890009462" class="hover:text-white transition-colors duration-300 block mt-0.5">+228 90 00 94 62</a>
+                <a v-if="settingsStore.settings?.contact_phone_primary" :href="`tel:${settingsStore.settings.contact_phone_primary.replace(/\s+/g, '')}`" class="hover:text-white transition-colors duration-300 block">{{ settingsStore.settings.contact_phone_primary }}</a>
+                <a v-if="settingsStore.settings?.contact_phone_secondary_1" :href="`tel:${settingsStore.settings.contact_phone_secondary_1.replace(/\s+/g, '')}`" class="hover:text-white transition-colors duration-300 block">{{ settingsStore.settings.contact_phone_secondary_1 }}</a>
+                <a v-if="settingsStore.settings?.contact_phone_secondary_2" :href="`tel:${settingsStore.settings.contact_phone_secondary_2.replace(/\s+/g, '')}`" class="hover:text-white transition-colors duration-300 block mt-0.5">{{ settingsStore.settings.contact_phone_secondary_2 }}</a>
               </div>
             </li>
             
-            <!-- Email -->
-            <li class="flex items-center gap-3 text-white/70 group">
+            <li v-if="settingsStore.settings?.contact_email" class="flex items-center gap-3 text-white/70 group">
               <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-pink-500/20 transition-colors">
                 <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
               </div>
-              <a href="mailto:librairieicclome05gmail.com" class="hover:text-white transition-colors duration-300 font-medium text-[15px]">librairieicclome05gmail.com</a>
+              <a :href="`mailto:${settingsStore.settings.contact_email}`" class="hover:text-white transition-colors duration-300 font-medium text-[15px]">{{ settingsStore.settings.contact_email }}</a>
             </li>
 
             <!-- Adresse -->
-            <li class="flex items-start gap-3 text-white/70 group">
+            <li v-if="settingsStore.settings?.contact_address" class="flex items-start gap-3 text-white/70 group">
               <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-pink-500/20 transition-colors">
                 <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -144,8 +143,7 @@
                 </svg>
               </div>
               <div class="flex flex-col font-medium">
-                <span class="text-[15px] text-white">Librairie ICC Hountigomé</span>
-                <span class="text-[14px] mt-0.5">Lomé, Togo</span>
+                <span class="text-[15px] text-white">{{ settingsStore.settings.contact_address }}</span>
               </div>
             </li>
           </ul>
@@ -208,7 +206,14 @@
 </template>
 
 <script setup lang="ts">
-// Aucun script additionnel n'est nécessaire
+import { useSettingsStore } from "~~/stores/settings";
+const settingsStore = useSettingsStore();
+
+onMounted(async () => {
+  if (!settingsStore.settings) {
+    await settingsStore.fetchSettings();
+  }
+});
 </script>
 
 <style scoped>

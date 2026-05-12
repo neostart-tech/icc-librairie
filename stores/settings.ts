@@ -2,7 +2,13 @@ import { defineStore } from "pinia";
 
 export interface Settings {
 	payment_message: string;
-	delivery_fee: number;
+	contact_phone_primary: string;
+	contact_phone_secondary_1: string;
+	contact_phone_secondary_2: string;
+	contact_email: string;
+	contact_address: string;
+	opening_hours_weekday: string;
+	opening_hours_sunday: string;
 }
 
 export const useSettingsStore = defineStore("settings", {

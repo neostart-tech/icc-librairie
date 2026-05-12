@@ -30,32 +30,32 @@
           style="clip-path: polygon(0 0, 100% 0, 100% 100%, 45px 100%);">
           <!-- Left spacing and clip-path create a slanted edge parallel to the white curve with a violet gap -->
           <div class="flex items-center gap-3 xl:gap-4 font-medium tracking-wide whitespace-nowrap">
-            <a href="tel:+22892090204" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
+            <a v-if="settingsStore.settings?.contact_phone_primary" :href="`tel:${settingsStore.settings.contact_phone_primary.replace(/\s+/g, '')}`" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path
                   d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                 </path>
               </svg>
-              <span>+228 92 09 02 04</span>
+              <span>{{ settingsStore.settings.contact_phone_primary }}</span>
             </a>
-            <div class="w-px h-5 bg-white/20"></div>
-            <a href="mailto:librairieicclome05gmail.com" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
+            <div v-if="settingsStore.settings?.contact_phone_primary && settingsStore.settings?.contact_email" class="w-px h-5 bg-white/20"></div>
+            <a v-if="settingsStore.settings?.contact_email" :href="`mailto:${settingsStore.settings.contact_email}`" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
-              <span>librairieicclome05gmail.com</span>
+              <span>{{ settingsStore.settings.contact_email }}</span>
             </a>
-            <div class="w-px h-5 bg-white/20"></div>
-            <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
+            <div v-if="settingsStore.settings?.contact_email && (settingsStore.settings?.opening_hours_weekday || settingsStore.settings?.opening_hours_sunday)" class="w-px h-5 bg-white/20"></div>
+            <div v-if="settingsStore.settings?.opening_hours_weekday || settingsStore.settings?.opening_hours_sunday" class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
-              <span>Lun-Ven 8h-17h | Dim 8h-14h</span>
+              <span>{{ settingsStore.settings.opening_hours_weekday }}{{ settingsStore.settings.opening_hours_weekday && settingsStore.settings.opening_hours_sunday ? ' | ' : '' }}{{ settingsStore.settings.opening_hours_sunday }}</span>
             </div>
           </div>
 
@@ -401,14 +401,14 @@
           <!-- Bottom Info -->
           <div class="mt-8 pt-8 border-t border-white/5 space-y-4">
              <div class="flex flex-col gap-2 text-white/40 text-sm font-medium">
-                <div class="flex items-center gap-3">
+                <div v-if="settingsStore.settings?.contact_phone_primary" class="flex items-center gap-3">
                    <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                   +228 92 09 02 04
+                   {{ settingsStore.settings.contact_phone_primary }}
                 </div>
-                <div class="flex items-center gap-3">
-                   <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                   librairieicclome05@gmail.com
-                </div>
+                 <div v-if="settingsStore.settings?.contact_email" class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    {{ settingsStore.settings.contact_email }}
+                 </div>
              </div>
           </div>
         </div>
@@ -589,6 +589,7 @@ import { useCartStore } from "~~/stores/cart";
 import { useCategorieStore } from "~~/stores/categorie";
 import { useLivreStore } from "~~/stores/livre";
 import { useAuteurStore } from "~~/stores/auteur";
+import { useSettingsStore } from "~~/stores/settings";
 
 import { useSearch } from "~/composables/useSearch";
 
@@ -605,6 +606,7 @@ const { search } = useSearch();
 const categorieStore = useCategorieStore();
 const livreStore = useLivreStore();
 const auteurStore = useAuteurStore();
+const settingsStore = useSettingsStore();
 
 const isMenuOpen = ref(false);
 const isCatalogueExtended = ref(false);
@@ -682,6 +684,7 @@ onMounted(async () => {
   if (livreStore.livres.length === 0) promises.push(livreStore.fetchLivres());
   if (auteurStore.auteurs.length === 0) promises.push(auteurStore.fetchAuteurs());
   if (!livreStore.livreDuMois) promises.push(livreStore.fetchFeaturedLivres());
+  if (!settingsStore.settings) promises.push(settingsStore.fetchSettings());
   
   await Promise.all(promises);
 });
