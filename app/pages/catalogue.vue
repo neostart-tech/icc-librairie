@@ -51,8 +51,22 @@
               </svg>
               Catégories
             </h3>
+            
+            <!-- Search Category -->
+            <div class="mb-4 relative group">
+              <input 
+                v-model="categorySearch" 
+                type="text" 
+                placeholder="Rechercher..."
+                class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2 text-xs focus:ring-2 focus:ring-[#6a0d5f]/10 focus:border-[#6a0d5f]/20 outline-none transition-all"
+              />
+              <svg class="absolute right-3 top-2.5 w-3.5 h-3.5 text-gray-300 group-focus-within:text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+
             <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-              <label v-for="cat in categorieStore.categories" :key="cat.id"
+              <label v-for="cat in filteredCategories" :key="cat.id"
                 class="flex items-center gap-3 group cursor-pointer">
                 <div class="relative flex items-center">
                   <input type="checkbox" :value="cat.libelle" v-model="filters.categories"
@@ -78,8 +92,22 @@
               </svg>
               Auteurs
             </h3>
+
+            <!-- Search Author -->
+            <div class="mb-4 relative group">
+              <input 
+                v-model="authorSearch" 
+                type="text" 
+                placeholder="Rechercher..."
+                class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2 text-xs focus:ring-2 focus:ring-[#6a0d5f]/10 focus:border-[#6a0d5f]/20 outline-none transition-all"
+              />
+              <svg class="absolute right-3 top-2.5 w-3.5 h-3.5 text-gray-300 group-focus-within:text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+
             <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-              <label v-for="auteur in auteurStore.auteurs" :key="auteur.id"
+              <label v-for="auteur in filteredAuthors" :key="auteur.id"
                 class="flex items-center gap-3 group cursor-pointer">
                 <div class="relative flex items-center">
                   <input type="checkbox" :value="auteur.nom" v-model="filters.authors"
@@ -387,8 +415,18 @@
               <!-- CATEGORIES -->
               <div>
                 <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Par Catégorie</h3>
-                <div class="space-y-3">
-                  <label v-for="cat in categorieStore.categories" :key="cat.id" class="flex items-center gap-3">
+                
+                <div class="mb-4 relative group">
+                  <input 
+                    v-model="categorySearch" 
+                    type="text" 
+                    placeholder="Rechercher..."
+                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2 text-xs focus:ring-2 focus:ring-[#6a0d5f]/10 focus:border-[#6a0d5f]/20 outline-none transition-all"
+                  />
+                </div>
+
+                <div class="space-y-3 max-h-[200px] overflow-y-auto pr-1 custom-scrollbar">
+                  <label v-for="cat in filteredCategories" :key="cat.id" class="flex items-center gap-3">
                     <input type="checkbox" :value="cat.libelle" v-model="filters.categories"
                       class="w-5 h-5 rounded border-gray-300 text-[#6a0d5f] focus:ring-[#6a0d5f]/20">
                     <span class="text-sm font-bold text-gray-600">{{ cat.libelle }}</span>
@@ -399,8 +437,18 @@
               <!-- AUTEURS -->
               <div>
                 <h3 class="font-bold text-gray-900 mb-4 text-xs uppercase tracking-widest">Par Auteur</h3>
-                <div class="space-y-3">
-                  <label v-for="auteur in auteurStore.auteurs" :key="auteur.id" class="flex items-center gap-3">
+
+                <div class="mb-4 relative group">
+                  <input 
+                    v-model="authorSearch" 
+                    type="text" 
+                    placeholder="Rechercher..."
+                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2 text-xs focus:ring-2 focus:ring-[#6a0d5f]/10 focus:border-[#6a0d5f]/20 outline-none transition-all"
+                  />
+                </div>
+
+                <div class="space-y-3 max-h-[200px] overflow-y-auto pr-1 custom-scrollbar">
+                  <label v-for="auteur in filteredAuthors" :key="auteur.id" class="flex items-center gap-3">
                     <input type="checkbox" :value="auteur.nom" v-model="filters.authors"
                       class="w-5 h-5 rounded border-gray-300 text-[#6a0d5f] focus:ring-[#6a0d5f]/20">
                     <span class="text-sm font-bold text-gray-600">{{ auteur.nom }}</span>
@@ -465,6 +513,37 @@ const filters = ref({
   authors: [],
 });
 
+const categorySearch = ref("");
+const authorSearch = ref("");
+
+const sortedCategories = computed(() => {
+  return [...categorieStore.categories].sort((a, b) =>
+    a.libelle.localeCompare(b.libelle)
+  );
+});
+
+const filteredCategories = computed(() => {
+  if (!categorySearch.value) return sortedCategories.value;
+  const q = categorySearch.value.toLowerCase();
+  return sortedCategories.value.filter((cat) =>
+    cat.libelle.toLowerCase().includes(q)
+  );
+});
+
+const sortedAuthors = computed(() => {
+  return [...auteurStore.auteurs].sort((a, b) =>
+    a.nom.localeCompare(b.nom)
+  );
+});
+
+const filteredAuthors = computed(() => {
+  if (!authorSearch.value) return sortedAuthors.value;
+  const q = authorSearch.value.toLowerCase();
+  return sortedAuthors.value.filter((auteur) =>
+    auteur.nom.toLowerCase().includes(q)
+  );
+});
+
 // Titre dynamique et Breadcrumb
 const selectedCategory = computed(() => {
   return route.query.category || null;
@@ -512,21 +591,31 @@ onMounted(async () => {
     auteurStore.fetchAuteurs(),
   ]);
 
-  // Sync category from URL if present
+  // Sync category or author from URL if present
   if (route.query.category) {
     filters.value.categories = [route.query.category];
   }
+  if (route.query.author) {
+    filters.value.authors = [route.query.author];
+  }
 });
 
-// Watch route category changes
-watch(() => route.query.category, (newCat) => {
-  if (newCat) {
-    filters.value.categories = [newCat];
+// Watch route changes for category and author
+watch(() => route.query, (newQuery) => {
+  if (newQuery.category) {
+    filters.value.categories = [newQuery.category];
   } else {
     filters.value.categories = [];
   }
+  
+  if (newQuery.author) {
+    filters.value.authors = [newQuery.author];
+  } else {
+    filters.value.authors = [];
+  }
+  
   currentPage.value = 1;
-});
+}, { deep: true });
 
 const enVogue = computed(() => {
   const book = livreStore.livreDuMois;

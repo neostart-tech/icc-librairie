@@ -42,9 +42,9 @@
           </div>
 
           <!-- Téléphones -->
-          <div class="bg-gray-50 rounded-3xl p-6 space-y-5 border border-gray-100">
+          <div v-if="phones.length > 0" class="bg-gray-50 rounded-3xl p-6 space-y-5 border border-gray-100">
             <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Téléphone</h3>
-            <a v-for="phone in phones" :key="phone.number" :href="'tel:' + phone.raw"
+            <a v-for="(phone, idx) in phones" :key="idx" :href="`tel:${phone.raw}`"
               class="group flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 hover:border-[#6a0d5f]/30">
               <div class="w-11 h-11 rounded-xl bg-[#6a0d5f]/10 flex items-center justify-center group-hover:bg-[#6a0d5f] transition-colors duration-300 flex-shrink-0">
                 <svg class="w-5 h-5 text-[#6a0d5f] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -59,7 +59,7 @@
           </div>
 
           <!-- Email -->
-          <a href="mailto:librairieicclome05gmail.com"
+          <a v-if="settingsStore.settings?.contact_email" :href="`mailto:${settingsStore.settings.contact_email}`"
             class="group flex items-center gap-4 p-5 bg-gray-50 rounded-3xl border border-gray-100 hover:border-[#6a0d5f]/30 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div class="w-12 h-12 rounded-2xl bg-[#6a0d5f]/10 flex items-center justify-center group-hover:bg-[#6a0d5f] transition-colors duration-300 flex-shrink-0">
               <svg class="w-5 h-5 text-[#6a0d5f] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,13 +68,13 @@
               </svg>
             </div>
             <div>
-              <p class="font-bold text-gray-900 text-[15px] group-hover:text-[#6a0d5f] transition-colors">librairieicclome05gmail.com</p>
+              <p class="font-bold text-gray-900 text-[15px] group-hover:text-[#6a0d5f] transition-colors">{{ settingsStore.settings.contact_email }}</p>
               <p class="text-gray-400 text-xs font-medium">Email</p>
             </div>
           </a>
 
           <!-- Horaires d'ouverture -->
-          <div class="bg-gradient-to-br from-[#6a0d5f] to-[#4a0942] rounded-3xl p-6 text-white">
+          <div v-if="schedules.length > 0" class="bg-gradient-to-br from-[#6a0d5f] to-[#4a0942] rounded-3xl p-6 text-white">
             <div class="flex items-center gap-3 mb-5">
               <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -85,8 +85,7 @@
               <h3 class="font-bold text-lg">Horaires d'ouverture</h3>
             </div>
             <div class="space-y-3">
-              <div v-for="schedule in schedules" :key="schedule.day"
-                class="flex items-center justify-between py-2 border-b border-white/10 last:border-0">
+              <div v-for="(schedule, idx) in schedules" :key="idx" class="flex items-center justify-between py-2 border-b border-white/10 last:border-0">
                 <span class="font-medium text-white/80 text-[15px]">{{ schedule.day }}</span>
                 <span class="font-bold text-white text-[15px] bg-white/15 px-3 py-1 rounded-full">{{ schedule.hours }}</span>
               </div>
@@ -134,7 +133,7 @@
           </a>
 
           <!-- Adresse sous la carte -->
-          <div class="flex items-start gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100">
+          <div v-if="settingsStore.settings?.contact_address" class="flex items-start gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100">
             <div class="w-10 h-10 rounded-xl bg-[#6a0d5f]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
               <svg class="w-5 h-5 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -142,8 +141,7 @@
               </svg>
             </div>
             <div>
-              <p class="font-bold text-gray-900 text-[15px]">Librairie ICC Hountigomé</p>
-              <p class="text-gray-500 text-[14px] mt-1 leading-relaxed">Lomé, Togo<br/>À côté de l'Impact Centre Chrétien</p>
+              <p class="font-bold text-gray-900 text-[15px]">{{ settingsStore.settings.contact_address }}</p>
             </div>
           </div>
         </div>
@@ -169,6 +167,16 @@
 </template>
 
 <script setup lang="ts">
+import { useSettingsStore } from "~~/stores/settings";
+
+const settingsStore = useSettingsStore();
+
+onMounted(async () => {
+  if (!settingsStore.settings) {
+    await settingsStore.fetchSettings();
+  }
+});
+
 useHead({
   title: 'Contact – Librairie ICC Hountigomé',
   meta: [
@@ -176,14 +184,26 @@ useHead({
   ]
 })
 
-const phones = [
-  { number: '+228 92 09 02 04', raw: '+22892090204', label: 'Principal' },
-  { number: '+228 79 76 27 33', raw: '+22879762733', label: 'Secondaire' },
-  { number: '+228 90 00 94 62', raw: '+22890009462', label: 'Secondaire' },
-]
+const phones = computed(() => [
+  { 
+    number: settingsStore.settings?.contact_phone_primary, 
+    raw: settingsStore.settings?.contact_phone_primary?.replace(/\s/g, ''), 
+    label: 'Principal' 
+  },
+  { 
+    number: settingsStore.settings?.contact_phone_secondary_1, 
+    raw: settingsStore.settings?.contact_phone_secondary_1?.replace(/\s/g, ''), 
+    label: 'Secondaire' 
+  },
+  { 
+    number: settingsStore.settings?.contact_phone_secondary_2, 
+    raw: settingsStore.settings?.contact_phone_secondary_2?.replace(/\s/g, ''), 
+    label: 'Secondaire' 
+  },
+].filter(p => p.number));
 
-const schedules = [
-  { day: 'Lundi – Vendredi', hours: '8h00 – 17h00' },
-  { day: 'Dimanche', hours: '8h00 – 14h00' },
-]
+const schedules = computed(() => [
+  { day: 'Lundi – Vendredi', hours: settingsStore.settings?.opening_hours_weekday },
+  { day: 'Dimanche', hours: settingsStore.settings?.opening_hours_sunday },
+].filter(s => s.hours));
 </script>

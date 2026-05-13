@@ -30,32 +30,32 @@
           style="clip-path: polygon(0 0, 100% 0, 100% 100%, 45px 100%);">
           <!-- Left spacing and clip-path create a slanted edge parallel to the white curve with a violet gap -->
           <div class="flex items-center gap-3 xl:gap-4 font-medium tracking-wide whitespace-nowrap">
-            <a href="tel:+22892090204" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
+            <a v-if="settingsStore.settings?.contact_phone_primary" :href="`tel:${settingsStore.settings.contact_phone_primary.replace(/\s+/g, '')}`" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path
                   d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                 </path>
               </svg>
-              <span>+228 92 09 02 04</span>
+              <span>{{ settingsStore.settings.contact_phone_primary }}</span>
             </a>
-            <div class="w-px h-5 bg-white/20"></div>
-            <a href="mailto:librairieicclome05gmail.com" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
+            <div v-if="settingsStore.settings?.contact_phone_primary && settingsStore.settings?.contact_email" class="w-px h-5 bg-white/20"></div>
+            <a v-if="settingsStore.settings?.contact_email" :href="`mailto:${settingsStore.settings.contact_email}`" class="flex items-center gap-2 mr-2 xl:mr-3 hover:text-pink-300 transition-colors duration-300">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
-              <span>librairieicclome05gmail.com</span>
+              <span>{{ settingsStore.settings.contact_email }}</span>
             </a>
-            <div class="w-px h-5 bg-white/20"></div>
-            <div class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
+            <div v-if="settingsStore.settings?.contact_email && (settingsStore.settings?.opening_hours_weekday || settingsStore.settings?.opening_hours_sunday)" class="w-px h-5 bg-white/20"></div>
+            <div v-if="settingsStore.settings?.opening_hours_weekday || settingsStore.settings?.opening_hours_sunday" class="flex items-center gap-2 cursor-default mr-2 xl:mr-3">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
-              <span>Lun-Ven 8h-17h | Dim 8h-14h</span>
+              <span>{{ settingsStore.settings.opening_hours_weekday }}{{ settingsStore.settings.opening_hours_weekday && settingsStore.settings.opening_hours_sunday ? ' | ' : '' }}{{ settingsStore.settings.opening_hours_sunday }}</span>
             </div>
           </div>
 
@@ -180,6 +180,19 @@
           <div class="flex items-center gap-4 sm:gap-6 ml-auto">
 
             <!-- Panier moved to end -->
+
+            <!-- Recherche -->
+            <button
+              @click="isSearchOpen = true"
+              class="group relative flex items-center justify-center bg-white rounded-full w-[46px] h-[46px] lg:w-[40px] lg:h-[40px] shadow-sm hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all duration-300 hover:-translate-y-1 z-20">
+              <svg
+                class="w-5 h-5 lg:w-5 lg:h-5 text-[#1a1a1a] transition-all duration-300 group-hover:text-[#6a0d5f] group-hover:scale-110"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
 
             <!-- Panier (Bookle style: white exact circle with dark icon) -->
             <NuxtLink to="/panier"
@@ -388,15 +401,168 @@
           <!-- Bottom Info -->
           <div class="mt-8 pt-8 border-t border-white/5 space-y-4">
              <div class="flex flex-col gap-2 text-white/40 text-sm font-medium">
-                <div class="flex items-center gap-3">
+                <div v-if="settingsStore.settings?.contact_phone_primary" class="flex items-center gap-3">
                    <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                   +228 92 09 02 04
+                   {{ settingsStore.settings.contact_phone_primary }}
                 </div>
-                <div class="flex items-center gap-3">
-                   <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                   librairieicclome05@gmail.com
-                </div>
+                 <div v-if="settingsStore.settings?.contact_email" class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    {{ settingsStore.settings.contact_email }}
+                 </div>
              </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Overlay de Recherche (Modal) -->
+    <transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 scale-95"
+      enter-to-class="opacity-100 scale-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 scale-100"
+      leave-to-class="opacity-0 scale-95">
+      <div v-if="isSearchOpen" class="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-[#6a0d5f]/40 backdrop-blur-md" @click="isSearchOpen = false"></div>
+        
+        <!-- Modal Container -->
+        <div class="relative w-full max-w-4xl bg-white rounded-[2rem] lg:rounded-[3rem] shadow-[0_32px_64px_-12px_rgba(106,13,95,0.2)] flex flex-col overflow-hidden max-h-[80vh] lg:max-h-[85vh] border border-white/20">
+          
+          <!-- Header Overlay -->
+          <div class="flex items-center px-6 lg:px-10 py-6 lg:py-8 border-b border-gray-50 bg-white sticky top-0 z-10">
+            <div class="flex-1 flex items-center gap-4 lg:gap-6">
+              <svg class="w-6 h-6 lg:w-8 lg:h-8 text-[#6a0d5f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                v-model="searchQuery"
+                ref="searchInput"
+                type="text"
+                placeholder="Rechercher un livre, un auteur..."
+                class="w-full text-xl lg:text-3xl font-bold text-gray-900 placeholder-gray-200 outline-none bg-transparent"
+                @keyup.esc="isSearchOpen = false"
+              />
+              <button @click="isSearchOpen = false" class="p-2 hover:bg-gray-100 rounded-full transition-all group">
+                <svg class="w-6 h-6 text-gray-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Results Area -->
+          <div class="flex-1 overflow-y-auto custom-scrollbar bg-white p-6 lg:p-10">
+            <div class="max-w-4xl mx-auto">
+              <div v-if="searchQuery.length > 0">
+                <!-- Authors Results -->
+                <div v-if="filteredSearchAuthors.length > 0" class="mb-10">
+                  <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Auteurs</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <NuxtLink
+                      v-for="auteur in filteredSearchAuthors"
+                      :key="auteur.id"
+                      :to="`/catalogue?author=${auteur.nom}`"
+                      @click="isSearchOpen = false"
+                      class="flex items-center gap-4 p-3 bg-gray-50/50 hover:bg-white rounded-2xl border border-transparent hover:border-[#6a0d5f]/10 hover:shadow-lg transition-all group"
+                    >
+                      <div class="w-10 h-10 rounded-full bg-[#6a0d5f] text-white flex items-center justify-center font-bold text-sm">
+                        {{ auteur.nom.charAt(0) }}
+                      </div>
+                      <div>
+                        <p class="font-bold text-gray-900 group-hover:text-[#6a0d5f] transition-colors line-clamp-1">{{ auteur.nom }}</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Auteur</p>
+                      </div>
+                    </NuxtLink>
+                  </div>
+                </div>
+
+                <!-- Books Results -->
+                <div v-if="filteredSearchBooks.length > 0">
+                  <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Livres</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <NuxtLink
+                      v-for="book in filteredSearchBooks"
+                      :key="book.id"
+                      :to="`/livres/${book.id}`"
+                      @click="isSearchOpen = false"
+                      class="flex gap-4 p-3 bg-gray-50/50 hover:bg-white rounded-2xl border border-transparent hover:border-[#6a0d5f]/10 hover:shadow-lg transition-all group"
+                    >
+                      <div class="w-16 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden shadow-md">
+                        <img :src="livreStore.getCoverImage(book)" :alt="book.titre" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      </div>
+                      <div class="flex flex-col justify-center py-1">
+                        <h4 class="font-bold text-sm text-gray-900 group-hover:text-[#6a0d5f] transition-colors line-clamp-2 leading-tight mb-1">{{ book.titre }}</h4>
+                        <p class="text-[11px] font-bold text-gray-400 mb-2">{{ book.auteurRel?.nom || book.auteur || '--' }}</p>
+                        <p class="text-sm font-black text-[#6a0d5f]">{{ formatPrice(book.prix_promo ?? book.prix) }} FCFA</p>
+                      </div>
+                    </NuxtLink>
+                  </div>
+                  
+                  <!-- View all results -->
+                  <div class="mt-8 text-center">
+                    <NuxtLink 
+                      :to="`/catalogue`"
+                      @click="handleSeeAll"
+                      class="inline-flex items-center gap-2 bg-[#6a0d5f] text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-[#6a0d5f]/20 hover:scale-105 transition-all active:scale-95"
+                    >
+                      VOIR TOUT LE CATALOGUE
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </NuxtLink>
+                  </div>
+                </div>
+
+                <!-- No Results -->
+                <div v-if="filteredSearchBooks.length === 0 && filteredSearchAuthors.length === 0" class="py-12 text-center">
+                  <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-200">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  </div>
+                  <p class="text-lg font-bold text-gray-900">Aucun résultat pour "{{ searchQuery }}"</p>
+                  <p class="text-sm text-gray-400 mt-1">Essayez d'autres mots-clés ou parcourez le catalogue.</p>
+                </div>
+              </div>
+
+              <!-- Suggestions Area -->
+              <div v-else class="space-y-10">
+                <!-- Popular Categories -->
+                <div>
+                  <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Catégories populaires</h3>
+                  <div class="flex flex-wrap gap-2">
+                    <NuxtLink 
+                      v-for="cat in categoriesWithBooks.slice(0, 10)" 
+                      :key="cat.id"
+                      :to="`/catalogue?category=${cat.libelle}`"
+                      @click="isSearchOpen = false"
+                      class="px-4 py-2 bg-gray-50 hover:bg-[#6a0d5f] hover:text-white rounded-full font-bold text-[12px] text-gray-600 transition-all border border-gray-100 hover:border-[#6a0d5f]"
+                    >
+                      {{ cat.libelle }}
+                    </NuxtLink>
+                  </div>
+                </div>
+                
+                <!-- Special Selection -->
+                <div v-if="livreDuMois">
+                  <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Coup de cœur</h3>
+                  <NuxtLink 
+                    :to="`/livres/${livreDuMois.id}`"
+                    @click="isSearchOpen = false"
+                    class="group flex gap-6 p-4 bg-gray-50/50 hover:bg-white rounded-[2rem] border border-transparent hover:border-[#6a0d5f]/10 hover:shadow-xl transition-all duration-500"
+                  >
+                    <div class="w-24 lg:w-32 aspect-[3/4] flex-shrink-0 rounded-2xl overflow-hidden shadow-xl group-hover:-translate-y-2 transition-transform duration-700">
+                      <img :src="livreStore.getCoverImage(livreDuMois)" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex flex-col justify-center">
+                      <span class="text-[9px] font-black text-orange-500 uppercase tracking-widest mb-2">Sélection Spéciale</span>
+                      <h4 class="font-bold text-lg text-gray-900 group-hover:text-[#6a0d5f] transition-colors leading-tight mb-1">{{ livreDuMois.titre }}</h4>
+                      <p class="text-[12px] font-bold text-gray-400 mb-3">{{ livreDuMois.auteurRel?.nom || livreDuMois.auteur || '--' }}</p>
+                      <p class="text-base font-black text-[#6a0d5f]">{{ formatPrice(livreDuMois.prix_promo ?? livreDuMois.prix) }} FCFA</p>
+                    </div>
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -417,10 +583,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { useAuthStore } from "~~/stores/auth";
 import { useCartStore } from "~~/stores/cart";
 import { useCategorieStore } from "~~/stores/categorie";
+import { useLivreStore } from "~~/stores/livre";
+import { useAuteurStore } from "~~/stores/auteur";
+import { useSettingsStore } from "~~/stores/settings";
 
 import { useSearch } from "~/composables/useSearch";
 
@@ -435,11 +604,65 @@ router.afterEach(() => {
 
 const { search } = useSearch();
 const categorieStore = useCategorieStore();
+const livreStore = useLivreStore();
+const auteurStore = useAuteurStore();
+const settingsStore = useSettingsStore();
 
 const isMenuOpen = ref(false);
 const isCatalogueExtended = ref(false);
 const showDropdown = ref(false);
 const dropdownRef = ref<HTMLElement | null>(null);
+
+// Search State
+const isSearchOpen = ref(false);
+const searchQuery = ref("");
+const searchInput = ref<HTMLInputElement | null>(null);
+
+// Focus input when search opens
+watch(isSearchOpen, (val) => {
+  if (val) {
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+      searchInput.value?.focus();
+    }, 100);
+  } else {
+    document.body.style.overflow = '';
+  }
+});
+
+const filteredSearchBooks = computed(() => {
+  if (searchQuery.value.length < 2) return [];
+  const q = searchQuery.value.toLowerCase();
+  return livreStore.livres.filter(b => 
+    b.titre.toLowerCase().includes(q) || 
+    (b.auteurRel?.nom || b.auteur || "").toLowerCase().includes(q)
+  ).slice(0, 8);
+});
+
+const filteredSearchAuthors = computed(() => {
+  if (searchQuery.value.length < 2) return [];
+  const q = searchQuery.value.toLowerCase();
+  return auteurStore.auteurs.filter(a => 
+    a.nom.toLowerCase().includes(q)
+  ).slice(0, 6);
+});
+
+const categoriesWithBooks = computed(() => {
+  return categorieStore.categories.filter(cat => 
+    livreStore.livres.some(livre => livre.categorie_id === cat.id)
+  );
+});
+
+const livreDuMois = computed(() => livreStore.livreDuMois);
+
+const handleSeeAll = () => {
+  search.value = searchQuery.value;
+  isSearchOpen.value = false;
+};
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('fr-FR').format(price);
+};
 
 const handleClickOutside = (event: MouseEvent) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
@@ -455,7 +678,15 @@ import Swal from 'sweetalert2';
 onMounted(async () => {
   auth.init();
   document.addEventListener("click", handleClickOutside);
-  await categorieStore.fetchCategories();
+  
+  // Fetch missing data
+  const promises = [categorieStore.fetchCategories()];
+  if (livreStore.livres.length === 0) promises.push(livreStore.fetchLivres());
+  if (auteurStore.auteurs.length === 0) promises.push(auteurStore.fetchAuteurs());
+  if (!livreStore.livreDuMois) promises.push(livreStore.fetchFeaturedLivres());
+  if (!settingsStore.settings) promises.push(settingsStore.fetchSettings());
+  
+  await Promise.all(promises);
 });
 
 onBeforeUnmount(() => {
