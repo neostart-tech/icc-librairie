@@ -8,15 +8,14 @@
     </transition-group>
 
     <!-- OVERLAY PROGRESSIF POUR LISIBILITÉ -->
-    <div class="absolute inset-0 bg-transparent"></div>
+    <div class="absolute inset-0 bg-black/30"></div>
     <div class="absolute inset-0 bg-transparent"></div>
 
     <!-- CONTENU -->
     <div class="relative z-10 h-full flex items-center px-4 sm:px-8 md:px-8 lg:px-12 max-w-[1400px] mx-auto overflow-hidden">
       <div class="text-white max-w-3xl transform transition-all duration-1000 translate-y-0 opacity-100 flex flex-col gap-6 items-start">
-        <!-- Titre avec son propre fond flouté -->
-        <div class="backdrop-blur-md bg-black/25 p-6 md:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl w-fit relative group/title-box">
-          <div class="absolute -inset-1 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-0 group-hover/title-box:opacity-100 transition-opacity duration-700"></div>
+        <!-- Titre -->
+        <div class="relative group/title-box">
           <h1
             class="relative z-10 animate-title text-3xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight">
           <span
