@@ -8,15 +8,17 @@
     </transition-group>
 
     <!-- OVERLAY PROGRESSIF POUR LISIBILITÉ -->
-    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    <div class="absolute inset-0 bg-transparent"></div>
+    <div class="absolute inset-0 bg-transparent"></div>
 
     <!-- CONTENU -->
-    <div
-      class="relative z-10 h-full flex px-4 sm:px-8 md:px-8 lg:px-8 max-w-[1400px] mx-auto overflow-hidden">
-      <div class="text-white max-w-2xl transform transition-all duration-700 translate-y-0 opacity-100">
-        <h1
-          class="animate-title text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mt-30 mb-4 leading-tight tracking-wide">
+    <div class="relative z-10 h-full flex items-center px-4 sm:px-8 md:px-8 lg:px-12 max-w-[1400px] mx-auto overflow-hidden">
+      <div class="text-white max-w-3xl transform transition-all duration-1000 translate-y-0 opacity-100 flex flex-col gap-6 items-start">
+        <!-- Titre avec son propre fond flouté -->
+        <div class="backdrop-blur-md bg-black/25 p-6 md:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl w-fit relative group/title-box">
+          <div class="absolute -inset-1 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-0 group-hover/title-box:opacity-100 transition-opacity duration-700"></div>
+          <h1
+            class="relative z-10 animate-title text-3xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight">
           <span
             class="inline-block bg-clip-text text-transparent bg-gradient-to-r from-white via-pink-200 to-white bg-[length:200%_auto] custom-gradient-text drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             Bienvenue
@@ -25,7 +27,6 @@
           <br class="hidden sm:block" />
           <span class="relative inline-block mt-1 sm:mt-2 group/title">
             <span class="relative z-10 drop-shadow-md">librairie</span>
-            <!-- Animation trait souligné -->
             <svg
               class="absolute w-[105%] h-[12px] md:h-[18px] -bottom-1 -left-1 text-[#6a0d5f] z-0 drop-shadow-md max-w-full"
               viewBox="0 0 100 10" preserveAspectRatio="none">
@@ -34,11 +35,12 @@
             </svg>
           </span>
         </h1>
+        </div>
         <p
-          class="animate-subtitle text-lg md:text-lg lg:text-xl font-light mb-8 md:mb-10 text-gray-100 max-w-xl leading-relaxed border-l-4 border-[#6a0d5f] pl-5 py-2 backdrop-blur-sm bg-black/20 rounded-r-xl shadow-lg">
+          class="relative z-10 animate-subtitle text-base md:text-lg lg:text-xl font-medium text-gray-100 max-w-xl leading-relaxed border-l-4 border-[#6a0d5f] pl-6 py-4 backdrop-blur-sm bg-black/20 rounded-r-2xl shadow-lg">
           Découvrez une <strong class="text-white font-bold drop-shadow-lg">collection inspirante</strong> de nos
           meilleurs ouvrages et <span
-            class="text-pink-200 custom-float inline-block drop-shadow-lg font-medium">nouveautés</span>.
+            class="text-pink-200 custom-float inline-block drop-shadow-lg font-bold">nouveautés</span>.
         </p>
         <NuxtLink to="/catalogue"
           class="animate-button group/btn relative overflow-hidden px-8 py-4 bg-[#6a0d5f] rounded-full text-base md:text-lg font-bold shadow-xl hover:shadow-[#6a0d5f]/50 transition-all duration-300 transform hover:-translate-y-1 inline-flex items-center justify-center">

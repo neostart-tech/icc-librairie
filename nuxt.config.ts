@@ -1,14 +1,12 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
   vite: {
-    server: {
-      allowedHosts: ["entertaining-nonacute-olinda.ngrok-free.dev"],
-    },
+    plugins: [tailwindcss()],
   },
 
   modules: [
     "@nuxt/eslint",
-    "@nuxt/ui",
     "@pinia/nuxt",
     "nuxt-toast",
     "pinia-plugin-persistedstate/nuxt",
@@ -25,14 +23,14 @@ export default defineNuxtConfig({
     enabled: true,
   },
 
-  css: ["~/assets/css/main.css"],
+  css: ["./app/assets/css/main.css"],
 
   runtimeConfig: {
     public: {
-      // apiBase: "http://localhost:8000/api",
-      // storageBase: "http://localhost:8000/storage",
-      apiBase: "https://api-librairie.icctogo.com/api",
-      storageBase: "https://api-librairie.icctogo.com/storage",
+      apiBase: "http://localhost:8000/api",
+      storageBase: "http://localhost:8000/storage",
+      // apiBase: "https://api-librairie.icctogo.com/api",
+      // storageBase: "https://api-librairie.icctogo.com/storage",
     },
   },
 

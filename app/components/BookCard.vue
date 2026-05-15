@@ -35,6 +35,9 @@
         {{ book.price }} FCFA
       </p>
 
+      <!-- Rating -->
+      <StarRating v-if="book.average_rating" :rating="book.average_rating" size="sm" />
+
       <!-- AJOUT PANIER (toujours visible) -->
       <button
         class="mt-3 w-full bg-[#4A2B69] text-white text-sm py-2 rounded-lg hover:bg-[#4A2B69] transition cursor-pointer"

@@ -18,6 +18,8 @@ export interface Livre {
   auteurRel?: any;
   stock?: any;
   featured_order?: number;
+  average_rating?: number;
+  notes_count?: number;
 }
 
 export const useLivreStore = defineStore("livre", {
@@ -220,6 +222,37 @@ export const useLivreStore = defineStore("livre", {
         console.error("Erreur fetchFeaturedLivres", error);
       } finally {
         this.loading = false;
+      }
+    },
+
+    /** ======================
+     * NOTES & COMMENTAIRES
+     ======================= */
+    async fetchNotes(livreId: string | number) {
+      const { $api } = useNuxtApp();
+      try {
+        const res: any = await $api(`/livres/${livreId}/notes`);
+        return res || [];
+      } catch (error) {
+        console.error("Erreur fetchNotes", error);
+        return [];
+      }
+    },
+
+    async addNote(payload: { id_livre: string | number; note: number; commentaire?: string }) {
+      const { $api } = useNuxtApp();
+      try {
+        const res: any = await $api("/notes", {
+          method: "POST",
+          body: payload,
+        });
+        
+        // Mettre à jour le livre localement pour refléter la nouvelle moyenne
+        // (Optionnel: on pourrait aussi re-fetch le livre)
+        
+        return res;
+      } catch (error: any) {
+        throw error?.data || error;
       }
     },
   },

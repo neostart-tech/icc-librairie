@@ -184,6 +184,13 @@
                </div>
                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ enVogue.authorName }}</p>
                
+               <div v-if="!enVogue.surCommande" class="flex items-center justify-center gap-1.5 mt-1">
+                 <div :class="['w-1.5 h-1.5 rounded-full', enVogue.stockAvailable >= 5 ? 'bg-green-500' : (enVogue.stockAvailable > 0 ? 'bg-orange-500' : 'bg-red-500')]"></div>
+                 <span :class="['text-[10px] font-bold uppercase tracking-widest', enVogue.stockAvailable >= 5 ? 'text-green-600' : (enVogue.stockAvailable > 0 ? 'text-orange-600' : 'text-red-600')]">
+                   {{ enVogue.stockAvailable >= 5 ? 'Disponible' : (enVogue.stockAvailable > 0 ? 'Stock limité' : 'Stock épuisé') }}
+                 </span>
+               </div>
+               
                <p v-if="enVogue.description" class="text-xs text-gray-500 line-clamp-4 leading-relaxed mt-4 pt-4 border-t border-gray-50 flex-1">
                  {{ enVogue.description }}
                </p>
@@ -273,11 +280,18 @@
                     loading="lazy" />
 
                   <!-- Badge Promo -->
-                  <div class="absolute top-4 left-4">
+                  <div class="absolute top-4 left-4 z-20">
                     <span v-if="book.isPromo"
                       class="bg-red-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-xl uppercase tracking-wide">
                       -{{ calculateDiscount(book.oldPrice, book.price) }}%
                     </span>
+                  </div>
+
+                  <!-- Floating Rating Label -->
+                  <div v-if="book.averageRating" class="absolute top-4 right-4 z-20">
+                    <div class="bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm border border-white/50 flex items-center">
+                      <StarRating :rating="book.averageRating" size="sm" />
+                    </div>
                   </div>
 
                   <!-- Overlay au hover -->
@@ -292,7 +306,15 @@
                     class="font-bold text-sm md:text-base text-gray-900 mb-1 lg:mb-2 line-clamp-2 min-h-[3rem] group-hover:text-[#6a0d5f] transition-colors">
                     {{ book.title }}
                   </h3>
-                  <p class="text-xs font-bold text-gray-400 mb-4">{{ book.authorName }}</p>
+                  <p class="text-xs font-bold text-gray-400 mb-2">{{ book.authorName }}</p>
+
+
+                  <div v-if="!book.surCommande" class="flex items-center gap-1.5 mb-4">
+                    <div :class="['w-1.5 h-1.5 rounded-full', book.stockAvailable >= 5 ? 'bg-green-500' : (book.stockAvailable > 0 ? 'bg-orange-500' : 'bg-red-500')]"></div>
+                    <span :class="['text-[10px] font-bold uppercase tracking-widest', book.stockAvailable >= 5 ? 'text-green-600' : (book.stockAvailable > 0 ? 'text-orange-600' : 'text-red-600')]">
+                      {{ book.stockAvailable >= 5 ? 'Disponible' : (book.stockAvailable > 0 ? 'Stock limité' : 'Stock épuisé') }}
+                    </span>
+                  </div>
 
                   <div class="mt-auto pt-4 border-t border-gray-50 space-y-4">
                     <div class="flex flex-col">
@@ -334,7 +356,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
-                      {{ cartStore.getQuantity(book.id) > 0 ? 'Voir le panier' : (book.stockAvailable ? 'Ajouter' : 'Rupture') }}
+                      {{ cartStore.getQuantity(book.id) > 0 ? 'Voir le panier' : (book.stockAvailable ? 'Ajouter' : 'Épuisé') }}
                     </button>
                   </div>
                 </div>
@@ -646,6 +668,7 @@ const books = computed(() =>
     isPromo: !!livre.prix_promo,
     stockAvailable: livre.stock?.quantite ?? 0,
     category: livre.categorie?.libelle ?? "Autre",
+    averageRating: livre.average_rating || 0,
     image: livreStore.getCoverImage(livre),
     createdAt: new Date(livre.created_at || Date.now())
   }))
