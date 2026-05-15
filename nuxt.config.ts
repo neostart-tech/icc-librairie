@@ -1,14 +1,12 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
   vite: {
-    server: {
-      allowedHosts: ["entertaining-nonacute-olinda.ngrok-free.dev"],
-    },
+    plugins: [tailwindcss()],
   },
 
   modules: [
     "@nuxt/eslint",
-    "@nuxt/ui",
     "@pinia/nuxt",
     "nuxt-toast",
     "pinia-plugin-persistedstate/nuxt",
@@ -25,7 +23,7 @@ export default defineNuxtConfig({
     enabled: true,
   },
 
-  css: ["~/assets/css/main.css"],
+  css: ["./app/assets/css/main.css"],
 
   runtimeConfig: {
     public: {

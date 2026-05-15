@@ -144,6 +144,13 @@
               <NuxtLink :to="`/livres/${book.id}`"
                 class="relative aspect-[3/4] rounded-3xl bg-gray-50 p-6 mb-6 overflow-hidden transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-[#6a0d5f]/10 block group-hover:-translate-y-2">
                 <img :src="book.image" :alt="book.titre" class="w-full h-full object-contain drop-shadow-2xl transition-all duration-700 group-hover:scale-110" />
+                
+                <!-- Floating Rating Label -->
+                <div v-if="book.average_rating" class="absolute top-4 right-4 z-20">
+                  <div class="bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm border border-white/50">
+                    <StarRating :rating="book.average_rating" size="sm" />
+                  </div>
+                </div>
               </NuxtLink>
               <div class="space-y-2 px-2">
                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ book.categorie?.libelle || 'Inspirant' }}</span>
@@ -195,6 +202,14 @@
                 <NuxtLink :to="`/livres/${livreDuMois.id}`" class="w-56 md:w-72 flex-shrink-0 relative group/img">
                    <div class="absolute -inset-6 bg-orange-500/30 blur-3xl rounded-full animate-pulse transition-all group-hover/img:bg-orange-500/40"></div>
                    <img :src="livreDuMois.image" :alt="livreDuMois.titre" class="relative z-10 w-full h-auto drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-700 group-hover:scale-105 group-hover:-rotate-2" />
+                   
+                   <!-- Floating Rating Label -->
+                   <div v-if="livreDuMois.average_rating" class="absolute -top-4 -left-4 z-30">
+                     <div class="bg-white/90 backdrop-blur-md px-3 py-2 rounded-2xl shadow-2xl border border-white/50 flex items-center">
+                       <StarRating :rating="livreDuMois.average_rating" size="md" />
+                     </div>
+                   </div>
+
                    <div class="absolute top-0 -right-4 z-20 bg-orange-500 text-white px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest shadow-2xl shadow-orange-500/40 ring-4 ring-[#6a0d5f]">
                       Livre du mois
                    </div>
@@ -208,7 +223,7 @@
                         </h3>
                       </NuxtLink>
                       <p class="text-orange-500 font-bold uppercase tracking-[0.2em] text-sm">{{ livreDuMois.auteurRel?.nom || livreDuMois.auteur }}</p>
-                   </div>
+                    </div>
                    <p class="text-white/70 text-base md:text-lg leading-relaxed line-clamp-4 font-medium">
                       {{ livreDuMois.description || "Une immersion profonde et transformative à ne pas manquer ce mois-ci pour nourrir votre esprit." }}
                    </p>
@@ -251,6 +266,13 @@
                    </NuxtLink>
                    <div class="absolute -top-2 -right-2 z-20 bg-blue-500 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20">
                       Livre Duo
+                   </div>
+                   
+                   <!-- Floating Rating Label -->
+                   <div v-if="livreDuo.average_rating" class="absolute -top-4 -left-4 z-30">
+                     <div class="bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm border border-white/50 flex items-center">
+                       <StarRating :rating="livreDuo.average_rating" size="sm" />
+                     </div>
                    </div>
                 </div>
                 <div class="space-y-6">
@@ -328,6 +350,11 @@
               
               <div class="relative aspect-[3/4.2] mb-5 overflow-hidden rounded-[2rem] bg-gray-100 shadow-xl group-hover/card:shadow-2xl transition-all duration-700">
                  <img :src="book.image" :alt="book.titre" class="w-full h-full object-cover transition-transform duration-1000 group-hover/card:scale-110" />
+                 <div v-if="book.average_rating" class="absolute top-4 right-4 z-20">
+                   <div class="bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm border border-white/50">
+                     <StarRating :rating="book.average_rating" size="sm" />
+                   </div>
+                 </div>
                  <div class="absolute inset-0 bg-gradient-to-t from-[#6a0d5f]/80 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
                     <div class="absolute bottom-6 left-6 right-6 flex justify-between items-center">
                        <span class="px-4 py-2 bg-white text-[#6a0d5f] rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-xl">Voir</span>
@@ -347,7 +374,7 @@
                  <h3 class="text-base font-black text-gray-900 uppercase tracking-tight line-clamp-1 group-hover/card:text-[#6a0d5f] transition-colors">
                    {{ book.titre }}
                  </h3>
-                 <div class="flex items-center justify-between">
+                 <div class="flex items-center justify-between gap-2">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate max-w-[150px]">
                       {{ book.auteurRel?.nom || book.auteur }}
                     </p>
@@ -601,6 +628,8 @@ const livreDuo = computed(() => {
   if (!book) return null;
   return {
     ...book,
+    surCommande: !!book.sur_commande,
+    stockAvailable: book.stock?.quantite ?? 0,
     image: livreStore.getCoverImage(book),
   };
 });
@@ -608,6 +637,8 @@ const livreDuo = computed(() => {
 const selectionAnnee = computed(() => {
   return (livreStore.selectionAnnee || []).map(book => ({
     ...book,
+    surCommande: !!book.sur_commande,
+    stockAvailable: book.stock?.quantite ?? 0,
     image: livreStore.getCoverImage(book),
   }));
 });
@@ -657,6 +688,8 @@ const recentBooks = computed(() => {
     .map(book => {
       return {
         ...book,
+        surCommande: !!book.sur_commande,
+        stockAvailable: book.stock?.quantite ?? 0,
         image: livreStore.getCoverImage(book),
         categorie: book.categorie || categorieStore.categories.find(c => c.id === book.categorie_id),
         isPromo: !!book.prix_promo
